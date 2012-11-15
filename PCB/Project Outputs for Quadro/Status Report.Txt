@@ -1,0 +1,26 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Project [Quadro.PrjPCB]
+   Generated File[Quadro.GTL]
+   Generated File[Quadro.GBL]
+   Generated File[Quadro.GPB]
+   Generated File[Quadro.GPT]
+   Generated File[Quadro.GTO]
+   Generated File[Quadro.GTP]
+   Generated File[Quadro.GTS]
+   Generated File[Quadro.GBS]
+   Generated File[Quadro.GBP]
+   Generated File[Quadro.GBO]
+   Generated File[Quadro.GM1]
+   Generated File[Quadro.GM13]
+   Generated File[Quadro.GM15]
+   Generated File[Quadro.GKO]
+   Generated File[Quadro.RUL]
+   Generated File[Quadro.EXTREP]
+   Generated File[Quadro.REP]
+
+
+Files Generated   : 17
+Documents Printed : 0
+
+Finished Output Generation At 21:51:27 On 8.10.2012 ã.
