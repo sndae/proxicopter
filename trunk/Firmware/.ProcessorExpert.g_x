@@ -1,0 +1,30 @@
+<CodeGenerationInfo>
+  <ToolchainSettings />
+  <GeneratedFilesList>
+    <GeneratedByPE>
+      <File Name="Project_Settings\Linker_Files\MC56F8257_Internal_PFlash_SDM.cmd" FileDate="2012-11-06, 21:40:17" FileAge="1352230817641" FileType="4" CompNumb="2" />
+      <File Name="Generated_Code\Cpu.c" FileDate="2012-11-11, 13:57:10" FileAge="1352635030074" FileType="4411" CompNumb="2" />
+      <File Name="Generated_Code\PE_Types.h" FileDate="2012-11-06, 21:40:17" FileAge="1352230817800" FileType="4411" />
+      <File Name="Generated_Code\Vectors.c" FileDate="2012-11-11, 13:57:10" FileAge="1352635030080" FileType="4411" CompNumb="2" />
+      <File Name="Project_Settings\Startup_Code\56F80xx_init.asm" FileDate="2012-11-06, 21:40:17" FileAge="1352230817469" FileType="64" CompNumb="2" />
+      <File Name="Sources\Events.h" FileDate="2012-11-11, 13:57:10" FileAge="1352635030086" FileType="16896" />
+      <File Name="Sources\Events.c" FileDate="2012-11-11, 13:57:10" FileAge="1352635030140" FileType="16896" />
+      <File Name="Generated_Code\PE_Error.h" FileDate="2012-11-06, 21:40:17" FileAge="1352230817788" FileType="4411" />
+      <File Name="Generated_Code\AS1.h" FileDate="2012-11-11, 13:50:50" FileAge="1352634650135" FileType="4411" CompNumb="28" />
+      <File Name="Documentation\ProcessorExpert.txt" FileDate="2012-11-11, 14:11:14" FileAge="1352635874580" FileType="3072" />
+      <File Name="Generated_Code\I2C2.h" FileDate="2012-11-07, 23:41:22" FileAge="1352324482572" FileType="4411" CompNumb="20" />
+      <File Name="Generated_Code\AS1.c" FileDate="2012-11-11, 13:50:50" FileAge="1352634650125" FileType="4411" CompNumb="28" />
+      <File Name="Generated_Code\I2C2.c" FileDate="2012-11-07, 23:41:22" FileAge="1352324482537" FileType="4411" CompNumb="20" />
+      <File Name="Generated_Code\SM1.h" FileDate="2012-11-11, 13:57:10" FileAge="1352635030048" FileType="4411" CompNumb="30" />
+      <File Name="Generated_Code\PE_Const.h" FileDate="2012-11-06, 21:40:17" FileAge="1352230817753" FileType="4411" />
+      <File Name="Generated_Code\SM1.c" FileDate="2012-11-11, 13:57:10" FileAge="1352635030044" FileType="4411" CompNumb="30" />
+      <File Name="Documentation\ProcessorExpert_SIGNALS.txt" FileDate="2012-11-14, 20:51:25" FileAge="1352919085300" FileType="3072" />
+      <File Name="Generated_Code\IO_Map.h" FileDate="2012-11-06, 21:40:17" FileAge="1352230817735" FileType="4411" />
+      <File Name="Generated_Code\Cpu.h" FileDate="2012-11-06, 21:40:17" FileAge="1352230817688" FileType="4411" CompNumb="2" />
+      <File Name="Documentation\ProcessorExpert_Settings.xml" FileDate="2012-11-11, 14:11:14" FileAge="1352635874516" FileType="3072" />
+      <File Name="Generated_Code\assert.h" FileDate="2012-11-06, 21:40:17" FileAge="1352230817807" FileType="4411" />
+      <File Name="Sources\ProcessorExpert.c" FileDate="2012-11-11, 13:57:10" FileAge="1352635030067" FileType="128" />
+    </GeneratedByPE>
+  </GeneratedFilesList>
+  <CodeGenReference>33</CodeGenReference>
+</CodeGenerationInfo>
