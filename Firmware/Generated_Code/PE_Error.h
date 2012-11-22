@@ -6,7 +6,7 @@
 **     Component   : PE_Error
 **     Version     : Driver 01.00
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-06, 21:40, # CodeGen: 0
+**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
 **     Abstract    :
 **         This component "PE_Error" contains internal definitions
 **         of the error constants.

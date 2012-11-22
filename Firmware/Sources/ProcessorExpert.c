@@ -22,6 +22,8 @@
 #include "I2C2.h"
 #include "AS1.h"
 #include "SM1.h"
+#include "PWMC1.h"
+#include "eFPWM1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"

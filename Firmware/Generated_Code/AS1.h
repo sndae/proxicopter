@@ -6,7 +6,7 @@
 **     Component   : AsynchroSerial
 **     Version     : Component 02.507, Driver 02.06, CPU db: 3.00.240
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-11, 13:50, # CodeGen: 27
+**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of

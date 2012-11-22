@@ -7,7 +7,7 @@
 **     Version     : Component 01.014, Driver 02.10, CPU db: 3.00.240
 **     Datasheet   : MC56F824x/5xPB Rev. 1.0.0, 09/2008; MC56F82XXRM Rev. 0 Draft A 11/2008
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-11, 13:57, # CodeGen: 28
+**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
 **     Abstract    :
 **
 **     Settings    :
@@ -31,6 +31,8 @@
 #include "I2C2.h"
 #include "AS1.h"
 #include "SM1.h"
+#include "PWMC1.h"
+#include "eFPWM1.h"
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
@@ -192,8 +194,10 @@ void PE_low_level_init(void)
 /* Enable peripheral clock */
   /* SIM_PCE1: SCI1=1,QSPI0=1,IIC1=1,HFM=1,MSCAN=1 */
   setReg16Bits(SIM_PCE1, 0x0343U);     /* Enable prph.clocks in the SIM_PCE1 register before Common initialization */ 
-  /* SIM_PCE0: GPIOC=1,GPIOF=1 */
-  setReg16Bits(SIM_PCE0, 0x12U);       /* Enable prph.clocks in the SIM_PCE0 register before Common initialization */ 
+  /* SIM_PCE2: PWMCH0=1,PWMCH1=1,PWMCH2=1 */
+  setReg16Bits(SIM_PCE2, 0x0EU);       /* Enable prph.clocks in the SIM_PCE2 register before Common initialization */ 
+  /* SIM_PCE0: GPIOC=1,GPIOE=1,GPIOF=1 */
+  setReg16Bits(SIM_PCE0, 0x16U);       /* Enable prph.clocks in the SIM_PCE0 register before Common initialization */ 
   /* GPIO_A_DRIVE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,DRIVE7=0,DRIVE6=0,DRIVE5=0,DRIVE4=0,DRIVE3=0,DRIVE2=0,DRIVE1=0,DRIVE0=0 */
   setReg16(GPIO_A_DRIVE, 0x00U);       /* Set High/Low drive strength on GPIOA pins according to the CPU bean settings */ 
   /* GPIO_B_DRIVE: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,DRIVE7=0,DRIVE6=0,DRIVE5=0,DRIVE4=0,DRIVE3=0,DRIVE2=0,DRIVE1=0,DRIVE0=0 */
@@ -223,19 +227,35 @@ void PE_low_level_init(void)
   setReg16Bits(GPIO_C_PEREN, 0x0700U);  
   /* SIM_GPS1: C10=0,C9=0,C8=0 */
   clrReg16Bits(SIM_GPS1, 0x35U);        
+  /* INTC_IPR4: PWM_RERR_IPL=0,PWM_FAULT_IPL=0 */
+  clrReg16Bits(INTC_IPR4, 0xF0U);       
+  /* GPIO_E_PEREN: PE5=1,PE4=1,PE3=1,PE2=1,PE1=1,PE0=1 */
+  setReg16Bits(GPIO_E_PEREN, 0x3FU);    
+  /* SIM_GPS3: E5=0,E4=0 */
+  clrReg16Bits(SIM_GPS3, 0x50U);        
   /* Disable peripheral clock after initialization of their registers (if the clocks should not be enabled in init. code) */
   /* SIM_PCE0: TA0=0,TA1=0,TA2=0,TA3=0,TB0=0,TB1=0,TB2=0,TB3=0,ADC=0,GPIOA=0,GPIOB=0,GPIOC=0,GPIOD=0,GPIOE=0,GPIOF=0,??=0 */
   setReg16(SIM_PCE0, 0x00U);           /* Disable prph.clocks in the SIM_PCE0 register after Common initialization */ 
   /* SIM_PCE1: ??=0,DAC=0,CMPA=0,CMPB=0,CMPC=0,SCI0=0,IIC0=0,CRC=0,REFA=0,REFB=0,REFC=0 */
   clrReg16Bits(SIM_PCE1, 0xFCBCU);     /* Disable prph.clocks in the SIM_PCE1 register after Common initialization */ 
-  /* SIM_PCE2: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,PWMCH0=0,PWMCH1=0,PWMCH2=0,PWMCH3=0 */
-  setReg16(SIM_PCE2, 0x00U);           /* Disable prph.clocks in the SIM_PCE2 register after Common initialization */ 
+  /* SIM_PCE2: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,PWMCH3=0 */
+  clrReg16Bits(SIM_PCE2, 0xFFF1U);     /* Disable prph.clocks in the SIM_PCE2 register after Common initialization */ 
   /* ### InternalI2C "I2C2" init code ... */
   I2C2_Init();
   /* ### Asynchro serial "AS1" init code ... */
   AS1_Init();
   /* ### SynchroMaster "SM1" init code ... */
   SM1_Init();
+  /* ### Init_eFlexPWM "eFPWM1" init code ... */
+  /* ### Call "eFPWM1_Init();" init method in a user code, i.e. in the main code */
+
+  /* ### Note:   To enable automatic calling of the "eFPWM1" init code here,
+                 the 'Call Init method' property must be set to 'yes'.
+   */
+  /* ### PWMMC "PWMC1" init code ... */
+  PWMC1_Init();
+
+
   __EI(0);                             /* Enable interrupts of the selected priority level */
 }
 

@@ -26,6 +26,8 @@
 #include "I2C2.h"
 #include "AS1.h"
 #include "SM1.h"
+#include "PWMC1.h"
+#include "eFPWM1.h"
 
 
 void I2C2_OnReceiveData(void);

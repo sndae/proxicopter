@@ -6,7 +6,7 @@
 **     Component   : InternalI2C
 **     Version     : Component 01.277, Driver 02.03, CPU db: 3.00.240
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-07, 23:41, # CodeGen: 8
+**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
 **     Abstract    :
 **          This component encapsulates the internal I2C communication 
 **          interface. The implementation of the interface is based 
