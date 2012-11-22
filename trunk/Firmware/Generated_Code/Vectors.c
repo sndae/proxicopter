@@ -5,7 +5,7 @@
 **     Processor   : MC56F8257
 **     Version     : Component 01.014, Driver 02.10, CPU db: 3.00.240
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-11, 13:57, # CodeGen: 28
+**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
 **     Abstract    :
 **
 **     Settings    :
@@ -21,6 +21,8 @@
 #include "I2C2.h"
 #include "AS1.h"
 #include "SM1.h"
+#include "PWMC1.h"
+#include "eFPWM1.h"
 #include "Events.h"
 
 #ifndef _lint

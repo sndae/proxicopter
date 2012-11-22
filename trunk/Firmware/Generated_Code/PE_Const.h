@@ -6,7 +6,7 @@
 **     Component   : PE_Const
 **     Version     : Driver 01.02
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-06, 21:40, # CodeGen: 0
+**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
 **     Abstract    :
 **         This component "PE_Const" contains internal definitions
 **         of the constants.

@@ -55,4 +55,3 @@ QuadRes L3G4200D_InitializeGyro();
 QuadRes L3G4200D_MeasureGyro();
 QuadRes L3G4200D_CalibrateGyro();
 QuadRes L3G4200D_ReadGyroTemp();
-

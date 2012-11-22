@@ -102,6 +102,22 @@ Module "SM1"       (component SynchroMaster)
                 accumulates errors in a set; after calling [GetError] this set is returned and cleared. This method is 
                 available only if the "Interrupt service/event" property is enabled.
 
+Module "PWMC1"     (component PWMMC)
+   - PWMC1_SetDuty -Setting duty (value) register(s) of selected channel. The value is loaded after calling <Load> method.   [ 
+                Version specific information for Freescale 56800/E and HC08 and HCS12 and HCS12X derivatives ]   Setting is 
+                valid for actual speed mode only, initial value is restored after speed mode change.   [ Version specific 
+                information for Freescale 56800/E derivatives - eFlexPWM device ]   Duty register(s) value is not affected 
+                during speed mode change. It should be handled by the user code.
+   - PWMC1_Load -Apply last setting of the methods <SetDuty>, <SetDutyPercent>, both <SetRatio*>, <SetPeriod> and 
+                <SetPrescaler>.
+   - PWMC1_OutputPadEnable -Method enables output pads.
+   - PWMC1_OutputPadDisable -Method disables output pads.
+
+Module "eFPWM1"    (component Init_eFlexPWM_56800)
+   - eFPWM1_Init -This method initializes registers of the eFlexPWM module according to the Peripheral Initialization settings. 
+                Call this method in user code to initialize the module. By default, the method is called by PE automatically; 
+                see "Call Init method" property of the component for more details.
+
 Module "Cpu"       (component 56F8257)
    - Cpu_EnableInt -Enables all maskable interrupts
    - Cpu_DisableInt -Disables all maskable interrupts
