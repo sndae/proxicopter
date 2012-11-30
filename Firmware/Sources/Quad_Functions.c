@@ -3,9 +3,16 @@
 #include "AS1.h"
 #include "SM1.h"
 
-#define ACC_I2C_ADDR   0x19
+#define ACC_I2C_ADDR             0x19
+#define QUAD_POOLELELMENT_SIZE   0x0A
 
-UInt8 g_UARTBuff[sizeof(QUAD_PACK_U)];
+static QUAD_PACK_U  s_atPackPool[QUAD_POOLELELMENT_SIZE];
+static QUAD_PACK_U  s_uiPackPoolLevel = 0;
+
+QUAD_PACK_U QuadPoolPacketGet()
+{
+  return;
+}
 
 QuadRes QuadSendPack(UInt16 uiDst, QUAD_PACK_HEAD_T *ptPck)
 {
