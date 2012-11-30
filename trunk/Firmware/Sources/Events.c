@@ -184,6 +184,20 @@ void I2C2_OnTransmitData(void)
 void SM1_OnRxChar(void)
 {
   /* Write your code here ... */
+  static UInt8 s_UARTBuff[sizeof(QUAD_PACK_U)] = {0};
+  static UInt32 s_uiUARTBuffCntr = 0;
+  static UInt8 s_bUARTPackLen = 0;
+  if(s_uiUARTBuffCntr == 0){
+    s_bUARTPackLen = sizeof(QUAD_PACK_HEAD_T);
+  }
+  SM1_RecvChar(&s_UARTBuff[s_uiUARTBuffCntr]);
+  if(s_uiUARTBuffCntr == offsetof(QUAD_PACK_HEAD_T, uiLen)){
+    s_bUARTPackLen += s_UARTBuff[s_uiUARTBuffCntr];
+  }
+
+  if(s_uiUARTBuffCntr++ == s_bUARTPackLen){
+
+  }
 }
 
 /*
