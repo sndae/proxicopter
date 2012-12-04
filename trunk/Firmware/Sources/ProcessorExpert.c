@@ -35,7 +35,7 @@ void main(void)
 {
   /* Write your local variable definition here */
   UInt32  uiCntr = 0;
-  
+  QUAD_PACK_U *ptPack = 0;
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
@@ -43,9 +43,21 @@ void main(void)
   /* Write your code here */
 
   for(;;) {
-	if(uiCntr++ == 0){
-	  //Bit1_ChangeVal();
-	}
+    ptPack = QuadWaitForPacket(FALSE);
+    if(ptPack){
+      switch(ptPack->tHead.uiCmd){
+        case QUAD_CMD_READ_DATA_REQ:
+        case QUAD_CMD_WRITE_DATA_REQ:
+          QuadSendPack(ptPack);
+          break;
+        break;
+        case QUAD_CMD_DATA_IND:
+
+        default:
+        break;
+      }
+      QuadPackRelease(ptPack);
+    }
   }
 }
 

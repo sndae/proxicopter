@@ -19,30 +19,28 @@
 
 /***** Commands list ******/
 
-#define QUAD_CMD_GET_DATA_REQ   (0x0001)
-#define QUAD_CMD_GET_DATA_CNF   (0x0002)
+#define QUAD_CMD_READ_DATA_REQ   (0x0001)
+#define QUAD_CMD_READ_DATA_CNF   (0x0002)
 
-#define QUAD_CMD_SET_PWM_REQ    (0x0003)
-#define QUAD_CMD_SET_PWM_CNF    (0x0004)
+#define QUAD_CMD_SET_PWM_REQ     (0x0003)
+#define QUAD_CMD_SET_PWM_CNF     (0x0004)
 
-#define QUAD_CMD_DATA_IND       (0x0005)
-#define QUAD_CMD_DATA_RES       (0x0006)
+#define QUAD_CMD_DATA_IND        (0x0005)
+#define QUAD_CMD_DATA_RES        (0x0006)
 
-/****** Sources list *****/
+#define QUAD_CMD_WRITE_DATA_REQ  (0x0007)
+#define QUAD_CMD_WRITE_DATA_CNF  (0x0008)
 
-#define QUAD_SRC_INT            (0x0000)
-#define QUAD_SRC_ACC            (0x0001)
-#define QUAD_SRC_GYRO           (0x0002)
-#define QUAD_SRC_RF             (0x0003)
-#define QUAD_SRC_UART           (0x0004)
 
 /****** Destinations list *****/
 
-#define QUAD_DST_INT            (0x0000)
-#define QUAD_DST_ACC            (0x0001)
-#define QUAD_DST_GYRO           (0x0002)
-#define QUAD_DST_RF             (0x0003)
-#define QUAD_DST_UART           (0x0004)
+typedef enum QUAD_SRCDST_Etag{
+  QUAD_SRCDST_INT           = (0x0000),
+  QUAD_SRCDST_ACC           = (0x0001),
+  QUAD_SRCDST_GYRO          = (0x0002),
+  QUAD_SRCDST_RF            = (0x0003),
+  QUAD_SRCDST_UART          = (0x0004),
+}QUAD_SRCDST_E;
 
 /****** Quadro types definitions ******/
 typedef UInt16  QuadRes;
@@ -55,8 +53,8 @@ typedef UInt16  QuadRes;
 
 typedef struct QUAD_PACK_HEAD_Ttag{
   UInt16  uiCmd;
-  UInt16  uiSrc;
-  UInt16  uiDst;
+  QUAD_SRCDST_E  eSrc;
+  QUAD_SRCDST_E  eDst;
   UInt16  uiLen;  
 }QUAD_PACK_HEAD_T;
 
@@ -121,6 +119,7 @@ typedef struct QUAD_PACK_DATA_RES_Ttag{
 /***** Union of all public packets *****/
 
 typedef union QUAD_PACK_Utag{
+  QUAD_PACK_HEAD_T         tHead;
   QUAD_PACK_GET_DATA_REQ_T tPack1;
   QUAD_PACK_GET_DATA_CNF_T tPack2;
   QUAD_PACK_SET_PWM_REQ_T  tPack3;
@@ -130,5 +129,6 @@ typedef union QUAD_PACK_Utag{
 }QUAD_PACK_U;
 
 /***** Function declarations *****/
-QuadRes QuadSendPack(UInt16 uiDst, QUAD_PACK_HEAD_T *ptPck);
-QuadRes QuadGetPack(QUAD_PACK_HEAD_T *ptPck);
+QuadRes QuadSendPack(QUAD_PACK_HEAD_T *ptPck);
+QUAD_PACK_U *QuadWaitForPacket(bool bInfinite);
+QUAD_PACK_U *QuadPoolPacketGet();
