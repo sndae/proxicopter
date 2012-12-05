@@ -16,7 +16,7 @@
 ** ###################################################################*/
 
 #include "PE_Types.h"
-
+#include "PE_Error.h"
 /***** Commands list ******/
 
 #define QUAD_CMD_READ_DATA_REQ   (0x0001)
@@ -35,17 +35,17 @@
 /****** Destinations list *****/
 
 typedef enum QUAD_SRCDST_Etag{
-  QUAD_SRCDST_INT           = (0x0000),
-  QUAD_SRCDST_ACC           = (0x0001),
-  QUAD_SRCDST_GYRO          = (0x0002),
-  QUAD_SRCDST_RF            = (0x0003),
-  QUAD_SRCDST_UART          = (0x0004),
+  QUAD_SRCDST_INT           = (0x0001),
+  QUAD_SRCDST_ACC           = (0x0002),
+  QUAD_SRCDST_GYRO          = (0x0003),
+  QUAD_SRCDST_RF            = (0x0004),
+  QUAD_SRCDST_UART          = (0x0005),
 }QUAD_SRCDST_E;
 
 /****** Quadro types definitions ******/
-typedef UInt16  QuadRes;
-#define S_OK    (0x0000)
-#define S_FAIL  (0x0001)
+typedef byte    QuadRes;
+#define S_OK    (ERR_OK)
+#define S_FAIL  (ERR_OK + 1)
 
 
 /******* Data structures definitions *******/
@@ -129,6 +129,6 @@ typedef union QUAD_PACK_Utag{
 }QUAD_PACK_U;
 
 /***** Function declarations *****/
-QuadRes QuadSendPack(QUAD_PACK_HEAD_T *ptPck);
+QuadRes QuadSendPack(QUAD_PACK_U *ptPck);
 QUAD_PACK_U *QuadWaitForPacket(bool bInfinite);
 QUAD_PACK_U *QuadPoolPacketGet();

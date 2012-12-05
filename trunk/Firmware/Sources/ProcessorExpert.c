@@ -35,24 +35,28 @@ void main(void)
 {
   /* Write your local variable definition here */
   UInt32  uiCntr = 0;
-  QUAD_PACK_U *ptPack = 0;
+  QUAD_PACK_U *puPack = 0;
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+#define EN_UART_CONTOL
 
   for(;;) {
-    ptPack = QuadWaitForPacket(FALSE);
+    puPack = QuadWaitForPacket(FALSE);
     if(ptPack){
-      switch(ptPack->tHead.uiCmd){
+      switch(puPack->tHead.uiCmd){
         case QUAD_CMD_READ_DATA_REQ:
         case QUAD_CMD_WRITE_DATA_REQ:
-          QuadSendPack(ptPack);
+          QuadSendPack(puPack);
           break;
-        break;
         case QUAD_CMD_DATA_IND:
-
+#ifdef  EN_UART_CONTOL
+          puPack->tHead.eDst = QUAD_SRCDST_UART;
+          QuadSendPack(puPack);
+#endif
+          break;
         default:
         break;
       }
