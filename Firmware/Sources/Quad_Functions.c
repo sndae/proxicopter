@@ -7,10 +7,11 @@
 #define QUAD_POOLELELMENT_SIZE   0x0A
 
 static QUAD_PACK_U  s_atPackPool[QUAD_POOLELELMENT_SIZE];
-static QUAD_PACK_U  s_uiPackPoolLevel = 0;
+static UInt32       s_uiPackPoolNextFree;
+static UInt32       s_uiPackPoolNextToProcess;
 
-static  QUAD_SRC_E  s_eCurrentI2CSrc;
 
+static  QUAD_SRC_E  s_eCurrentI2CSrc = 0;
 
 QuadRes Quad_SetI2CSlave(QUAD_SRCDSST_E eDst){
   QuadRes bRes = ERR_OK;
@@ -89,15 +90,33 @@ QuadRes QuadSendPack(QUAD_PACK_U *puPack)
 }
 
 QUAD_PACK_U *QuadWaitForPacket(bool bInfinite){
-  do{
-    if(s_uiPackPoolLevel){
-      return &s_atPackPool[s_uiPackPoolLevel];
-    }
-  }while(bInfinite);
+  if(s_uiPackPoolNextToProcess == s_uiPackPoolNextFree){
+    return 0;
+  }
 
-  return 0;
+  return s_atPackPool[s_uiPackPoolNextToProcess];
 }
 
 void QuadPackRelease(QUAD_PACK_U *ptPack){
-  s_uiPackPoolLevel--;
+  if(s_uiPackPoolNextToProcess == QUAD_POOLELELMENT_SIZE){
+    s_uiPackPoolNextToProcess = 0;
+  }else{
+    s_uiPackPoolNextToProcess++;
+  }
+}
+
+QUAD_PACK_U *QuadPoolPacketGet(){
+
+  if(s_uiPackPoolNextFree == QUAD_POOLELELMENT_SIZE){
+    s_uiPackPoolNextFree = 0;
+    if(s_uiPackPoolNextToProcess == 0){
+      return 0;
+    }
+  }
+
+  if(s_uiPackPoolNextFree == s_uiPackPoolNextToProcess){
+    return 0;
+  }
+
+  return s_atPackPool[s_uiPackPoolNextFree++];
 }
