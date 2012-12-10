@@ -30,38 +30,6 @@
 #include "eFPWM1.h"
 
 
-void I2C2_OnReceiveData(void);
-/*
-** ===================================================================
-**     Event       :  I2C2_OnReceiveData (module Events)
-**
-**     Component   :  I2C2 [InternalI2C]
-**     Description :
-**         This event is invoked when I2C finishes the reception of the
-**         data successfully. This event is not available for the SLAVE
-**         mode and if both RecvChar and RecvBlock are disabled. This
-**         event is enabled only if interrupts/events are enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void I2C2_OnTransmitData(void);
-/*
-** ===================================================================
-**     Event       :  I2C2_OnTransmitData (module Events)
-**
-**     Component   :  I2C2 [InternalI2C]
-**     Description :
-**         This event is invoked when I2C finishes the transmission of
-**         the data successfully. This event is not available for the
-**         SLAVE mode and if both SendChar and SendBlock are disabled.
-**         This event is enabled only if interrupts/events are enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
 void SM1_OnRxChar(void);
 /*
 ** ===================================================================

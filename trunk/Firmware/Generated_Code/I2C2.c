@@ -6,7 +6,7 @@
 **     Component   : InternalI2C
 **     Version     : Component 01.277, Driver 02.03, CPU db: 3.00.240
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
+**     Date/Time   : 2012-12-10, 20:49, # CodeGen: 34
 **     Abstract    :
 **          This component encapsulates the internal I2C communication 
 **          interface. The implementation of the interface is based 
@@ -47,9 +47,6 @@
 **             Address register        : I2C1_ADDR [F220]
 **             Glitch filter register  : I2C1_FILT [F226]
 **
-**         Interrupt
-**             Vector name             : INT_I2C1
-**             Priority                : 1
 **
 **         Used pins                   :
 **       ----------------------------------------------------------
@@ -59,13 +56,11 @@
 **              SCL       |     39     |  GPIOF2_SCL1_XB_OUT2
 **       ----------------------------------------------------------
 **     Contents    :
-**         SendChar        - byte I2C2_SendChar(byte Chr);
-**         RecvChar        - byte I2C2_RecvChar(byte *Chr);
-**         SendBlock       - byte I2C2_SendBlock(void* Ptr, word Siz, word *Snt);
-**         RecvBlock       - byte I2C2_RecvBlock(void* Ptr, word Siz, word *Rcv);
-**         GetCharsInTxBuf - word I2C2_GetCharsInTxBuf(void);
-**         GetCharsInRxBuf - word I2C2_GetCharsInRxBuf(void);
-**         SelectSlave     - byte I2C2_SelectSlave(byte Slv);
+**         SendChar    - byte I2C2_SendChar(byte Chr);
+**         RecvChar    - byte I2C2_RecvChar(byte *Chr);
+**         SendBlock   - byte I2C2_SendBlock(void* Ptr, word Siz, word *Snt);
+**         RecvBlock   - byte I2C2_RecvBlock(void* Ptr, word Siz, word *Rcv);
+**         SelectSlave - byte I2C2_SelectSlave(byte Slv);
 **
 **     Copyright : 1997 - 2011 Freescale Semiconductor, Inc. All Rights Reserved.
 **     
@@ -77,7 +72,6 @@
 /* MODULE I2C2. */
 
 
-#include "Events.h"
 #include "I2C2.h"
 
 #define OVERRUN_ERR      0x01          /* Overrun error flag bit   */
@@ -95,6 +89,7 @@ static byte *InpPtrM;                  /* Pointer to input buffer for Master mod
 static word OutLenM;                   /* Length of output bufer's content */
 static byte *OutPtrM;                  /* Pointer to output buffer for Master mode */
 volatile word I2C2_SndRcvTemp;         /* Temporary variable for SendChar (RecvChar) when they call SendBlock (RecvBlock) */
+static word *PtrSndRcv;                /* Pointer to Snd/Rcv counter for SendBlock/RecvBlock */
 static byte ChrTemp;                   /* Temporary variable for SendChar method */
 volatile byte I2C2_SerFlag;            /* Flags for serial communication */
                                        /* Bits: 0 - OverRun error */
@@ -108,11 +103,11 @@ volatile byte I2C2_SerFlag;            /* Flags for serial communication */
 
 /*
 ** ===================================================================
-**     Method      :  I2C2_Interrupt (component InternalI2C)
+**     Method      :  MainComm (component InternalI2C)
 **
 **     Description :
-**         The method services the interrupt of the selected peripheral(s)
-**         and eventually invokes the beans event(s).
+**         The method services the interrupt flags if Interrupt service 
+**         is disabled.
 **         This method is internal. It is used by Processor Expert only.
 ** ===================================================================
 */
@@ -120,79 +115,88 @@ volatile byte I2C2_SerFlag;            /* Flags for serial communication */
 #define SRW  0x04
 #define IBAL 0x10
 #define IAAS 0x40
-
-#define ON_ARBIT_LOST 0x01
-#define ON_FULL_RX    0x02
-#define ON_RX_CHAR    0x04
-#define ON_FREE_TX    0x08
-#define ON_TX_CHAR    0x10
-#define ON_OVERRUN    0x20
-#define ON_TX_EMPTY   0x40
-
-#pragma interrupt alignsp saveall
-void I2C2_Interrupt(void)
+static byte MainComm(void)
 {
-  register word Status;                /* Temporary variable for status register */
+  register word Tr;
+  register word Status;                /* Temporary variable for saving status register */
 
-  Status = getReg(I2C1_SR);            /* Safe status register */
-  setRegBit(I2C1_SR,IICIF);            /* Clear interrupt flag */
-  if (getRegBit(I2C1_CR1,MST)) {       /* Is device in master mode? */
-    if (getRegBit(I2C1_CR1,TX)) {      /* Is device in Tx mode? */
-      if (Status & I2C1_SR_RXAK_MASK) { /* NACK received? */
-        clrRegBit(I2C1_CR1,MST);       /* Switch device to slave mode (stop signal sent) */
-        OutLenM = 0;                   /* No character for sending */
-        InpLenM = 0;                   /* No character for reception */
-        I2C2_SerFlag &= ~(CHAR_IN_TX|WAIT_RX_CHAR|IN_PROGRES); /* No character for sending or reception */
-      }
-      else {
-        if (OutLenM) {                 /* Is any char. for transmitting? */
-          OutLenM--;                   /* Decrease number of chars for the transmit */
-          setReg(I2C1_DATA,*(OutPtrM)++); /* Send character */
-        }
-        else {
-          if (InpLenM) {               /* Is any char. for reception? */
-            if (InpLenM == 1) {        /* If only one char to receive */
-              setRegBit(I2C1_CR1,TXAK); /* then transmit ACK disable */
-            }
-            else {
-              clrRegBit(I2C1_CR1,TXAK); /* else transmit ACK enable */
-            }
-            clrRegBit(I2C1_CR1,TX);    /* Switch to Rx mode */
-            getReg(I2C1_DATA);         /* Dummy read character */
-          }
-          else {
-            I2C2_SerFlag &= ~IN_PROGRES; /* Clear flag "busy" */
+  *PtrSndRcv = 0;                      /* Clear Snd/Rcv counter */
+  for (Tr=0; Tr<0x07D0;Tr++) {
+    if (getRegBit(I2C1_SR,IICIF)) {
+      Status = getReg(I2C1_SR);        /* Save status register */
+      setRegBit(I2C1_SR,IICIF);        /* Clear interrupt flag */
+      Tr = (word)-1;                   /* Clear trials */
+      if (getRegBit(I2C1_CR1,MST)) {   /* Is device in master mode? */
+        if (getRegBit(I2C1_CR1,TX)) {  /* Is device in Tx mode? */
+          if (Status & I2C1_SR_RXAK_MASK) { /* NACK received? */
             clrRegBit(I2C1_CR1,MST);   /* Switch device to slave mode (stop signal sent) */
             clrRegBit(I2C1_CR1,TX);    /* Switch to Rx mode */
-            I2C2_OnTransmitData();     /* Invoke OnTransmitData event */
+            OutLenM = 0;               /* Any character is not for sent */
+            InpLenM = 0;               /* Any character is not for reception */
+            I2C2_SerFlag &= ~(CHAR_IN_TX|WAIT_RX_CHAR|IN_PROGRES); /* Any character is not for sent or reception*/
+            return ERR_BUSY;           /* Return with error */
+          }
+          else {
+            if (OutLenM) {             /* Is any char. for transmitting? */
+              OutLenM--;               /* Decrease number of chars for the transmit */
+              setReg(I2C1_DATA,*(OutPtrM)++); /* Send character */
+              (*PtrSndRcv)++;          /* Increment Snd counter */
+            }
+            else {
+              if (InpLenM) {           /* Is any char. for reception? */
+                if (InpLenM == 1)      /* If only one char to receive */
+                  setRegBit(I2C1_CR1,TXAK); /* then transmit ACK disable */
+                else
+                  clrRegBit(I2C1_CR1,TXAK); /* else transmit ACK enable */
+                clrRegBit(I2C1_CR1,TX); /* Switch to Rx mode */
+                getReg(I2C1_DATA);     /* Dummy read character */
+              }
+              else {
+                clrRegBit(I2C1_CR1,MST); /* Switch device to slave mode (stop signal sent) */
+                clrRegBit(I2C1_CR1,TX); /* Switch to Rx mode */
+                for (Tr=0x07D0;Tr!=0;Tr--) {
+                  if (!getRegBit(I2C1_SR,BUSY)) { /* Bus is busy? */
+                    return ERR_OK;     /* Return without error */
+                  }
+                }
+                return ERR_BUSOFF;     /* Return with error */
+              }
+            }
+          }
+        }
+        else {
+          InpLenM--;                   /* Decrease number of chars for the receive */
+          if (InpLenM) {               /* Is any char. for reception? */
+            if (InpLenM == 1)
+              setRegBit(I2C1_CR1,TXAK); /* Transmit ACK disable */
+          }
+          else {
+            clrRegBit(I2C1_CR1,MST);   /* If no, switch device to slave mode (stop signal sent) */
+          }
+          *(InpPtrM)++ = (byte)getReg(I2C1_DATA); /* Receive character */
+          (*PtrSndRcv)++;              /* Increment Rcv counter */
+          if (!InpLenM) {              /* Is any char. for reception? */
+            for (Tr=0x07D0;Tr!=0;Tr--) {
+              if (!getRegBit(I2C1_SR,BUSY)) { /* Bus is busy? */
+                return ERR_OK;         /* Return without error */
+              }
+            }
+            return ERR_BUSOFF;         /* Return with error */
           }
         }
       }
-    }
-    else {
-      InpLenM--;                       /* Decrease number of chars for the receive */
-      if (InpLenM) {                   /* Is any char. for reception? */
-        if (InpLenM == 1)
-          setRegBit(I2C1_CR1,TXAK);    /* Transmit ACK disable */
-      }
       else {
-        clrRegBit(I2C1_CR1,MST);       /* If no, switch device to slave mode (stop signal sent) */
-        clrRegBit(I2C1_CR1,TXAK);      /* Transmit ACK enable */
-      }
-      *(InpPtrM)++ = (byte)getReg(I2C1_DATA); /* Receive character */
-      if (!InpLenM) {                  /* Is any char. for reception? */
-        I2C2_OnReceiveData();          /* Invoke OnReceiveData event */
+        if (Status & I2C1_SR_ARBL_MASK) { /* Arbitration lost? */
+          OutLenM = 0;                 /* Any character is not for sent */
+          InpLenM = 0;                 /* Any character is not for reception */
+          I2C2_SerFlag &= ~(CHAR_IN_TX|WAIT_RX_CHAR|IN_PROGRES); /* Any character is not for sent or reception*/
+          clrRegBit(I2C1_CR1,TX);      /* Switch to Rx mode */
+          return ERR_ARBITR;           /* Return with error */
+        }
       }
     }
   }
-  else {
-    if (Status & I2C1_SR_ARBL_MASK) {  /* Arbitration lost? */
-      OutLenM = 0;                     /* Any character is not for sent */
-      InpLenM = 0;                     /* Any character is not for reception */
-      I2C2_SerFlag &= ~(CHAR_IN_TX|WAIT_RX_CHAR|IN_PROGRES); /* Any character is not for sent or reception*/
-      clrRegBit(I2C1_CR1,TX);          /* Switch to Rx mode */
-    }
-  }
+  return ERR_BUSOFF;                   /* Return with error */
 }
 
 /*
@@ -367,8 +371,7 @@ byte I2C2_SendBlock(void* Ptr,word Siz,word *Snt)
   if ((getRegBit(I2C1_SR,BUSY))||(InpLenM)||(I2C2_SerFlag&(CHAR_IN_TX|WAIT_RX_CHAR|IN_PROGRES))) { /* Is the bus busy */
     return ERR_BUSOFF;                 /* If yes then error */
   }
-  EnterCritical();                     /* Enter the critical section */
-  I2C2_SerFlag |= IN_PROGRES;          /* Set flag "busy" */
+  PtrSndRcv = Snt;                     /* Safe Snd pointer */
   OutLenM = Siz;                       /* Set lenght of data */
   OutPtrM = (byte *)Ptr;               /* Save pointer to data for transmitting */
   setRegBit(I2C1_CR1,TX);              /* Set TX mode */
@@ -379,9 +382,7 @@ byte I2C2_SendBlock(void* Ptr,word Siz,word *Snt)
     setRegBit(I2C1_CR1,MST);           /* If no then start signal generated */
   }
   setReg(I2C1_DATA,I2C2_SlaveAddr);    /* Send slave address */
-  ExitCritical();                      /* Exit the critical section */
-  *Snt = Siz;                          /* Dummy number of really sent chars */
-  return ERR_OK;                       /* OK */
+  return (MainComm());                 /* Call main communication method and return */
 }
 
 /*
@@ -449,7 +450,7 @@ byte I2C2_RecvBlock(void* Ptr,word Siz,word *Rcv)
   if ((getRegBit(I2C1_SR,BUSY))||(InpLenM)||(I2C2_SerFlag&(CHAR_IN_TX|WAIT_RX_CHAR|IN_PROGRES))) { /* Is the bus busy */
     return ERR_BUSOFF;                 /* If yes then error */
   }
-  EnterCritical();                     /* Enter the critical section */
+  PtrSndRcv = Rcv;                     /* Safe Rcv pointer */
   InpLenM = Siz;                       /* Set lenght of data */
   InpPtrM = (byte *)Ptr;               /* Save pointer to data for reception */
   setRegBit(I2C1_CR1,TX);              /* Set TX mode */
@@ -460,50 +461,7 @@ byte I2C2_RecvBlock(void* Ptr,word Siz,word *Rcv)
     setRegBit(I2C1_CR1,MST);           /* If no then start signal generated */
   }
   setReg(I2C1_DATA,(byte)(I2C2_SlaveAddr+1)); /* Send slave address */
-  ExitCritical();                      /* Exit the critical section */
-  *Rcv = Siz;                          /* Dummy number of really received chars */
-  return ERR_OK;                       /* OK */
-}
-
-/*
-** ===================================================================
-**     Method      :  I2C2_GetCharsInTxBuf (component InternalI2C)
-**
-**     Description :
-**         Returns number of characters in the output buffer. In SLAVE
-**         mode returns the number of characters in the internal slave
-**         output buffer. In MASTER mode returns number of characters
-**         to be sent from the user buffer (passed by SendBlock method).
-**         This method is not supported in polling mode.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Number of characters in the output buffer.
-** ===================================================================
-*/
-word I2C2_GetCharsInTxBuf(void)
-{
-  return OutLenM;                      /* Return number of chars remaining in the Master Tx buffer */
-}
-
-/*
-** ===================================================================
-**     Method      :  I2C2_GetCharsInRxBuf (component InternalI2C)
-**
-**     Description :
-**         Returns number of characters in the input buffer. In SLAVE
-**         mode returns the number of characters in the internal slave
-**         input buffer. In MASTER mode returns number of characters to
-**         be received into a user buffer (passed by RecvChar or
-**         RecvBlock method).
-**         This method is not supported in polling mode.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Number of characters in the input buffer.
-** ===================================================================
-*/
-word I2C2_GetCharsInRxBuf(void)
-{
-  return InpLenM;                      /* Return number of chars remaining in the Master Rx buffer */
+  return (MainComm());                 /* Call main communication method and return */
 }
 
 /*
@@ -562,8 +520,6 @@ void I2C2_Init(void)
   /* I2C1_SMB_CSR: FACK=0,ALERTEN=0,SIICAEN=0,TCKSEL=0,SLTF=1,SHTF=0,SHTF2=0,SHTF2IE=0 */
   setReg(I2C1_SMB_CSR,0x08);
   setRegBit(I2C1_CR1,IICEN);           /* Enable device */
-  /* I2C1_CR1: IICEN=1,IICIE=1,MST=0,TX=0,TXAK=0,RSTA=0,WUEN=0,??=0 */
-  setReg(I2C1_CR1,0xC0);               /* Control register settings */
 }
 
 

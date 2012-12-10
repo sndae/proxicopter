@@ -16,6 +16,7 @@
 
 #include "L3G4200D.h"
 #include "I2C2.h"
+#include "Quadro_Public.h"
 
 static float   gyroRate[3] = {0.0,0.0,0.0};
 static Int32   gyroZero[3] = {0,0,0};
@@ -27,7 +28,7 @@ static byte    gyroSampleCount = 0;
 
 QuadRes L3G4200D_Init(void){
   UInt8 bChar = 0;
-  Uint8 bRes = ERR_OK;
+  UInt8 bRes = ERR_OK;
   I2C2_SelectSlave(L3G4200D_I2C_ADDR);
   I2C2_SendChar(0xFF);
   I2C2_RecvChar(&bChar);
@@ -56,8 +57,7 @@ QuadRes L3G4200D_MeasureGyro(){
 }
 
 QuadRes L3G4200D_CalibrateGyro(){
-  r
-  eturn S_OK;
+  return S_OK;
 }
 
 QuadRes L3G4200D_ReadGyroTemp(){

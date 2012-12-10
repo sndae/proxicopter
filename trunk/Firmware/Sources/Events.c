@@ -20,7 +20,7 @@
 #include "Events.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
-
+#include "Quadro_Public.h"
 /*
 ** ===================================================================
 **     Event       :  SM1_OnRxChar (module Events)
@@ -88,11 +88,7 @@
 void I2C2_OnReceiveData(void)
 {
   /* Write your code here ... */
-  QUAD_PACK_U *ptPck = QuadPoolPacketGet();
-  ptPck->tHead.uiCmd = QUAD_CMD_DATA_IND;
-  ptPck->tHead.eDst  = QUAD_SRCDST_INT;
-  ptPck->tHead.eSrc  = Quad_GetI2CSlave();
-  I2C2_RecvBlock(&ptPck->tPack5.tData, &ptPck->tHead.uiLen, &ptPck->tHead.uiLen);
+
 }
 
 /*
@@ -189,23 +185,7 @@ void I2C2_OnTransmitData(void)
 void SM1_OnRxChar(void)
 {
   /* Write your code here ... */
-  static UInt8 s_UARTBuff[sizeof(QUAD_PACK_U)] = {0};
-  static UInt32 s_uiUARTBuffCntr = 0;
-  static UInt8 s_bUARTPackLen = sizeof(QUAD_PACK_HEAD_T);
-  QUAD_PACK_U *ptPack = 0;
 
-  SM1_RecvChar(&s_UARTBuff[s_uiUARTBuffCntr]);
-  if(s_uiUARTBuffCntr == offsetof(QUAD_PACK_HEAD_T, uiLen)){
-    s_bUARTPackLen += s_UARTBuff[s_uiUARTBuffCntr];
-  }
-
-  if(s_uiUARTBuffCntr++ == s_bUARTPackLen){
-    /* signal user that a new packet has arrived */
-    ptPack = QuadPoolPacketGet();
-    memcpy(s_bUARTPackLen, s_UARTBuff, s_bUARTPackLen);
-    s_uiUARTBuffCntr = 0;
-    s_bUARTPackLen = sizeof(QUAD_PACK_HEAD_T);
-  }
 }
 
 /*
