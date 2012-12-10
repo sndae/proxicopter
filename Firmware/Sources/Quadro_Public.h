@@ -15,6 +15,9 @@
 **
 ** ###################################################################*/
 
+#ifndef __QUADRO_PUBLIC_H__
+#define __QUADRO_PUBLIC_H__
+
 #include "PE_Types.h"
 #include "PE_Error.h"
 /***** Commands list ******/
@@ -35,6 +38,7 @@
 /****** Destinations list *****/
 
 typedef enum QUAD_SRCDST_Etag{
+  QUAD_SRCDST_UKNWN         = (0x0000),
   QUAD_SRCDST_INT           = (0x0001),
   QUAD_SRCDST_ACC           = (0x0002),
   QUAD_SRCDST_GYRO          = (0x0003),
@@ -130,5 +134,10 @@ typedef union QUAD_PACK_Utag{
 
 /***** Function declarations *****/
 QuadRes QuadSendPack(QUAD_PACK_U *ptPck);
+QuadRes Quad_SetI2CSlave(QUAD_SRCDST_E eSrc);
 QUAD_PACK_U *QuadWaitForPacket(bool bInfinite);
 QUAD_PACK_U *QuadPoolPacketGet();
+void QuadPackRelease(QUAD_PACK_U *ptPack);
+byte Quad_GetI2CSlave();
+
+#endif

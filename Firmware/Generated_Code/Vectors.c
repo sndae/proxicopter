@@ -5,7 +5,7 @@
 **     Processor   : MC56F8257
 **     Version     : Component 01.014, Driver 02.10, CPU db: 3.00.240
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
+**     Date/Time   : 2012-12-10, 20:49, # CodeGen: 34
 **     Abstract    :
 **
 **     Settings    :
@@ -79,7 +79,7 @@ volatile asm void _vect(void) {
   JSR  Cpu_Interrupt                   /* Interrupt no. 34 (Unused) - ivINT_QSCI0_TxEmpty  */
   JSR  SM1_InterruptTx                 /* Interrupt no. 35 (Used)   - ivINT_SPI_TxEmpty  */
   JSR  SM1_InterruptRx                 /* Interrupt no. 36 (Used)   - ivINT_SPI_RxFull  */
-  JSR  I2C2_Interrupt                  /* Interrupt no. 37 (Used)   - ivINT_I2C1  */
+  JSR  Cpu_Interrupt                   /* Interrupt no. 37 (Unused) - ivINT_I2C1  */
   JSR  Cpu_Interrupt                   /* Interrupt no. 38 (Unused) - ivINT_I2C0  */
   JSR  Cpu_Interrupt                   /* Interrupt no. 39 (Unused) - ivINT_TMRA3  */
   JSR  Cpu_Interrupt                   /* Interrupt no. 40 (Unused) - ivINT_TMRA2  */
@@ -118,7 +118,6 @@ volatile asm void _vect(void) {
 /*lint -esym(765,Cpu_Interrupt) Disable MISRA rule (8.10) checking for symbols (Cpu_Interrupt). */
 /*lint -esym(765,SM1_InterruptTx) Disable MISRA rule (8.10) checking for symbols (SM1_InterruptTx). */
 /*lint -esym(765,SM1_InterruptRx) Disable MISRA rule (8.10) checking for symbols (SM1_InterruptRx). */
-/*lint -esym(765,I2C2_Interrupt) Disable MISRA rule (8.10) checking for symbols (I2C2_Interrupt). */
 
 /*
 ** ###################################################################

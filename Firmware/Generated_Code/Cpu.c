@@ -7,7 +7,7 @@
 **     Version     : Component 01.014, Driver 02.10, CPU db: 3.00.240
 **     Datasheet   : MC56F824x/5xPB Rev. 1.0.0, 09/2008; MC56F82XXRM Rev. 0 Draft A 11/2008
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
+**     Date/Time   : 2012-12-10, 20:49, # CodeGen: 34
 **     Abstract    :
 **
 **     Settings    :
@@ -217,12 +217,12 @@ void PE_low_level_init(void)
   /* SIM_CLKOUT: ??=0,??=0,??=1,??=0,??=0,??=0,??=0,??=0,??=0,TEST=0,CLKDIS=1,CLKOSEL=0 */
   setReg16(SIM_CLKOUT, 0x2020U);       /* Set up the SIM clock output select register */ 
   /* Common initialization of the CPU registers */
-  /* INTC_IPR3: IIC1_IPL=2,QSPI_RCV_IPL=2,QSPI_XMIT_IPL=2 */
-  clrSetReg16Bits(INTC_IPR3, 0x0150U, 0x02A0U); 
   /* GPIO_F_PEREN: PE5=1,PE4=1,PE3=1,PE2=1 */
   setReg16Bits(GPIO_F_PEREN, 0x3CU);    
   /* SIM_GPS2: F5=0,F4=0,F3=0,F2=0 */
   clrReg16Bits(SIM_GPS2, 0x0550U);      
+  /* INTC_IPR3: QSPI_RCV_IPL=2,QSPI_XMIT_IPL=2 */
+  clrSetReg16Bits(INTC_IPR3, 0x50U, 0xA0U); 
   /* GPIO_C_PEREN: PE10=1,PE9=1,PE8=1 */
   setReg16Bits(GPIO_C_PEREN, 0x0700U);  
   /* SIM_GPS1: C10=0,C9=0,C8=0 */

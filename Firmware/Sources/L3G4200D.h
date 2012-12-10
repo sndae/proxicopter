@@ -21,7 +21,7 @@
 
 /* Register addressing */
 #define WHO_AM_I      (0x0F)
-#define CTRL_REG2     (0x20)
+#define CTRL_REG1     (0x20)
 #define CTRL_REG2     (0x21)
 #define CTRL_REG3     (0x22)
 #define CTRL_REG4     (0x23)

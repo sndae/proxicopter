@@ -30,6 +30,7 @@
 #include "PE_Const.h"
 #include "PE_Types.h"
 #include "IO_Map.h"
+#include "Quadro_Public.h"
 
 void main(void)
 {
@@ -45,7 +46,7 @@ void main(void)
 
   for(;;) {
     puPack = QuadWaitForPacket(FALSE);
-    if(ptPack){
+    if(puPack){
       switch(puPack->tHead.uiCmd){
         case QUAD_CMD_READ_DATA_REQ:
         case QUAD_CMD_WRITE_DATA_REQ:
@@ -60,7 +61,7 @@ void main(void)
         default:
         break;
       }
-      QuadPackRelease(ptPack);
+      QuadPackRelease(puPack);
     }
   }
 }

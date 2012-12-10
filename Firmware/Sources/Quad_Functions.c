@@ -2,6 +2,7 @@
 #include "I2C2.h"
 #include "AS1.h"
 #include "SM1.h"
+#include "L3G4200D.h"
 
 #define ACC_I2C_ADDR             0x19
 #define QUAD_POOLELELMENT_SIZE   0x0A
@@ -11,9 +12,9 @@ static UInt32       s_uiPackPoolNextFree;
 static UInt32       s_uiPackPoolNextToProcess;
 
 
-static  QUAD_SRC_E  s_eCurrentI2CSrc = 0;
+static  QUAD_SRCDST_E  s_eCurrentI2CSrc = QUAD_SRCDST_UKNWN;
 
-QuadRes Quad_SetI2CSlave(QUAD_SRCDSST_E eDst){
+QuadRes Quad_SetI2CSlave(QUAD_SRCDST_E eSrc){
   QuadRes bRes = ERR_OK;
   if(eSrc == QUAD_SRCDST_ACC){
     s_eCurrentI2CSrc = eSrc;
@@ -26,7 +27,7 @@ QuadRes Quad_SetI2CSlave(QUAD_SRCDSST_E eDst){
   return bRes;
 }
 
-QUAD_SRCDSST_E  Quad_GetI2CSlave(){
+byte Quad_GetI2CSlave(){
   return s_eCurrentI2CSrc;
 }
 
@@ -94,7 +95,7 @@ QUAD_PACK_U *QuadWaitForPacket(bool bInfinite){
     return 0;
   }
 
-  return s_atPackPool[s_uiPackPoolNextToProcess];
+  return &s_atPackPool[s_uiPackPoolNextToProcess];
 }
 
 void QuadPackRelease(QUAD_PACK_U *ptPack){
@@ -118,5 +119,5 @@ QUAD_PACK_U *QuadPoolPacketGet(){
     return 0;
   }
 
-  return s_atPackPool[s_uiPackPoolNextFree++];
+  return &s_atPackPool[s_uiPackPoolNextFree++];
 }

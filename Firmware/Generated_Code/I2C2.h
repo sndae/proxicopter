@@ -6,7 +6,7 @@
 **     Component   : InternalI2C
 **     Version     : Component 01.277, Driver 02.03, CPU db: 3.00.240
 **     Compiler    : Metrowerks DSP C Compiler
-**     Date/Time   : 2012-11-22, 23:31, # CodeGen: 33
+**     Date/Time   : 2012-12-10, 20:49, # CodeGen: 34
 **     Abstract    :
 **          This component encapsulates the internal I2C communication 
 **          interface. The implementation of the interface is based 
@@ -47,9 +47,6 @@
 **             Address register        : I2C1_ADDR [F220]
 **             Glitch filter register  : I2C1_FILT [F226]
 **
-**         Interrupt
-**             Vector name             : INT_I2C1
-**             Priority                : 1
 **
 **         Used pins                   :
 **       ----------------------------------------------------------
@@ -59,13 +56,11 @@
 **              SCL       |     39     |  GPIOF2_SCL1_XB_OUT2
 **       ----------------------------------------------------------
 **     Contents    :
-**         SendChar        - byte I2C2_SendChar(byte Chr);
-**         RecvChar        - byte I2C2_RecvChar(byte *Chr);
-**         SendBlock       - byte I2C2_SendBlock(void* Ptr, word Siz, word *Snt);
-**         RecvBlock       - byte I2C2_RecvBlock(void* Ptr, word Siz, word *Rcv);
-**         GetCharsInTxBuf - word I2C2_GetCharsInTxBuf(void);
-**         GetCharsInRxBuf - word I2C2_GetCharsInRxBuf(void);
-**         SelectSlave     - byte I2C2_SelectSlave(byte Slv);
+**         SendChar    - byte I2C2_SendChar(byte Chr);
+**         RecvChar    - byte I2C2_RecvChar(byte *Chr);
+**         SendBlock   - byte I2C2_SendBlock(void* Ptr, word Siz, word *Snt);
+**         RecvBlock   - byte I2C2_RecvBlock(void* Ptr, word Siz, word *Rcv);
+**         SelectSlave - byte I2C2_SelectSlave(byte Slv);
 **
 **     Copyright : 1997 - 2011 Freescale Semiconductor, Inc. All Rights Reserved.
 **     
@@ -90,18 +85,6 @@
 /* MODULE I2C2. */
 
 extern volatile word I2C2_SndRcvTemp;
-
-void I2C2_Interrupt(void);
-/*
-** ===================================================================
-**     Method      :  I2C2_Interrupt (component InternalI2C)
-**
-**     Description :
-**         The method services the interrupt of the selected peripheral(s)
-**         and eventually invokes the beans event(s).
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
-*/
 
 byte I2C2_SendChar(byte Chr);
 /*
@@ -312,41 +295,6 @@ byte I2C2_RecvBlock(void* Ptr,word Siz,word *Rcv);
 **                           ERR_NOTAVAIL - Method is not available in
 **                           current mode - see the comment in the
 **                           generated code.
-** ===================================================================
-*/
-
-word I2C2_GetCharsInTxBuf(void);
-/*
-** ===================================================================
-**     Method      :  I2C2_GetCharsInTxBuf (component InternalI2C)
-**
-**     Description :
-**         Returns number of characters in the output buffer. In SLAVE
-**         mode returns the number of characters in the internal slave
-**         output buffer. In MASTER mode returns number of characters
-**         to be sent from the user buffer (passed by SendBlock method).
-**         This method is not supported in polling mode.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Number of characters in the output buffer.
-** ===================================================================
-*/
-
-word I2C2_GetCharsInRxBuf(void);
-/*
-** ===================================================================
-**     Method      :  I2C2_GetCharsInRxBuf (component InternalI2C)
-**
-**     Description :
-**         Returns number of characters in the input buffer. In SLAVE
-**         mode returns the number of characters in the internal slave
-**         input buffer. In MASTER mode returns number of characters to
-**         be received into a user buffer (passed by RecvChar or
-**         RecvBlock method).
-**         This method is not supported in polling mode.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Number of characters in the input buffer.
 ** ===================================================================
 */
 
