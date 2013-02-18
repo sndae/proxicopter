@@ -6,7 +6,7 @@
 
 #include "PhonebookDoc.h"
 #include "PhonebookView.h"
-#include "PhoneBookRecSet.h"
+#include "CitiesTable.h"
 #include "PhoneBookDBException.h"
 
 #ifdef _DEBUG
@@ -17,10 +17,10 @@
 // CPhonebookView
 const CPhonebookView::RegnameToTablenameMapping CPhonebookView::m_stRegnameToTablenameMapping[4] = 
 {  
-  {_T("Номенклатура с градове"), _T("phonebook.dbo.cities")},
-  {_T("Номенклатура с типове телефони"), _T("phonebook.dbo.phones")},
+  {_T("Градове"), _T("phonebook.dbo.cities")},
+  {_T("Типове телефони"), _T("phonebook.dbo.phones")},
   {_T("Абонати"), _T("phonebook.dbo.subscribers")},
-  {_T("Телефонни номера на абонати"), _T("phonebook.dbo.subscriber_phone_numbers")},
+  {_T("Телефонни номера"), _T("phonebook.dbo.subscriber_phone_numbers")},
 };
 
 IMPLEMENT_DYNCREATE(CPhonebookView, CFormView)
@@ -110,7 +110,7 @@ void CPhonebookView::OnCbnSelchangeRegisterSelector()
   // TODO: Add your control notification handler code here
   int iCurrSel = m_RegSelector.GetCurSel();
   try{
-    CPhonebookRecSet cRecordSet(m_Database, CPhonebookView::m_stRegnameToTablenameMapping[iCurrSel].pszTablename); 
+    CCitiesTable cRecordSet(m_Database); 
   }
   catch(CPhoneBookDBException cException)
   {
