@@ -192,6 +192,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CitiesTable.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MainFrm.cpp"
 				>
 			</File>
@@ -213,6 +217,10 @@
 			</File>
 			<File
 				RelativePath=".\PhonebookView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PhonesTable.cpp"
 				>
 			</File>
 			<File
@@ -246,6 +254,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CitiesTable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MainFrm.h"
 				>
 			</File>
@@ -267,6 +279,10 @@
 			</File>
 			<File
 				RelativePath=".\PhonebookView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PhonesTable.h"
 				>
 			</File>
 			<File

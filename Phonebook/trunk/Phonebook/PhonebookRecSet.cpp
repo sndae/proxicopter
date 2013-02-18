@@ -5,9 +5,12 @@
 CPhonebookRecSet::CPhonebookRecSet(CDatabase *pcDatabase)
 :CRecordset(pcDatabase)
 { 
+  m_iCurrRowRevNumber = 0;
+  m_iCurrRowRevNumber = 0;
   m_pcDatabase = pcDatabase;
-  m_cAttrList.Add(CDispnameToAttrname(0, _T("Id")));
-  m_cAttrList.Add(CDispnameToAttrname(0, _T("rev_nmb")));    
+  m_cAttrList.Add(CDispnameToAttrname(_T(""), _T("Id")));
+  m_cAttrList.Add(CDispnameToAttrname(_T(""), _T("rev_nmb")));   
+  m_iUserOffset = m_cAttrList.GetCount();
 }
 
 CPhonebookRecSet::~CPhonebookRecSet(void)
@@ -19,33 +22,62 @@ BOOL CPhonebookRecSet::MoveToFirstRow()
 {
   if(!IsBOF()){
     MoveFirst();
+    UpdateCurrRowRevNumber();
     return TRUE;
   }
-
+  
   return FALSE;
 }
 
 BOOL CPhonebookRecSet::MoveToNextRow()
 {
+  MoveNext();
   if(!IsEOF())
   {
-    MoveNext();
+    UpdateCurrRowRevNumber();
     return TRUE;
   }
 
   return FALSE;
 }
 
-BOOL CPhonebookRecSet::GetRowFirstAtrrVal(CDBVariant &cDBVariant)
+BOOL CPhonebookRecSet::MoveToPrevRow()
 {
-  m_iRowAttrCntr = 0;  
-  return GetRowNextAtrrVal(cDBVariant);
+  MovePrev();
+  if(!IsBOF())    
+    return TRUE;
+
+  return FALSE;
 }
 
-BOOL CPhonebookRecSet::GetRowNextAtrrVal(CDBVariant &cDBVariant)
+BOOL CPhonebookRecSet::GetRowFirstAtrrVal(CDBVariant &cDBVariant, TCHAR **pszDispName)
+{
+  m_iRowAttrCntr = m_iUserOffset;    
+  return GetRowNextAtrrVal(cDBVariant, pszDispName);
+}
+
+BOOL CPhonebookRecSet::GetRowPrevAtrrVal(CDBVariant &cDBVariant, TCHAR **pszDispName)
+{
+  if(m_iRowAttrCntr >= m_iUserOffset)
+  {
+    m_iRowAttrCntr--;
+    if(pszDispName){
+      *pszDispName = m_cAttrList.GetAt(m_iRowAttrCntr).m_szDispName;
+    }
+    GetFieldValue(m_iRowAttrCntr, cDBVariant);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+BOOL CPhonebookRecSet::GetRowNextAtrrVal(CDBVariant &cDBVariant,  TCHAR **pszDispName)
 {
   if(m_iRowAttrCntr < GetODBCFieldCount())
   {
+    if(pszDispName){
+      *pszDispName = m_cAttrList.GetAt(m_iRowAttrCntr).m_szDispName;
+    }
     GetFieldValue(m_iRowAttrCntr++, cDBVariant);
     return TRUE;
   }
@@ -53,29 +85,43 @@ BOOL CPhonebookRecSet::GetRowNextAtrrVal(CDBVariant &cDBVariant)
   return FALSE;
 }
 
-BOOL CPhonebookRecSet::LoadDB(TCHAR *pszTableName, CDispnameToAttrname *apszAttr[], int fFlags)
+BOOL CPhonebookRecSet::LoadDB(CDispnameToAttrname tTableName, CDispnameToAttrname *patAttrList, int fFlags)
 {
   CString csSQLcmd(_T("SELECT "));
-  
-  if(apszAttr){
-    for (int i = 0; *apszAttr[i]->m_pszAttrName == 0; ){
-      m_cAttrList.Add(*apszAttr[i]);
-      csSQLcmd += *apszAttr[i]->m_pszAttrName;
-      if(*apszAttr[++i]->m_pszAttrName)
-        csSQLcmd += _T(",");
-    };
 
-    csSQLcmd += _T(" FROM ");
-    csSQLcmd += pszTableName;
+  if(patAttrList){
+    while(1)
+    {
+      if(_tcsclen(patAttrList->m_szAttrName))
+        m_cAttrList.Add(*patAttrList++);
+      else
+        break;
+    }
+  }
 
-  }else
-    csSQLcmd.Format(_T("SELECT * FROM %s"), pszTableName);
+  for(int i = 0; i < m_cAttrList.GetCount(); )
+  {
+    csSQLcmd += m_cAttrList.GetAt(i).m_szAttrName;
+    if(++i != m_cAttrList.GetCount())
+      csSQLcmd += _T(",");
+  }
+
+  csSQLcmd += _T(" FROM ");
+  csSQLcmd += tTableName.m_szAttrName;
 
   if(Open(CRecordset::dynaset, csSQLcmd) == 0)
     return FALSE;
   else if(IsBOF())
     return FALSE;
 
+  m_cTableName = tTableName;
+
   return TRUE;
 }
 
+void CPhonebookRecSet::UpdateCurrRowRevNumber()
+{
+  CDBVariant cDBVariant;
+  GetFieldValue(_T("rev_nmb"), cDBVariant);
+  m_iCurrRowRevNumber = cDBVariant.m_iVal;
+}

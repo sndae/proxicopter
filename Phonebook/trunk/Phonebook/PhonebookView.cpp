@@ -7,6 +7,7 @@
 #include "PhonebookDoc.h"
 #include "PhonebookView.h"
 #include "CitiesTable.h"
+#include "PhonesTable.h"
 #include "PhoneBookDBException.h"
 
 #ifdef _DEBUG
@@ -63,15 +64,27 @@ void CPhonebookView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
 
-  for(int i = 0; i < sizeof(m_stRegnameToTablenameMapping)/sizeof(m_stRegnameToTablenameMapping[0]); i++)
+  if(m_Database.Open(_T("SQLEXPRESS")) != 0)
   {
-    m_RegSelector.AddString(m_stRegnameToTablenameMapping[i].pszRegname);
-  }
-  m_RegSelector.SetCurSel(0);
+    CCitiesTable cCitiesTable(m_Database);
+    CPhonesTable cPhonesTable(m_Database);
+    CPhonebookRecSet *pc = static_cast<CPhonebookRecSet*>(&cCitiesTable);
+    m_RegSelector.AddString(pc->GetTableDispName());
+    //pc = static_cast<CPhonebookRecSet*>(&cPhonesTable);
+    m_RegSelector.AddString(pc->GetTableDispName());
 
-  if(m_Database.Open(_T("SQLEXPRESS")) == 0)
-  {
-    MessageBox(_T("Unable to load database"));
+    CDBVariant attr_data;
+    CString attr_name;
+    TCHAR *psz = 0;
+    if(pc->MoveToFirstRow())
+    {
+      do
+      {
+        pc->GetRowFirstAtrrVal(attr_data, &psz);
+        while(pc->GetRowNextAtrrVal(attr_data, &psz))
+          ;
+      }while(pc->MoveToNextRow());
+    }   
   }
 }
 
@@ -110,7 +123,7 @@ void CPhonebookView::OnCbnSelchangeRegisterSelector()
   // TODO: Add your control notification handler code here
   int iCurrSel = m_RegSelector.GetCurSel();
   try{
-    CCitiesTable cRecordSet(m_Database); 
+//    CCitiesTable cRecordSet(m_Database); 
   }
   catch(CPhoneBookDBException cException)
   {
