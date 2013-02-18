@@ -20,6 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories=".\Phonebook"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -129,6 +130,9 @@
 				RelativePath=".\Phonebook\ChildFrm.cpp">
 			</File>
 			<File
+				RelativePath=".\Phonebook\CitiesTable.cpp">
+			</File>
+			<File
 				RelativePath=".\Phonebook\MainFrm.cpp">
 			</File>
 			<File
@@ -138,16 +142,10 @@
 				RelativePath=".\Phonebook\PhoneBookDBException.cpp">
 			</File>
 			<File
-				RelativePath=".\Phonebook\PhoneBookDBException.h">
-			</File>
-			<File
 				RelativePath=".\Phonebook\PhonebookDoc.cpp">
 			</File>
 			<File
 				RelativePath=".\Phonebook\PhonebookRecSet.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\PhonebookRecSet.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\PhonebookView.cpp">
@@ -167,13 +165,22 @@
 				RelativePath=".\Phonebook\ChildFrm.h">
 			</File>
 			<File
+				RelativePath=".\Phonebook\CitiesTable.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\MainFrm.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\Phonebook.h">
 			</File>
 			<File
+				RelativePath=".\Phonebook\PhoneBookDBException.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\PhonebookDoc.h">
+			</File>
+			<File
+				RelativePath=".\Phonebook\PhonebookRecSet.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\PhonebookView.h">
