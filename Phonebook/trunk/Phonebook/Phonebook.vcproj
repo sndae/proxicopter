@@ -200,7 +200,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PhoneBookDBException.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PhonebookDoc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PhonebookRecSet.cpp"
 				>
 			</File>
 			<File
@@ -246,7 +254,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PhoneBookDBException.h"
+				>
+			</File>
+			<File
 				RelativePath=".\PhonebookDoc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PhonebookRecSet.h"
 				>
 			</File>
 			<File
@@ -298,5 +314,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="Phonebook.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

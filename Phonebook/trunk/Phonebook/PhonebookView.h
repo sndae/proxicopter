@@ -1,16 +1,22 @@
 // PhonebookView.h : interface of the CPhonebookView class
 //
 
-
 #pragma once
-
+#include "afxwin.h"
+#include "PhonebookDB.h"
 
 class CPhonebookView : public CFormView
 {
 protected: // create from serialization only
 	CPhonebookView();
 	DECLARE_DYNCREATE(CPhonebookView)
-
+private:
+  struct RegnameToTablenameMapping{
+    TCHAR* pszRegname;
+    TCHAR* pszTablename;
+  };
+  static const RegnameToTablenameMapping m_stRegnameToTablenameMapping[4];
+  
 public:
 	enum{ IDD = IDD_PHONEBOOK_FORM };
 
@@ -40,6 +46,13 @@ protected:
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+  afx_msg void OnBnClickedLoaddb();
+  CComboBox m_RegSelector;
+  CListBox  m_RegContentList;
+  CDatabase m_Database;
+
+  afx_msg void OnCbnSelchangeRegisterSelector();
 };
 
 #ifndef _DEBUG  // debug version in PhonebookView.cpp
