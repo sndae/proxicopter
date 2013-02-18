@@ -3,7 +3,6 @@
 
 #pragma once
 #include "afxwin.h"
-#include "PhonebookDB.h"
 
 class CPhonebookView : public CFormView
 {
