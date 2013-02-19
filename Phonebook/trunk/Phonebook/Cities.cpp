@@ -71,6 +71,12 @@ void CCities::Dump(CDumpContext& dc) const
 {
 	CRecordset::Dump(dc);
 }
+
+void CCities::EditAndUpdateFields(CArray<CString> &a_csRowData)
+{
+
+}
+
 #endif //_DEBUG
 
 

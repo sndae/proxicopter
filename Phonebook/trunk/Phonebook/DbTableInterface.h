@@ -15,6 +15,8 @@ class CDbTableInterface :
   int m_iUserOffset;
   CString m_szTableName;
   CArray<CString> m_aszFieldsNames;
+protected:
+  virtual void     EditAndUpdateFields(CArray<CString> &a_csRowData) = 0;
 public:
   virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
   virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);

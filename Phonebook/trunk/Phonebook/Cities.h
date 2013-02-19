@@ -7,6 +7,8 @@
 
 class CCities :  virtual private CRecordset, public CDbTableInterface
 {
+protected:
+  virtual void     EditAndUpdateFields(CArray<CString> &a_csRowData);
 public:
 	CCities(CDatabase* pDatabase);
 	DECLARE_DYNAMIC(CCities)

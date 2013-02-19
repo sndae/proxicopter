@@ -34,6 +34,29 @@ HANDLE CDbTableInterface::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 
 BOOL CDbTableInterface::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 {
+  if(!hRow)
+    return FALSE;
+
+  CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Move(pRowId->m_iNmb);
+  if(IsEOF() || IsBOF() || !CanUpdate())
+    return FALSE;
+
+  CDBVariant cDBVariant;
+  GetFieldValue(_T("rev_nmb"), cDBVariant);
+  if(cDBVariant.m_iVal != pRowId->m_iRev){
+    return FALSE;
+  }
+
+  GetFieldValue(_T("Id"), cDBVariant);
+  if(cDBVariant.m_iVal != pRowId->m_iId){
+    return FALSE;
+  }
+
+  if(a_csRowData.GetCount() != (GetODBCFieldCount() - m_iUserOffset)){
+    return FALSE;
+  }
+
   return TRUE;
 }
 
