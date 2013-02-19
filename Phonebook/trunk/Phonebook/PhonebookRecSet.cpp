@@ -7,7 +7,6 @@ CPhonebookRecSet::CPhonebookRecSet(CDatabase *pcDatabase)
 { 
   m_iCurrRowRevNumber = 0;
   m_iCurrRowRevNumber = 0;
-  m_pcDatabase = pcDatabase;
   m_cAttrList.Add(CDispnameToAttrname(_T(""), _T("Id")));
   m_cAttrList.Add(CDispnameToAttrname(_T(""), _T("rev_nmb")));   
   m_iUserOffset = m_cAttrList.GetCount();
@@ -108,30 +107,33 @@ BOOL  CPhonebookRecSet::ReadRowAttributesNames(CArray<CString> &a_csRowData)
   return TRUE;
 }
 
-BOOL  CPhonebookRecSet::WriteRow(CArray<CString> &a_csRowData, HADNLE hRow)
+BOOL  CPhonebookRecSet::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 {
   if(!hRow)
     return FALSE;
 
-  CRowIdent *pRowId = static_cast<CRowIdent>(hRow);
-  
+  CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Move(pRowId->m_iNmb);
+  if(IsEOF() || IsBOF() || !CanUpdate())
+    return FALSE;
+
   CDBVariant cDBVariant;
   GetFieldValue(_T("rev_nmb"), cDBVariant);
-  if(cDBVariant.m_iVal != pRowId->){
-    return FALSE;
-  }else if(a_csRowData.GetCount() != (GetODBCFieldCount() - m_iUserOffset)){
+  if(cDBVariant.m_iVal != pRowId->m_iRev){
     return FALSE;
   }
 
-  GetFieldValue(
+  GetFieldValue(_T("Id"), cDBVariant);
+  if(cDBVariant.m_iVal != pRowId->m_iId){
+    return FALSE;
+  }
 
-  CDBVariant cDBVariant;
-  SetFieldValue(_T("rev_nmb"), cDBVariant);
-  *piRowRev
-
+  if(a_csRowData.GetCount() != (GetODBCFieldCount() - m_iUserOffset)){
+    return FALSE;
+  }
 }
 
-HANDLE * CPhonebookRecSet::ReadRow(CArray<CString> &a_csRowData, int iRowNmbr)
+HANDLE CPhonebookRecSet::ReadRow(CArray<CString> &a_csRowData, int iRowNmbr)
 {
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
@@ -153,8 +155,8 @@ HANDLE * CPhonebookRecSet::ReadRow(CArray<CString> &a_csRowData, int iRowNmbr)
     a_csRowData.Add(szFieldData);
   }
 
-  return  (HANDLE)pcRowId; 
-}
+  return (HANDLE)pcRowId; 
+} 
 
 BOOL CPhonebookRecSet::LoadDB(CDispnameToAttrname tTableName, CDispnameToAttrname *patAttrList, int fFlags)
 {  

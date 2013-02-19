@@ -3,7 +3,7 @@
 #include "afxtempl.h"
 
 class CPhonebookRecSet :
-  private CRecordset
+  virtual public CRecordset
 {
 #define STR_MAX_LEN  64
 protected:
@@ -18,17 +18,16 @@ protected:
       if(pszAttrName) _tcscpy(m_szAttrName, pszAttrName);
     };
   };
-  class CRowIdent{
+  struct CRowIdent{
     int m_iRev;
     int m_iNmb;
     int m_iId;
     CRowIdent(){};
-    CRowIdent(int iNmb, int iRev, int iId){m_iNmb = iNmb, m_iRev = iRev, m_iId = iId};
+    CRowIdent(int iNmb, int iRev, int iId):m_iNmb(iNmb), m_iRev(iRev), m_iId(iId){};
   };
   CDispnameToAttrname m_cTableName;
 private:
   CArray<CDispnameToAttrname> m_cAttrList;
-  CDatabase *m_pcDatabase;
   int m_iUserOffset;
   int m_iCurrRowRevNumber;
   void UpdateCurrRowRevNumber();
@@ -44,7 +43,7 @@ public:
   virtual BOOL   GetRowNextAtrrVal(TCHAR *pszText,  TCHAR **pszDispName = 0);
   virtual BOOL   GetRowPrevAtrrVal(TCHAR *pszText,  TCHAR **pszDispName = 0);
 
-  virtual BOOL   WriteRow(CArray<CString> &a_csRowData, HADNLE hRow);
+  virtual BOOL   WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
   virtual HANDLE ReadRow(CArray<CString> &a_csRowData, int iRowNmbr);
   virtual BOOL   ReadRowAttributesNames(CArray<CString> &a_csRowData);
   CPhonebookRecSet(CDatabase *pcDatabase); 

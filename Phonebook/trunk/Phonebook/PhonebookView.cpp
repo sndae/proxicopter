@@ -6,10 +6,10 @@
 
 #include "PhonebookDoc.h"
 #include "PhonebookView.h"
-#include "CitiesTable.h"
+#include "Cities.h"
 #include "PhonesTable.h"
 #include "PhoneBookDBException.h"
-
+#include "DbTableInterface.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -64,27 +64,30 @@ void CPhonebookView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
 
-  if(m_Database.Open(_T("SQLEXPRESS")) != 0)
+  if(m_Database.Open(0) != 0)
   {
-    CCitiesTable cCitiesTable(m_Database);
-    CPhonesTable cPhonesTable(m_Database);
-    CPhonebookRecSet *pc = static_cast<CPhonebookRecSet*>(&cCitiesTable);
-    m_RegSelector.AddString(pc->GetTableDispName());
-    //pc = static_cast<CPhonebookRecSet*>(&cPhonesTable);
-    m_RegSelector.AddString(pc->GetTableDispName());
-
-    CDBVariant attr_data;
-    CString attr_name;
-    TCHAR *psz = 0;
-    if(pc->MoveToFirstRow())
+    CCities cCitiesTable(&m_Database);
+    CDbTableInterface *pc = static_cast<CDbTableInterface*>(&cCitiesTable);
+    CString *csTableName = pc->GetTableDispName();
+    CString ccTable;
+    
+    CArray<CString> csFieldNames;
+    BOOL bRes = pc->ReadRowFieldNames(csFieldNames);
+    for(int i = 0; i<csFieldNames.GetCount(); i++)
     {
-      do
+      ccTable = csFieldNames.GetAt(i);
+    }
+    int iRow = 0;
+    HANDLE hRow = 0;
+    csFieldNames.RemoveAll();
+    while(hRow = pc->ReadRow(csFieldNames,iRow++))
+    {
+      for(int c = 0; c < csFieldNames.GetCount(); c++)
       {
-        pc->GetRowFirstAtrrVal(attr_data, &psz);
-        while(pc->GetRowNextAtrrVal(attr_data, &psz))
-          ;
-      }while(pc->MoveToNextRow());
-    }   
+        ccTable = csFieldNames.GetAt(c);
+      }
+      csFieldNames.RemoveAll();
+    }    
   }
 }
 

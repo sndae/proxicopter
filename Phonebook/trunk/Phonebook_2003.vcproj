@@ -86,6 +86,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies=" odbc32.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="2"
@@ -130,7 +131,19 @@
 				RelativePath=".\Phonebook\ChildFrm.cpp">
 			</File>
 			<File
+				RelativePath=".\Phonebook\Cities.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\Cities.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\CitiesTable.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\DbTableInterface.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\DbTableInterface.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\MainFrm.cpp">
@@ -149,6 +162,9 @@
 			</File>
 			<File
 				RelativePath=".\Phonebook\PhonebookView.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\PhonesTable.cpp">
 			</File>
 			<File
 				RelativePath=".\Phonebook\stdafx.cpp">
@@ -184,6 +200,9 @@
 			</File>
 			<File
 				RelativePath=".\Phonebook\PhonebookView.h">
+			</File>
+			<File
+				RelativePath=".\Phonebook\PhonesTable.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\Resource.h">
