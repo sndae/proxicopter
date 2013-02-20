@@ -3,12 +3,12 @@
 #include "PhonebookDBException.h"
 
 CPhonebookRecSet::CPhonebookRecSet(CDatabase *pcDatabase)
-:CRecordset(pcDatabase)
+:CRecordset(pcDatabase), m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
 { 
   m_iCurrRowRevNumber = 0;
   m_iCurrRowRevNumber = 0;
-  m_cAttrList.Add(CDispnameToAttrname(_T(""), _T("Id")));
-  m_cAttrList.Add(CDispnameToAttrname(_T(""), _T("rev_nmb")));   
+//  m_cAttrList.Add(CDispnameToAttrname(_T(""), m_pszIdFieldName));
+//  m_cAttrList.Add(CDispnameToAttrname(_T(""), m_pszRevNmbFieldName));   
   m_iUserOffset = m_cAttrList.GetCount();
 }
 
@@ -98,7 +98,7 @@ BOOL  CPhonebookRecSet::MoveToRow(int iNmbr)
   return TRUE;
 }
 
-BOOL  CPhonebookRecSet::ReadRowAttributesNames(CArray<CString> &a_csRowData)
+BOOL  CPhonebookRecSet::GetColumnsRepresNames(CArray<CString> &a_csRowData)
 {
   for(int i = m_iUserOffset; i < m_cAttrList.GetCount(); i++){
     a_csRowData.Add(m_cAttrList[i].m_szDispName);
@@ -118,12 +118,12 @@ BOOL  CPhonebookRecSet::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
     return FALSE;
 
   CDBVariant cDBVariant;
-  GetFieldValue(_T("rev_nmb"), cDBVariant);
+  GetFieldValue(m_pszRevNmbFieldName, cDBVariant);
   if(cDBVariant.m_iVal != pRowId->m_iRev){
     return FALSE;
   }
 
-  GetFieldValue(_T("Id"), cDBVariant);
+  GetFieldValue(m_pszIdFieldName, cDBVariant);
   if(cDBVariant.m_iVal != pRowId->m_iId){
     return FALSE;
   }
@@ -144,9 +144,9 @@ HANDLE CPhonebookRecSet::ReadRow(CArray<CString> &a_csRowData, int iRowNmbr)
   CDBVariant cDBVariant;
   CRowIdent *pcRowId = new CRowIdent();
   
-  GetFieldValue(_T("rev_nmb"), cDBVariant);
+  GetFieldValue(m_pszRevNmbFieldName, cDBVariant);
   pcRowId->m_iRev = cDBVariant.m_iVal;
-  GetFieldValue(_T("id"), cDBVariant);
+  GetFieldValue(m_pszIdFieldName, cDBVariant);
   pcRowId->m_iId = cDBVariant.m_iVal;
   pcRowId->m_iNmb = iRowNmbr;
 
@@ -202,6 +202,6 @@ BOOL CPhonebookRecSet::LoadDB(CDispnameToAttrname tTableName, CDispnameToAttrnam
 void CPhonebookRecSet::UpdateCurrRowRevNumber()
 {
   CDBVariant cDBVariant;
-  GetFieldValue(_T("rev_nmb"), cDBVariant);
+  GetFieldValue(m_pszRevNmbFieldName, cDBVariant);
   m_iCurrRowRevNumber = cDBVariant.m_iVal;
 }

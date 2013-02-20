@@ -5,6 +5,12 @@
 class CDbTableInterface :
   virtual private  CRecordset
 {
+  int m_iUserOffset;
+  CString m_szTableRepresName;
+  CArray<CString> m_pszColumnsRepresNames;
+  const TCHAR* m_pszIdFieldName;
+  const TCHAR* m_pszRevNmbFieldName;
+protected:
   struct CRowIdent{
     int m_iRev;
     int m_iNmb;
@@ -12,23 +18,25 @@ class CDbTableInterface :
     CRowIdent(){};
     CRowIdent(int iNmb, int iRev, int iId):m_iNmb(iNmb), m_iRev(iRev), m_iId(iId){};
   };
-  int m_iUserOffset;
-  CString m_szTableName;
-  CArray<CString> m_aszFieldsNames;
-protected:
-  virtual void     EditAndUpdateFields(CArray<CString> &a_csRowData) = 0;
-public:
-  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
-  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
-  virtual BOOL     ReadRowFieldNames(CArray<CString> &a_csRowData);
+  virtual BOOL     EditAndUpdateFields(CArray<CString> &a_csRowData) = 0;
   virtual BOOL     LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName);
-  virtual CString* GetTableDispName(){ return &m_szTableName;};
-  CDbTableInterface(void)
-  {
-    m_aszFieldsNames.Add(_T("Id"));
-    m_aszFieldsNames.Add(_T("rev_nmb"));   
-    m_iUserOffset = m_aszFieldsNames.GetCount();
-  }
+  virtual int      GetColumnNumberByName(const TCHAR *pszColumnName);
+  virtual void     ReloadCompleteTable();
+public:
+  enum    eSortType {eAlphabetically, eAlphabeticallyRev, eNumerically, eNumericallyRev};
+  enum    eFileterType {eEquals, eBiggerThan, eBiggerThanOrEqual, eLessThan, eLessThanOrEqual, eContains};
+  
+  virtual BOOL     SortTableByColumn(const TCHAR *pszColumnName, eSortType eType);
+  virtual BOOL     FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter);
+  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
+  virtual BOOL     DeleteRow(int iRowNumber);
+  virtual BOOL     AddRow(CArray<CString> &a_csRowData) = 0;
+  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow) = 0;
+  virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
+  virtual TCHAR*   GetColumnRepresName(int iRow)  {return m_pszColumnsRepresNames[m_iUserOffset + iRow].GetBuffer();};
+  virtual CString* GetTableRepresName(){ return &m_szTableRepresName;};
+  virtual BOOL     IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter=eEquals);
+  CDbTableInterface(void);
 
   ~CDbTableInterface(void);
 };

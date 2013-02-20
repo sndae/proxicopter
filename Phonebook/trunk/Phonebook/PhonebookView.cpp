@@ -68,11 +68,16 @@ void CPhonebookView::OnInitialUpdate()
   {
     CCities cCitiesTable(&m_Database);
     CDbTableInterface *pc = static_cast<CDbTableInterface*>(&cCitiesTable);
-    CString *csTableName = pc->GetTableDispName();
+
+    //BOOL bRes = pc->SortTableByColumn(_T("grad"), CDbTableInterface::eAlphabeticallyRev);
+    BOOL bRes = pc->FilterTableByColumnValue(_T("Oblast"), _T("Varnenska"), CDbTableInterface::eEquals);  
+
+    CArray<CString> acsRowData;
+    CString *csTableName = pc->GetTableRepresName();
     CString ccTable;
     
     CArray<CString> csFieldNames;
-    BOOL bRes = pc->ReadRowFieldNames(csFieldNames);
+    bRes = pc->GetColumnsRepresNames(csFieldNames);
     for(int i = 0; i<csFieldNames.GetCount(); i++)
     {
       ccTable = csFieldNames.GetAt(i);
@@ -80,14 +85,18 @@ void CPhonebookView::OnInitialUpdate()
     int iRow = 0;
     HANDLE hRow = 0;
     csFieldNames.RemoveAll();
+
+    
     while(hRow = pc->ReadRow(csFieldNames,iRow++))
     {
+      pc->WriteRow(csFieldNames, hRow); 
       for(int c = 0; c < csFieldNames.GetCount(); c++)
       {
         ccTable = csFieldNames.GetAt(c);
       }
       csFieldNames.RemoveAll();
-    }    
+      delete hRow;
+    } 
   }
 }
 

@@ -27,13 +27,15 @@ protected:
   };
   CDispnameToAttrname m_cTableName;
 private:
+  const TCHAR* m_pszIdFieldName;
+  const TCHAR* m_pszRevNmbFieldName;
   CArray<CDispnameToAttrname> m_cAttrList;
   int m_iUserOffset;
   int m_iCurrRowRevNumber;
   void UpdateCurrRowRevNumber();
 public:
   BOOL LoadDB(CDispnameToAttrname tTableName, CDispnameToAttrname *patAttrList = 0, int fFlags = 0);
-  virtual TCHAR *GetTableDispName() {return m_cTableName.m_szDispName;} ;
+  virtual TCHAR *GetTableRepresName() {return m_cTableName.m_szDispName;} ;
 
   virtual BOOL   MoveToFirstRow();
   virtual BOOL   MoveToNextRow();
@@ -42,10 +44,9 @@ public:
   virtual BOOL   GetRowFirstAtrrVal(TCHAR *pszText, TCHAR **pszDispName = 0);
   virtual BOOL   GetRowNextAtrrVal(TCHAR *pszText,  TCHAR **pszDispName = 0);
   virtual BOOL   GetRowPrevAtrrVal(TCHAR *pszText,  TCHAR **pszDispName = 0);
-
   virtual BOOL   WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
   virtual HANDLE ReadRow(CArray<CString> &a_csRowData, int iRowNmbr);
-  virtual BOOL   ReadRowAttributesNames(CArray<CString> &a_csRowData);
+  virtual BOOL   GetColumnsRepresNames(CArray<CString> &a_csRowData);
   CPhonebookRecSet(CDatabase *pcDatabase); 
   virtual ~CPhonebookRecSet(void);
 };

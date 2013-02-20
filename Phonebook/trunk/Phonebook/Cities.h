@@ -7,8 +7,6 @@
 
 class CCities :  virtual private CRecordset, public CDbTableInterface
 {
-protected:
-  virtual void     EditAndUpdateFields(CArray<CString> &a_csRowData);
 public:
 	CCities(CDatabase* pDatabase);
 	DECLARE_DYNAMIC(CCities)
@@ -23,9 +21,9 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	double	m_Id;
-	double	m_rev_nmb;
-	double	m_Code;
+	int	m_Id;
+	int	m_rev_nmb;
+	int	m_Code;
 	CStringW	m_Name;
 	CStringW	m_Area;
 
@@ -41,8 +39,12 @@ public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
+  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
+  virtual BOOL     AddRow(CArray<CString> &a_csRowData);
+  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
 #endif
-
+protected:
+  virtual BOOL     EditAndUpdateFields(CArray<CString> &a_csRowData);
 };
 
 
