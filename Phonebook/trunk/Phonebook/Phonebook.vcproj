@@ -212,10 +212,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PhoneBookDBException.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\PhonebookDoc.cpp"
 				>
 			</File>
@@ -275,10 +271,6 @@
 			</File>
 			<File
 				RelativePath=".\Phonebook.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PhoneBookDBException.h"
 				>
 			</File>
 			<File
