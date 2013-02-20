@@ -1,9 +1,12 @@
 #include "StdAfx.h"
 #include ".\dbtableinterface.h"
 
-CDbTableInterface::CDbTableInterface(void):
+CDbTableInterface::CDbTableInterface(const TCHAR *pszDBPath):
 m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
 {
+  if(pszDBPath)
+    m_csDBPath = pszDBPath;
+
   m_pszColumnsRepresNames.Add(m_pszIdFieldName);
   m_pszColumnsRepresNames.Add(m_pszRevNmbFieldName);   
   m_iUserOffset = m_pszColumnsRepresNames.GetCount();
@@ -102,7 +105,7 @@ int CDbTableInterface::GetColumnNumberByName(const TCHAR *pszColumnName)
 
 BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName)
 {
-  m_szTableRepresName = csTableName;
+  m_csTableRepresName = csTableName;
   m_pszColumnsRepresNames.Append(a_csFieldsName);
 
   return Open(CRecordset::dynaset);
@@ -136,6 +139,7 @@ BOOL CDbTableInterface::SortTableByColumn(const TCHAR *pszColumnName, eSortType 
 
 BOOL  CDbTableInterface::FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter)
 {
+#define SQL_VARCHAR2 (-9)
   int iColumnNmb = GetColumnNumberByName(pszColumnName);
   if(iColumnNmb == -1)
     return FALSE;
@@ -158,18 +162,18 @@ BOOL  CDbTableInterface::FilterTableByColumnValue(const TCHAR *pszColumnName, co
     default: return FALSE;
   }
 
-  if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_CHAR))
+  if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_VARCHAR2))
     m_strFilter += _T("'");
 
   m_strFilter += pszValue;
 
   if(eFilter == eContains)
   {
-    if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_CHAR))
+    if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_VARCHAR2))
       m_strFilter += _T("%)'");
     else
       return FALSE;
-  }else if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_CHAR))
+  }else if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_VARCHAR2))
   {
     m_strFilter += _T("'");
   }
@@ -207,4 +211,12 @@ void CDbTableInterface::ReloadCompleteTable()
   m_strFilter = _T("");
   m_strSort = _T("");
   Open(CRecordset::dynaset);
+}
+
+TCHAR* CDbTableInterface::GetDBPath()
+{
+  if(m_csDBPath.GetLength() != 0)
+    return m_csDBPath.GetBuffer();
+  
+  return 0;
 }

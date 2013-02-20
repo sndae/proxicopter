@@ -192,7 +192,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Cities.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\CitiesTable.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DbTableInterface.cpp"
 				>
 			</File>
 			<File
@@ -254,7 +262,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Cities.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CitiesTable.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DbTableInterface.h"
 				>
 			</File>
 			<File

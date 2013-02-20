@@ -6,7 +6,8 @@ class CDbTableInterface :
   virtual private  CRecordset
 {
   int m_iUserOffset;
-  CString m_szTableRepresName;
+  CString m_csTableRepresName;
+  CString m_csDBPath;
   CArray<CString> m_pszColumnsRepresNames;
   const TCHAR* m_pszIdFieldName;
   const TCHAR* m_pszRevNmbFieldName;
@@ -34,9 +35,10 @@ public:
   virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow) = 0;
   virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
   virtual TCHAR*   GetColumnRepresName(int iRow)  {return m_pszColumnsRepresNames[m_iUserOffset + iRow].GetBuffer();};
-  virtual CString* GetTableRepresName(){ return &m_szTableRepresName;};
+  virtual CString* GetTableRepresName(){ return &m_csTableRepresName;};
+  virtual TCHAR*   GetDBPath();
   virtual BOOL     IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter=eEquals);
-  CDbTableInterface(void);
+  CDbTableInterface(const TCHAR *pszDBPath = 0);
 
   ~CDbTableInterface(void);
 };

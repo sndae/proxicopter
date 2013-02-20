@@ -8,7 +8,7 @@
 class CCities :  virtual private CRecordset, public CDbTableInterface
 {
 public:
-	CCities(CDatabase* pDatabase);
+	CCities(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);
 	DECLARE_DYNAMIC(CCities)
 
 // Field/Param Data
@@ -23,7 +23,7 @@ public:
 
 	int	m_Id;
 	int	m_rev_nmb;
-	int	m_Code;
+	CStringW	m_Code;
 	CStringW	m_Name;
 	CStringW	m_Area;
 

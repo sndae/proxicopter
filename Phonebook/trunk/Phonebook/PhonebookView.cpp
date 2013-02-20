@@ -64,9 +64,9 @@ void CPhonebookView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
 
-  if(m_Database.Open(0) != 0)
+  if(m_Database.Open(_T("SQLEXPRESS")) != 0)
   {
-    CCities cCitiesTable(&m_Database);
+    CCities cCitiesTable(&m_Database, _T("phonebook.dbo"));
     CDbTableInterface *pc = static_cast<CDbTableInterface*>(&cCitiesTable);
 
     //BOOL bRes = pc->SortTableByColumn(_T("grad"), CDbTableInterface::eAlphabeticallyRev);
@@ -85,8 +85,12 @@ void CPhonebookView::OnInitialUpdate()
     int iRow = 0;
     HANDLE hRow = 0;
     csFieldNames.RemoveAll();
-
+    csFieldNames.Add(_T("33"));
+    csFieldNames.Add(_T("Аксаково"));
+    csFieldNames.Add(_T("Варненска"));
     
+    pc->AddRow(csFieldNames);
+    return;
     while(hRow = pc->ReadRow(csFieldNames,iRow++))
     {
       pc->WriteRow(csFieldNames, hRow); 

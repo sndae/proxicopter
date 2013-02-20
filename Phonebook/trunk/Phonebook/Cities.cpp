@@ -12,23 +12,23 @@
 
 IMPLEMENT_DYNAMIC(CCities, CRecordset)
 
-CCities::CCities(CDatabase* pdb)
-	: CRecordset(pdb)
+CCities::CCities(CDatabase* pdb, const TCHAR *pszDBPath)
+	: CDbTableInterface(pszDBPath), CRecordset(pdb)
 {
 	m_Id = 0;
 	m_rev_nmb = 0;
-	m_Code = 0;
+	m_Code = L"";
 	m_Name = L"";
 	m_Area = L"";
 	m_nFields = 5;
 	m_nDefaultType = dynaset;
 
   CArray<CString> a_szFieldsNames;
-  a_szFieldsNames.Add(_T("Kod"));
-  a_szFieldsNames.Add(_T("Grad"));
-  a_szFieldsNames.Add(_T("Oblast"));
+  a_szFieldsNames.Add(_T("Код"));
+  a_szFieldsNames.Add(_T("Град"));
+  a_szFieldsNames.Add(_T("Област"));
 
-  LoadDb(_T("Gradove"), a_szFieldsNames);
+  LoadDb(_T("Градове"), a_szFieldsNames);
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -42,6 +42,11 @@ CString CCities::GetDefaultConnect()
 
 CString CCities::GetDefaultSQL()
 {
+  TCHAR *pszDBPath = GetDBPath();
+  if(pszDBPath)
+  {
+    return CString(pszDBPath) + _T(".cities");
+  }
 	return _T("[Cities$]");
 }
 
@@ -53,7 +58,7 @@ void CCities::DoFieldExchange(CFieldExchange* pFX)
 // ODBC will try to automatically convert the column value to the requested type
 	RFX_Int(pFX, _T("[id]"), m_Id);
 	RFX_Int(pFX, _T("[rev_nmb]"), m_rev_nmb);
-	RFX_Int(pFX, _T("[code]"), m_Code);
+	RFX_Text(pFX, _T("[code]"), m_Code);
 	RFX_Text(pFX, _T("[name]"), m_Name);
 	RFX_Text(pFX, _T("[area]"), m_Area);
  
@@ -74,13 +79,13 @@ void CCities::Dump(CDumpContext& dc) const
 
 BOOL CCities::EditAndUpdateFields(CArray<CString> &a_csRowData)
 {
-  if(a_csRowData.GetCount() != m_nDefaultType)
+  if(a_csRowData.GetCount() != m_nFields)
     return FALSE;
 
   Edit();
 	m_Id =      _ttoi(a_csRowData[0]);
 	m_rev_nmb = _ttoi(a_csRowData[1]);
-	m_Code    = _ttoi(a_csRowData[2]);
+	m_Code    = a_csRowData[2];
 	m_Name    = a_csRowData[3];
 	m_Area    = a_csRowData[4];  
   Update();
@@ -101,8 +106,6 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(m_Id != pRowId->m_iId)
     return FALSE;
   else if(m_rev_nmb != pRowId->m_iRev)
-    return FALSE;
-  else if(a_csRowData.GetCount() != m_nFields)
     return FALSE;
 
   CString szTemp;
@@ -129,10 +132,8 @@ HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   pcRowId->m_iRev = m_rev_nmb;
   pcRowId->m_iId = m_Id;
   pcRowId->m_iNmb = iRowNmbr;
-  
-  CString szFieldData;
-  szFieldData.Format(_T("%d"), m_Code); 
-	a_csRowData.Add(szFieldData);
+
+	a_csRowData.Add(m_Code);
 	a_csRowData.Add(m_Name);
 	a_csRowData.Add(m_Area);
 
@@ -154,7 +155,7 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   AddNew();
 	m_Id = iIndex + 1;
 	m_rev_nmb = 0;
-	m_Code = _ttoi(a_csRowData[0]);
+	m_Code = a_csRowData[0];
 	m_Name = a_csRowData[1];
 	m_Area = a_csRowData[2];  
   
