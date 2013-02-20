@@ -89,7 +89,7 @@ void CPhonebookView::OnInitialUpdate()
     csFieldNames.Add(_T("Аксаково"));
     csFieldNames.Add(_T("Варненска"));
     
-    pc->AddRow(csFieldNames);
+    pc->DeleteRow(4);
     return;
     while(hRow = pc->ReadRow(csFieldNames,iRow++))
     {

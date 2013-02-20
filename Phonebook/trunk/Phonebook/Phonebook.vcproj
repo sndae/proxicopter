@@ -196,11 +196,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CitiesTable.cpp"
+				RelativePath=".\DbTableInterface.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\DbTableInterface.cpp"
+				RelativePath=".\DBTablesContainer.cpp"
 				>
 			</File>
 			<File
@@ -217,10 +217,6 @@
 			</File>
 			<File
 				RelativePath=".\PhonebookDoc.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PhonebookRecSet.cpp"
 				>
 			</File>
 			<File
@@ -266,11 +262,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CitiesTable.h"
+				RelativePath=".\DbTableInterface.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DbTableInterface.h"
+				RelativePath=".\DBTablesContainer.h"
 				>
 			</File>
 			<File
@@ -287,10 +283,6 @@
 			</File>
 			<File
 				RelativePath=".\PhonebookDoc.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PhonebookRecSet.h"
 				>
 			</File>
 			<File
