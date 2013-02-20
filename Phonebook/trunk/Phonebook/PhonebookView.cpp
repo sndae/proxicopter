@@ -7,22 +7,12 @@
 #include "PhonebookDoc.h"
 #include "PhonebookView.h"
 #include "Cities.h"
-#include "PhonesTable.h"
-#include "PhoneBookDBException.h"
+#include "Subscribers.h"
 #include "DbTableInterface.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-
-// CPhonebookView
-const CPhonebookView::RegnameToTablenameMapping CPhonebookView::m_stRegnameToTablenameMapping[4] = 
-{  
-  {_T("Градове"), _T("phonebook.dbo.cities")},
-  {_T("Типове телефони"), _T("phonebook.dbo.phones")},
-  {_T("Абонати"), _T("phonebook.dbo.subscribers")},
-  {_T("Телефонни номера"), _T("phonebook.dbo.subscriber_phone_numbers")},
-};
 
 IMPLEMENT_DYNCREATE(CPhonebookView, CFormView)
 
@@ -66,13 +56,16 @@ void CPhonebookView::OnInitialUpdate()
 
   if(m_Database.Open(_T("SQLEXPRESS")) != 0)
   {
-    CCities cCitiesTable(&m_Database, _T("phonebook.dbo"));
+    CSubscribers cCitiesTable(&m_Database, _T("phonebook.dbo"));
     CDbTableInterface *pc = static_cast<CDbTableInterface*>(&cCitiesTable);
+   
+    CArray<CString> acsRowData;
+    HANDLE hRow = pc->ReadRow(acsRowData, 0);
 
     //BOOL bRes = pc->SortTableByColumn(_T("grad"), CDbTableInterface::eAlphabeticallyRev);
     BOOL bRes = pc->FilterTableByColumnValue(_T("Oblast"), _T("Varnenska"), CDbTableInterface::eEquals);  
 
-    CArray<CString> acsRowData;
+
     CString *csTableName = pc->GetTableRepresName();
     CString ccTable;
     
@@ -83,7 +76,7 @@ void CPhonebookView::OnInitialUpdate()
       ccTable = csFieldNames.GetAt(i);
     }
     int iRow = 0;
-    HANDLE hRow = 0;
+
     csFieldNames.RemoveAll();
     csFieldNames.Add(_T("33"));
     csFieldNames.Add(_T("Аксаково"));
@@ -137,12 +130,5 @@ void CPhonebookView::OnBnClickedLoaddb()
 void CPhonebookView::OnCbnSelchangeRegisterSelector()
 {
   // TODO: Add your control notification handler code here
-  int iCurrSel = m_RegSelector.GetCurSel();
-  try{
-//    CCitiesTable cRecordSet(m_Database); 
-  }
-  catch(CPhoneBookDBException cException)
-  {
-    MessageBox(cException.GetErrorMsg());
-  }
+
 }

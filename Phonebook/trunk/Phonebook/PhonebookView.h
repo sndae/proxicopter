@@ -9,13 +9,6 @@ class CPhonebookView : public CFormView
 protected: // create from serialization only
 	CPhonebookView();
 	DECLARE_DYNCREATE(CPhonebookView)
-private:
-  struct RegnameToTablenameMapping{
-    TCHAR* pszRegname;
-    TCHAR* pszTablename;
-  };
-  static const RegnameToTablenameMapping m_stRegnameToTablenameMapping[4];
-  
 public:
 	enum{ IDD = IDD_PHONEBOOK_FORM };
 

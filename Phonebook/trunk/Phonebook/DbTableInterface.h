@@ -12,6 +12,7 @@ class CDbTableInterface :
   const TCHAR* m_pszIdFieldName;
   const TCHAR* m_pszRevNmbFieldName;
 protected:
+  /* Row identification class */
   struct CRowIdent{
     int m_iRev;
     int m_iNmb;
@@ -19,26 +20,30 @@ protected:
     CRowIdent(){};
     CRowIdent(int iNmb, int iRev, int iId):m_iNmb(iNmb), m_iRev(iRev), m_iId(iId){};
   };
-  virtual BOOL     EditAndUpdateFields(CArray<CString> &a_csRowData) = 0;
+
   virtual BOOL     LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName);
-  virtual int      GetColumnNumberByName(const TCHAR *pszColumnName);
+  virtual int      GetColumnNumberByRepresName(const TCHAR *pszColumnName);
   virtual void     ReloadCompleteTable();
 public:
   enum    eSortType {eAlphabetically, eAlphabeticallyRev, eNumerically, eNumericallyRev};
   enum    eFileterType {eEquals, eBiggerThan, eBiggerThanOrEqual, eLessThan, eLessThanOrEqual, eContains};
   
+  /*Constructor and deconstructor */
+  CDbTableInterface(const TCHAR *pszDBPath = 0);
+  ~CDbTableInterface(void);
+
+  /* Interface functions */
   virtual BOOL     SortTableByColumn(const TCHAR *pszColumnName, eSortType eType);
   virtual BOOL     FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter);
-  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
-  virtual BOOL     DeleteRow(int iRowNumber);
-  virtual BOOL     AddRow(CArray<CString> &a_csRowData) = 0;
-  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow) = 0;
+  virtual BOOL     DeleteRow(int iRowNumber);  
   virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
   virtual TCHAR*   GetColumnRepresName(int iRow)  {return m_pszColumnsRepresNames[m_iUserOffset + iRow].GetBuffer();};
   virtual CString* GetTableRepresName(){ return &m_csTableRepresName;};
   virtual TCHAR*   GetDBPath();
   virtual BOOL     IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter=eEquals);
-  CDbTableInterface(const TCHAR *pszDBPath = 0);
+  /* pure virtual functions */
+  virtual BOOL     AddRow(CArray<CString> &a_csRowData) = 0;
+  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr) = 0;
+  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow) = 0;
 
-  ~CDbTableInterface(void);
 };

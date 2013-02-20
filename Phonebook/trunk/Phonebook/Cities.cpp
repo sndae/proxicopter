@@ -15,7 +15,7 @@ IMPLEMENT_DYNAMIC(CCities, CRecordset)
 CCities::CCities(CDatabase* pdb, const TCHAR *pszDBPath)
 	: CDbTableInterface(pszDBPath), CRecordset(pdb)
 {
-	m_Id = 0;
+	m_id = 0;
 	m_rev_nmb = 0;
 	m_Code = L"";
 	m_Name = L"";
@@ -37,8 +37,7 @@ CCities::CCities(CDatabase* pdb, const TCHAR *pszDBPath)
 // store the password in some other form or use a different user authentication.
 CString CCities::GetDefaultConnect()
 {
-	return _T("DSN=Excel Files;DBQ=C:\\PROJECTS\\Phonebook\\phonebook.xls;DefaultDir=C:\\PROJECTS\\Phonebook;DriverId=790;MaxBufferSize=2048;PageTimeout=5;");
-}
+	return _T("DSN=SQLExpress;Trusted_Connection=Yes;APP=Microsoft\x00ae Visual Studio\x00ae 2008;WSID=PROXIMUS-PC;DATABASE=phonebook");}
 
 CString CCities::GetDefaultSQL()
 {
@@ -56,7 +55,7 @@ void CCities::DoFieldExchange(CFieldExchange* pFX)
 // Macros such as RFX_Text() and RFX_Int() are dependent on the
 // type of the member variable, not the type of the field in the database.
 // ODBC will try to automatically convert the column value to the requested type
-	RFX_Int(pFX, _T("[id]"), m_Id);
+	RFX_Int(pFX, _T("[id]"), m_id);
 	RFX_Int(pFX, _T("[rev_nmb]"), m_rev_nmb);
 	RFX_Text(pFX, _T("[code]"), m_Code);
 	RFX_Text(pFX, _T("[name]"), m_Name);
@@ -76,22 +75,7 @@ void CCities::Dump(CDumpContext& dc) const
 {
 	CRecordset::Dump(dc);
 }
-
-BOOL CCities::EditAndUpdateFields(CArray<CString> &a_csRowData)
-{
-  if(a_csRowData.GetCount() != m_nFields)
-    return FALSE;
-
-  Edit();
-	m_Id =      _ttoi(a_csRowData[0]);
-	m_rev_nmb = _ttoi(a_csRowData[1]);
-	m_Code    = a_csRowData[2];
-	m_Name    = a_csRowData[3];
-	m_Area    = a_csRowData[4];  
-  Update();
-
-  return TRUE;
-}
+#endif //_DEBUG
 
 BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 {
@@ -103,19 +87,28 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
 
-  if(m_Id != pRowId->m_iId)
+  TCHAR szTemp[64];
+  a_csRowData.InsertAt(0, _itot(pRowId->m_iId, szTemp, 10));
+  a_csRowData.InsertAt(1, _itot(++pRowId->m_iId, szTemp, 10));
+
+  if(m_id != pRowId->m_iId)
     return FALSE;
   else if(m_rev_nmb != pRowId->m_iRev)
     return FALSE;
 
-  CString szTemp;
-  szTemp.Format(_T("%d"), pRowId->m_iId);
-  a_csRowData.InsertAt(0, szTemp);
+  if(a_csRowData.GetCount() != m_nFields)
+    return FALSE;
 
-  szTemp.Format(_T("%d"), ++pRowId->m_iId);
-  a_csRowData.InsertAt(1, szTemp);
+  Edit();
+	m_id =      _ttoi(a_csRowData[0]);
+	m_rev_nmb = _ttoi(a_csRowData[1]);
+	m_Code    = a_csRowData[2];
+	m_Name    = a_csRowData[3];
+	m_Area    = a_csRowData[4];  
+  
+  Update();
 
-  return EditAndUpdateFields(a_csRowData);
+  return TRUE;
 }
 
 HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
@@ -130,7 +123,7 @@ HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   CRowIdent *pcRowId = new CRowIdent();
   
   pcRowId->m_iRev = m_rev_nmb;
-  pcRowId->m_iId = m_Id;
+  pcRowId->m_iId = m_id;
   pcRowId->m_iNmb = iRowNmbr;
 
 	a_csRowData.Add(m_Code);
@@ -144,7 +137,7 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
 {
   ReloadCompleteTable();
   MoveLast();
-  int iIndex = m_Id;
+  int iIndex = m_id;
   if( !CanAppend() ||
       IsColumnValuePresent(GetColumnRepresName(0), a_csRowData[0]) ||
       IsColumnValuePresent(GetColumnRepresName(1), a_csRowData[1]) )
@@ -153,7 +146,7 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   }
   
   AddNew();
-	m_Id = iIndex + 1;
+	m_id = iIndex + 1;
 	m_rev_nmb = 0;
 	m_Code = a_csRowData[0];
 	m_Name = a_csRowData[1];
@@ -161,6 +154,6 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   
   return Update();
 }
-#endif //_DEBUG
+
 
 

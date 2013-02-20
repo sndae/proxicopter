@@ -1,15 +1,14 @@
-// Cities.h : Declaration of the CCities
+// SubscribersPhoneNumbers.h : Declaration of the CSubscribersPhoneNumbers
 
 #pragma once
 
-// code generated on Tuesday, February 19, 2013, 1:38 PM
-#include "DbTableInterface.h"
+// code generated on 20 февруари 2013 г., 23:56 ч.
 
-class CCities :  virtual private CRecordset, public CDbTableInterface
+class CSubscribersPhoneNumbers : public CRecordset
 {
 public:
-	CCities(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);
-	DECLARE_DYNAMIC(CCities)
+	CSubscribersPhoneNumbers(CDatabase* pDatabase = NULL);
+	DECLARE_DYNAMIC(CSubscribersPhoneNumbers)
 
 // Field/Param Data
 
@@ -21,11 +20,11 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	int	m_id;
-	int	m_rev_nmb;
-	CStringW	m_Code;
-	CStringW	m_Name;
-	CStringW	m_Area;
+	long	m_id;
+	long	m_rev_nmb;
+	long	m_subscriber_id;
+	long	m_phone_id;
+	CStringW	m_phone_number;
 
 // Overrides
 	// Wizard generated virtual function overrides
@@ -34,9 +33,7 @@ public:
 
 	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
-  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
-  virtual BOOL     AddRow(CArray<CString> &a_csRowData);
-  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
+
 // Implementation
 #ifdef _DEBUG
 	virtual void AssertValid() const;

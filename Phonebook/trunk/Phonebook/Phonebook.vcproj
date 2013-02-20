@@ -220,7 +220,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PhonesTable.cpp"
+				RelativePath=".\Phones.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Phones.h"
 				>
 			</File>
 			<File
@@ -242,6 +246,18 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Subscribers.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SubscribersPhoneNumbers.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SubscribersPhoneNumbers.h"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -282,15 +298,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PhonesTable.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Subscribers.h"
 				>
 			</File>
 			<File

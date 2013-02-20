@@ -16,7 +16,7 @@ CDbTableInterface::~CDbTableInterface(void)
 {
   Close();
 }
-
+#if 0
 HANDLE CDbTableInterface::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
   Move(iRowNmbr);
@@ -77,7 +77,7 @@ BOOL CDbTableInterface::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   return EditAndUpdateFields(a_csRowData);
 }
 
-
+#endif
 
 BOOL CDbTableInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
 {
@@ -88,8 +88,11 @@ BOOL CDbTableInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
   return TRUE;
 }
 
-int CDbTableInterface::GetColumnNumberByName(const TCHAR *pszColumnName)
+int CDbTableInterface::GetColumnNumberByRepresName(const TCHAR *pszColumnName)
 {
+  if(!pszColumnName)
+    return -1;
+
   CString csKeyWord(pszColumnName);
   csKeyWord.MakeUpper();
   for(int i = m_iUserOffset; i < m_pszColumnsRepresNames.GetCount(); i++)
@@ -113,8 +116,8 @@ BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString>
 
 BOOL CDbTableInterface::SortTableByColumn(const TCHAR *pszColumnName, eSortType eType)
 {
-  int iColumnNmb = GetColumnNumberByName(pszColumnName);
-  if(iColumnNmb == -1)
+  int iColumnNmb = GetColumnNumberByRepresName(pszColumnName);
+  if((iColumnNmb == -1) || !pszColumnName)
     return FALSE;
 
 
@@ -140,7 +143,10 @@ BOOL CDbTableInterface::SortTableByColumn(const TCHAR *pszColumnName, eSortType 
 BOOL  CDbTableInterface::FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter)
 {
 #define SQL_VARCHAR2 (-9)
-  int iColumnNmb = GetColumnNumberByName(pszColumnName);
+  if(!pszColumnName || !pszValue)
+    return FALSE;
+
+  int iColumnNmb = GetColumnNumberByRepresName(pszColumnName);
   if(iColumnNmb == -1)
     return FALSE;
   
@@ -195,7 +201,9 @@ BOOL  CDbTableInterface::DeleteRow(int iRowNumber)
 
 BOOL  CDbTableInterface::IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter)
 {
-#include "afxdb.h"
+  if(!pszColumnName || !pszValue)
+    return FALSE;
+
   FilterTableByColumnValue(pszColumnName, pszValue, eFilter);
   try{
     MoveFirst();
@@ -220,3 +228,4 @@ TCHAR* CDbTableInterface::GetDBPath()
   
   return 0;
 }
+

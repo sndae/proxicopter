@@ -1,15 +1,15 @@
-// Cities.h : Declaration of the CCities
+// Subscribers.h : Declaration of the CSubscribers
 
 #pragma once
 
-// code generated on Tuesday, February 19, 2013, 1:38 PM
+// code generated on 20 февруари 2013 г., 22:07 ч.
 #include "DbTableInterface.h"
 
-class CCities :  virtual private CRecordset, public CDbTableInterface
+class CSubscribers : virtual private CRecordset, public CDbTableInterface
 {
 public:
-	CCities(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);
-	DECLARE_DYNAMIC(CCities)
+	CSubscribers(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);
+	DECLARE_DYNAMIC(CSubscribers)
 
 // Field/Param Data
 
@@ -21,11 +21,15 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	int	m_id;
-	int	m_rev_nmb;
-	CStringW	m_Code;
-	CStringW	m_Name;
-	CStringW	m_Area;
+	double	m_id;
+	double	m_rev_nmb;
+	double	m_code;
+	CStringW	m_first_name;
+	CStringW	m_second_name;
+	CStringW	m_third_name;
+	double	m_ident_nmb;
+	long	m_city_id;
+	CStringW	m_city_addr;
 
 // Overrides
 	// Wizard generated virtual function overrides
@@ -42,7 +46,8 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-
+private:
+  BOOL GetCityNameById(int iId, TCHAR *pszCityName);
 };
 
 
