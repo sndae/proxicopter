@@ -40,7 +40,7 @@ public:
   virtual BOOL     DeleteRow(int iRowNumber);  
   virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
   virtual TCHAR*   GetColumnRepresName(int iColnumb)  {return m_pszColumnsRepresNames[m_iUserOffset + iColnumb].GetBuffer();};
-  virtual CString* GetTableRepresName(){ return &m_csTableRepresName;};
+  virtual TCHAR*   GetTableRepresName(){ return m_csTableRepresName.GetBuffer();};
   virtual TCHAR*   GetDBPath();
   virtual BOOL     IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter=eEquals);
   virtual BOOL     ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData);
