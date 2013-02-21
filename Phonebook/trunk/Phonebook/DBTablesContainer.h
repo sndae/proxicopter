@@ -1,14 +1,21 @@
 #pragma once
 
 #include "DBTableInterface.h"
-
+#include "Cities.h"
+#include "Phones.h"
+#include "Subscribers.h"
+#include "SubscribersPhoneNumbers.h"
 
 class CDBTablesContainer
 {
-  int iTablesCounter;
+  int m_iTablesCounter;
+  TCHAR m_szDBName[64];
+  CDatabase m_Database;
+  CSubscribersPhoneNumbers *m_pcSubscrPhoneNmbTable;
+  enum  eTableTypes{eCities = 0, ePhones, eSubscribers, eSubscrPhoneNumbs};
 public:
   CDbTableInterface *GetFirstTable(void);
   CDbTableInterface *GetNextTable(void);
-  CDBTablesContainer(void);
+  CDBTablesContainer(const TCHAR *pszDSNName = 0, const TCHAR *pszDBName = 0);
   ~CDBTablesContainer(void);
 };

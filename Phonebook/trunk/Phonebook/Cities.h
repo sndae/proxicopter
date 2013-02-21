@@ -10,7 +10,6 @@ class CCities :  virtual private CRecordset, public CDbTableInterface
 public:
 	CCities(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);
 	DECLARE_DYNAMIC(CCities)
-
 // Field/Param Data
 
 // The string types below (if present) reflect the actual data type of the

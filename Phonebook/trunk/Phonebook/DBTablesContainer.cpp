@@ -2,20 +2,36 @@
 #include "DBTablesContainer.h"
 #include "DBTableInterface.h"
 
-CDBTablesContainer::CDBTablesContainer(void)
+CDBTablesContainer::CDBTablesContainer(const TCHAR *pszDSNName, const TCHAR *pszDBName)
 {
+  if(!m_Database.Open(pszDSNName))
+    return;
+
+  if(pszDBName)
+    _tcscpy(m_szDBName, pszDBName);
 }
 
 CDBTablesContainer::~CDBTablesContainer(void)
 {
+  m_Database.Close();
 }
 
 CDbTableInterface *CDBTablesContainer::GetFirstTable(void)
 {
-  return 0;
+  m_iTablesCounter = 0;
+  return GetNextTable();
 }
 
 CDbTableInterface *CDBTablesContainer::GetNextTable(void)
 {
-  return 0;
+  CDbTableInterface *pcTable = 0;
+  switch(m_iTablesCounter++)
+  {
+    case eCities: pcTable = new CCities(&m_Database, m_szDBName); break;
+    case ePhones: pcTable = new CPhones(&m_Database, m_szDBName); break;
+    case eSubscribers: pcTable = new CSubscribers(&m_Database, m_szDBName); break;
+    case eSubscrPhoneNumbs: pcTable = new CSubscribersPhoneNumbers(&m_Database, m_szDBName); break;
+  }
+  
+ return pcTable;
 }

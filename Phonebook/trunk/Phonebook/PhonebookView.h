@@ -42,7 +42,6 @@ public:
   afx_msg void OnBnClickedLoaddb();
   CComboBox m_RegSelector;
   CListBox  m_RegContentList;
-  CDatabase m_Database;
 
   afx_msg void OnCbnSelchangeRegisterSelector();
 };

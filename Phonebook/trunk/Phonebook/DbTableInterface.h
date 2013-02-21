@@ -25,6 +25,8 @@ protected:
   virtual int      GetColumnNumberByRepresName(const TCHAR *pszColumnName);
   virtual void     ReloadCompleteTable();
 public:
+  using   CRecordset::operator new;
+  using   CRecordset::operator delete;
   enum    eSortType {eAlphabetically, eAlphabeticallyRev, eNumerically, eNumericallyRev};
   enum    eFileterType {eEquals, eBiggerThan, eBiggerThanOrEqual, eLessThan, eLessThanOrEqual, eContains};
   

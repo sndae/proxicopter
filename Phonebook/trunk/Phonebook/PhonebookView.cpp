@@ -6,9 +6,7 @@
 
 #include "PhonebookDoc.h"
 #include "PhonebookView.h"
-#include "Cities.h"
-#include "Subscribers.h"
-#include "DbTableInterface.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -53,48 +51,6 @@ void CPhonebookView::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
-
-  if(m_Database.Open(/*_T("SQLEXPRESS")*/0) != 0)
-  {
-    CSubscribers cCitiesTable(&m_Database/*, _T("phonebook.dbo")*/);
-    CDbTableInterface *pc = static_cast<CDbTableInterface*>(&cCitiesTable);
-   
-    CArray<CString> acsRowData;
-    HANDLE hRow = pc->ReadRow(acsRowData, 0);
-
-    //BOOL bRes = pc->SortTableByColumn(_T("grad"), CDbTableInterface::eAlphabeticallyRev);
-    BOOL bRes = pc->FilterTableByColumnValue(_T("Oblast"), _T("Varnenska"), CDbTableInterface::eEquals);  
-
-
-    CString *csTableName = pc->GetTableRepresName();
-    CString ccTable;
-    
-    CArray<CString> csFieldNames;
-    bRes = pc->GetColumnsRepresNames(csFieldNames);
-    for(int i = 0; i<csFieldNames.GetCount(); i++)
-    {
-      ccTable = csFieldNames.GetAt(i);
-    }
-    int iRow = 0;
-
-    csFieldNames.RemoveAll();
-    csFieldNames.Add(_T("33"));
-    csFieldNames.Add(_T("Аксаково"));
-    csFieldNames.Add(_T("Варненска"));
-    
-    pc->DeleteRow(4);
-    return;
-    while(hRow = pc->ReadRow(csFieldNames,iRow++))
-    {
-      pc->WriteRow(csFieldNames, hRow); 
-      for(int c = 0; c < csFieldNames.GetCount(); c++)
-      {
-        ccTable = csFieldNames.GetAt(c);
-      }
-      csFieldNames.RemoveAll();
-      delete hRow;
-    } 
-  }
 }
 
 
