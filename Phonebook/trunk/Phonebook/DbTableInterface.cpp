@@ -143,8 +143,7 @@ BOOL CDbTableInterface::SortTableByColumn(const TCHAR *pszColumnName, eSortType 
 BOOL  CDbTableInterface::FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter)
 {
 #define SQL_VARCHAR2 (-9)
-  if(!pszColumnName || !pszValue)
-    return FALSE;
+  ASSERT(!pszColumnName || !pszValue);
 
   int iColumnNmb = GetColumnNumberByRepresName(pszColumnName);
   if(iColumnNmb == -1)
@@ -165,7 +164,7 @@ BOOL  CDbTableInterface::FilterTableByColumnValue(const TCHAR *pszColumnName, co
     case eLessThan:           m_strFilter += _T(" < ");  break;
     case eLessThanOrEqual:    m_strFilter += _T(" <= "); break;
     case eContains:           m_strFilter += _T(" LIKE ('%"); break;
-    default: return FALSE;
+    default: ASSERT(TRUE);
   }
 
   if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_VARCHAR2))
@@ -205,9 +204,9 @@ BOOL  CDbTableInterface::IsColumnValuePresent(const TCHAR *pszColumnName, const 
     return FALSE;
 
   FilterTableByColumnValue(pszColumnName, pszValue, eFilter);
-  try{
+  if(!IsBOF()){
     MoveFirst();
-  }catch(CDBException*){
+  }else{
     return FALSE;
   }
   return TRUE;
@@ -227,5 +226,33 @@ TCHAR* CDbTableInterface::GetDBPath()
     return m_csDBPath.GetBuffer();
   
   return 0;
+}
+
+int CDbTableInterface::ReadIdentifierByRowNumber(int iRowNmb)
+{
+  Move(iRowNmb);
+  CDBVariant varValue;
+  GetFieldValue(short(0), varValue);
+
+  return varValue.m_iVal;
+}
+
+BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData)
+{
+  Close(); 
+  TCHAR szStr[64];
+  _itot(iId, szStr, 10);
+  m_strSort = _T("");
+  m_strFilter += m_pszIdFieldName;
+  m_strFilter += _T(" = ");
+  m_strFilter += szStr;
+  Open();
+  if(IsBOF())
+    return FALSE;
+
+  HANDLE hRow = ReadRow(a_csRowData, 0);
+  delete hRow;
+
+  return TRUE;
 }
 

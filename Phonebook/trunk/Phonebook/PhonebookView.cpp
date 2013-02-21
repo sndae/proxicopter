@@ -54,9 +54,9 @@ void CPhonebookView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
 
-  if(m_Database.Open(_T("SQLEXPRESS")) != 0)
+  if(m_Database.Open(/*_T("SQLEXPRESS")*/0) != 0)
   {
-    CSubscribers cCitiesTable(&m_Database, _T("phonebook.dbo"));
+    CSubscribers cCitiesTable(&m_Database/*, _T("phonebook.dbo")*/);
     CDbTableInterface *pc = static_cast<CDbTableInterface*>(&cCitiesTable);
    
     CArray<CString> acsRowData;

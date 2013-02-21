@@ -34,8 +34,9 @@ public:
 // Overrides
 	// Wizard generated virtual function overrides
 	public:
-	virtual CString GetDefaultConnect();	// Default connection string
+  enum    eTableColumns{eColCode = 0, eColFirstName, eColSecondName, eColThirdName, eColIdentNumb, eColCityId, eColCityAddr};
 
+	virtual CString GetDefaultConnect();	// Default connection string
 	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
   virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
@@ -46,8 +47,7 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-private:
-  BOOL GetCityNameById(int iId, TCHAR *pszCityName);
+
 };
 
 

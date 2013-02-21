@@ -28,6 +28,7 @@ public:
 // Overrides
 	// Wizard generated virtual function overrides
 	public:
+  enum    eTableColumns{eColCode = 0, eColPhoneType};
 	virtual CString GetDefaultConnect();	// Default connection string
 
 	virtual CString GetDefaultSQL(); 	// default SQL for Recordset

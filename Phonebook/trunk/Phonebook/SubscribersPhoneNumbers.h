@@ -3,11 +3,12 @@
 #pragma once
 
 // code generated on 20 февруари 2013 г., 23:56 ч.
+#include "DbTableInterface.h"
 
-class CSubscribersPhoneNumbers : public CRecordset
+class CSubscribersPhoneNumbers : virtual private CRecordset, public CDbTableInterface
 {
 public:
-	CSubscribersPhoneNumbers(CDatabase* pDatabase = NULL);
+	CSubscribersPhoneNumbers(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);
 	DECLARE_DYNAMIC(CSubscribersPhoneNumbers)
 
 // Field/Param Data
@@ -30,9 +31,13 @@ public:
 	// Wizard generated virtual function overrides
 	public:
 	virtual CString GetDefaultConnect();	// Default connection string
+  enum    eTableColumns{eColSubscriberId=0, eColPhoneId, eColPhoneNumb};
 
 	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
+  virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
+  virtual BOOL     AddRow(CArray<CString> &a_csRowData);
+  virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
 
 // Implementation
 #ifdef _DEBUG

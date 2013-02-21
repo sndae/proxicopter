@@ -24,9 +24,9 @@ CCities::CCities(CDatabase* pdb, const TCHAR *pszDBPath)
 	m_nDefaultType = dynaset;
 
   CArray<CString> a_szFieldsNames;
-  a_szFieldsNames.Add(_T("Код"));
-  a_szFieldsNames.Add(_T("Град"));
-  a_szFieldsNames.Add(_T("Област"));
+  a_szFieldsNames.InsertAt(eColCode, _T("Код"));
+  a_szFieldsNames.InsertAt(eColName, _T("Град"));
+  a_szFieldsNames.InsertAt(eColArea, _T("Област"));
 
   LoadDb(_T("Градове"), a_szFieldsNames);
 }
@@ -87,24 +87,21 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
 
-  TCHAR szTemp[64];
-  a_csRowData.InsertAt(0, _itot(pRowId->m_iId, szTemp, 10));
-  a_csRowData.InsertAt(1, _itot(++pRowId->m_iId, szTemp, 10));
-
   if(m_id != pRowId->m_iId)
     return FALSE;
   else if(m_rev_nmb != pRowId->m_iRev)
     return FALSE;
 
-  if(a_csRowData.GetCount() != m_nFields)
+  if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
     return FALSE;
 
   Edit();
-	m_id =      _ttoi(a_csRowData[0]);
-	m_rev_nmb = _ttoi(a_csRowData[1]);
-	m_Code    = a_csRowData[2];
-	m_Name    = a_csRowData[3];
-	m_Area    = a_csRowData[4];  
+
+	m_id =      pRowId->m_iId;
+	m_rev_nmb = ++pRowId->m_iRev;
+	m_Code    = a_csRowData[eColCode];
+	m_Name    = a_csRowData[eColName];
+	m_Area    = a_csRowData[eColArea];  
   
   Update();
 
@@ -139,8 +136,8 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   MoveLast();
   int iIndex = m_id;
   if( !CanAppend() ||
-      IsColumnValuePresent(GetColumnRepresName(0), a_csRowData[0]) ||
-      IsColumnValuePresent(GetColumnRepresName(1), a_csRowData[1]) )
+      IsColumnValuePresent(GetColumnRepresName(eColCode), a_csRowData[eColCode]) ||
+      IsColumnValuePresent(GetColumnRepresName(eColName), a_csRowData[eColCode]) )
   {
     return FALSE;
   }
@@ -148,9 +145,9 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   AddNew();
 	m_id = iIndex + 1;
 	m_rev_nmb = 0;
-	m_Code = a_csRowData[0];
-	m_Name = a_csRowData[1];
-	m_Area = a_csRowData[2];  
+	m_Code = a_csRowData[eColCode];
+	m_Name = a_csRowData[eColName];
+	m_Area = a_csRowData[eColArea];  
   
   return Update();
 }

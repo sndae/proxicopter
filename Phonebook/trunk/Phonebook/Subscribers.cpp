@@ -27,13 +27,13 @@ CSubscribers::CSubscribers(CDatabase* pdb, const TCHAR *pszDBPath)
 	m_nDefaultType = dynaset;
 
   CArray<CString> a_szFieldsNames;
-  a_szFieldsNames.Add(_T("Код на абонат"));
-  a_szFieldsNames.Add(_T("Име"));
-  a_szFieldsNames.Add(_T("Презиме"));
-  a_szFieldsNames.Add(_T("Фамилия"));
-  a_szFieldsNames.Add(_T("ЕГН"));
-  a_szFieldsNames.Add(_T("Код на град"));
-  a_szFieldsNames.Add(_T("Адрес"));
+  a_szFieldsNames.InsertAt(eColCode,       _T("Код на абонат"));
+  a_szFieldsNames.InsertAt(eColFirstName,  _T("Име"));
+  a_szFieldsNames.InsertAt(eColSecondName, _T("Презиме"));
+  a_szFieldsNames.InsertAt(eColThirdName,  _T("Фамилия"));
+  a_szFieldsNames.InsertAt(eColIdentNumb,  _T("ЕГН"));
+  a_szFieldsNames.InsertAt(eColCityId,     _T("Код на град"));
+  a_szFieldsNames.InsertAt(eColCityAddr,    _T("Адрес"));
 
   LoadDb(_T("Абонати"), a_szFieldsNames);
 }
@@ -76,27 +76,34 @@ void CSubscribers::DoFieldExchange(CFieldExchange* pFX)
 
 }
 
+
 BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
 {
   ReloadCompleteTable();
   MoveLast();
   int iIndex = m_id;
   if( !CanAppend() ||
-      IsColumnValuePresent(GetColumnRepresName(0), a_csRowData[0]))
+    IsColumnValuePresent(GetColumnRepresName(eColCode), a_csRowData[eColCode]))
   {
     return FALSE;
   }
+
+  CCities cCityTable(m_pDatabase, GetDBPath());
+  CArray<CString> csRelTableRowData;
+  cCityTable.FilterTableByColumnValue(cCityTable.GetColumnRepresName(CCities::eColCode), a_csRowData[eColCityId], eEquals);
+  if(IsBOF())
+    return FALSE;
   
   AddNew();
-	m_id = iIndex + 1;
-	m_rev_nmb = 0;
-	m_code        = _ttoi(a_csRowData[0]);
-	m_first_name  = a_csRowData[1];
-	m_second_name = a_csRowData[2];
-	m_third_name  = a_csRowData[3];
-	m_ident_nmb = _ttoi(a_csRowData[4]);
-	m_city_id   = _ttoi(a_csRowData[5]);
-	m_city_addr = a_csRowData[6];
+	m_id          = iIndex + 1;
+	m_rev_nmb     = 0;
+	m_code        = _ttoi(a_csRowData[eColCode]);
+	m_first_name  = a_csRowData[eColFirstName];
+  m_second_name = a_csRowData[eColSecondName];
+	m_third_name  = a_csRowData[eColThirdName];
+	m_ident_nmb   = _ttoi(a_csRowData[eColIdentNumb]);
+  m_city_id     = cCityTable.ReadIdentifierByRowNumber(0);
+  m_city_addr   = a_csRowData[eColCityAddr];
 
   return Update();
 }
@@ -117,44 +124,67 @@ HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   pcRowId->m_iNmb = iRowNmbr;
 
   TCHAR szTemp[64];
-	a_csRowData.Add(_itot(m_code, szTemp, 10));
-	a_csRowData.Add(m_first_name);
-	a_csRowData.Add(m_second_name);
-	a_csRowData.Add(m_third_name);
-	a_csRowData.Add(_itot(m_ident_nmb, szTemp, 10));
-	
-  GetCityNameById(m_city_id, szTemp);
-  //a_csRowData.Add(GetCityNameById(m_city_id));
-	
-  a_csRowData.Add(m_city_addr);
+  a_csRowData.InsertAt(eColCode,       _itot(m_code, szTemp, 10));
+	a_csRowData.InsertAt(eColFirstName,  m_first_name);
+	a_csRowData.InsertAt(eColSecondName, m_second_name);
+	a_csRowData.InsertAt(eColThirdName,  m_third_name);
+	a_csRowData.InsertAt(eColIdentNumb,  _itot(m_ident_nmb, szTemp, 10));
 
+  CCities cCityTable(m_pDatabase, GetDBPath());
+  CArray<CString> csRowData;
+  if(! cCityTable.ReadRowByIdentifier(m_city_id, csRowData))
+    return FALSE;
 
+  a_csRowData.InsertAt(eColCityId, csRowData[CCities::eColCode]);
+  CString csCityAddress = csRowData[CCities::eColName];
+  csCityAddress += _T(", ");
+  csCityAddress += m_city_addr;
+  a_csRowData.InsertAt(eColCityAddr, csCityAddress);
 
   return (HANDLE)pcRowId; 
 }
 
 BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 {
-  if(a_csRowData.GetCount() != m_nFields)
+  if(!hRow)
     return FALSE;
 
+  CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Move(pRowId->m_iNmb);
+  if(IsEOF() || IsBOF() || !CanUpdate())
+    return FALSE;
+
+  if(m_id != pRowId->m_iId)
+    return FALSE;
+  else if(m_rev_nmb != pRowId->m_iRev)
+    return FALSE;
+
+  if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
+    return FALSE;
+
+  CCities cCityTable(m_pDatabase, GetDBPath());
+  CArray<CString> csRelTableRowData;
+  cCityTable.FilterTableByColumnValue(cCityTable.GetColumnRepresName(CCities::eColCode), a_csRowData[eColCityId], eEquals);
+  if(IsBOF())
+    return FALSE;
+    
   Edit();
 
- // m_Code =  _ttoi(a_csRowData[0]);
- // m_PhoneType = a_csRowData[1];
+	m_id          = pRowId->m_iId ;
+	m_rev_nmb     = ++pRowId->m_iRev;
+	m_code        = _ttoi(a_csRowData[eColCode]);
+	m_first_name  = a_csRowData[eColFirstName];
+	m_second_name = a_csRowData[eColSecondName];
+	m_third_name  = a_csRowData[eColThirdName];
+  m_ident_nmb   = _ttoi(a_csRowData[eColIdentNumb]);
+  m_city_id     = cCityTable.ReadIdentifierByRowNumber(0);
+  m_city_addr   = a_csRowData[eColCityAddr];
 
   Update();
 
   return TRUE;
 }
 
-BOOL CSubscribers::GetCityNameById(int iId, TCHAR *pszCityName)
-{
-  CCities cCitiesTable(m_pDatabase, GetDBPath());
-//  cCitiesTable.Close();
-
-  return  TRUE;
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // CSubscribers diagnostics

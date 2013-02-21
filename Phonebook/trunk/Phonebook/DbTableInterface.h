@@ -4,14 +4,14 @@
 
 class CDbTableInterface :
   virtual private  CRecordset
-{
-  int m_iUserOffset;
+{;
   CString m_csTableRepresName;
   CString m_csDBPath;
   CArray<CString> m_pszColumnsRepresNames;
   const TCHAR* m_pszIdFieldName;
   const TCHAR* m_pszRevNmbFieldName;
 protected:
+  int m_iUserOffset; 
   /* Row identification class */
   struct CRowIdent{
     int m_iRev;
@@ -37,10 +37,12 @@ public:
   virtual BOOL     FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter);
   virtual BOOL     DeleteRow(int iRowNumber);  
   virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
-  virtual TCHAR*   GetColumnRepresName(int iRow)  {return m_pszColumnsRepresNames[m_iUserOffset + iRow].GetBuffer();};
+  virtual TCHAR*   GetColumnRepresName(int iColnumb)  {return m_pszColumnsRepresNames[m_iUserOffset + iColnumb].GetBuffer();};
   virtual CString* GetTableRepresName(){ return &m_csTableRepresName;};
   virtual TCHAR*   GetDBPath();
   virtual BOOL     IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter=eEquals);
+  virtual BOOL     ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData);
+  virtual int      ReadIdentifierByRowNumber(int iRowNmb);
   /* pure virtual functions */
   virtual BOOL     AddRow(CArray<CString> &a_csRowData) = 0;
   virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr) = 0;

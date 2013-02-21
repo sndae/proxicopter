@@ -21,8 +21,8 @@ CPhones::CPhones(CDatabase* pdb, const TCHAR *pszDBPath)
 	m_nDefaultType = dynaset;
 
   CArray<CString> a_szFieldsNames;
-  a_szFieldsNames.Add(_T("Код на тип телефон"));
-  a_szFieldsNames.Add(_T("Тип телефон"));
+  a_szFieldsNames.InsertAt(eColCode, _T("Код на тип телефон"));
+  a_szFieldsNames.InsertAt(eColPhoneType, _T("Тип телефон"));
 
   LoadDb(_T("Типове телефони"), a_szFieldsNames);
 }
@@ -64,7 +64,7 @@ BOOL CPhones::AddRow(CArray<CString> &a_csRowData)
   MoveLast();
   int iIndex = m_id;
   if( !CanAppend() ||
-      IsColumnValuePresent(GetColumnRepresName(0), a_csRowData[0]))
+      IsColumnValuePresent(GetColumnRepresName(eColCode), a_csRowData[eColCode]))
   {
     return FALSE;
   }
@@ -73,8 +73,8 @@ BOOL CPhones::AddRow(CArray<CString> &a_csRowData)
 	m_id = iIndex + 1;
 	m_rev_nmb = 0;
 
-	m_Code = _ttoi(a_csRowData[0]);
-	m_PhoneType = a_csRowData[1];
+	m_Code = _ttoi(a_csRowData[eColCode]);
+	m_PhoneType = a_csRowData[eColPhoneType];
   
   return Update();
 }
@@ -103,13 +103,28 @@ HANDLE CPhones::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 
 BOOL CPhones::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 {
-  if(a_csRowData.GetCount() != m_nFields)
+  if(!hRow)
+    return FALSE;
+
+  CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Move(pRowId->m_iNmb);
+  if(IsEOF() || IsBOF() || !CanUpdate())
+    return FALSE;
+
+  if(m_id != pRowId->m_iId)
+    return FALSE;
+  else if(m_rev_nmb != pRowId->m_iRev)
+    return FALSE;
+
+  if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
     return FALSE;
 
   Edit();
 
-  m_Code =  _ttoi(a_csRowData[0]);
-	m_PhoneType = a_csRowData[1];
+	m_id      = pRowId->m_iId;
+	m_rev_nmb = ++pRowId->m_iRev;
+  m_Code    = _ttoi(a_csRowData[eColCode]);
+	m_PhoneType = a_csRowData[eColPhoneType];
 
   Update();
 
