@@ -14,7 +14,7 @@ m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
 
 CDbTableInterface::~CDbTableInterface(void)
 {
-  Close();
+ // Close();
 }
 #if 0
 HANDLE CDbTableInterface::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
@@ -239,6 +239,8 @@ int CDbTableInterface::ReadIdentifierByRowNumber(int iRowNmb)
 
 BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData)
 {
+  CString strFilter = m_strFilter;
+  CString strSort   = m_strSort;
   Close(); 
   TCHAR szStr[64];
   _itot(iId, szStr, 10);
@@ -252,6 +254,11 @@ BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowDat
 
   HANDLE hRow = ReadRow(a_csRowData, 0);
   delete hRow;
+
+  Close();
+  m_strFilter = strFilter;
+  m_strSort = strSort;
+  Open();
 
   return TRUE;
 }

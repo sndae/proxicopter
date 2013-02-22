@@ -106,7 +106,9 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 	m_phone_id = iPhonesId;
   m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
-  return Update();
+  Update();
+
+  return TRUE;
 }
 
 BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
@@ -141,11 +143,15 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
 	m_phone_id = iPhonesId;
   m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
-  return Update();
+  Update();
+
+  return TRUE;
 }
 
 HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
+  Close();
+  Open();
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {
@@ -175,6 +181,7 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
   
   a_csRowData.InsertAt(eColPhoneNumb, m_phone_number);
 
+  
   return (HANDLE)pcRowId;
 }
 

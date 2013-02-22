@@ -81,6 +81,8 @@ BOOL CPhones::AddRow(CArray<CString> &a_csRowData)
 
 HANDLE CPhones::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
+  Close();
+  Open();
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {

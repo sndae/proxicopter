@@ -36,6 +36,7 @@ public:
 protected:
   CDBTablesContainer *m_pTablesContainer;
   CArray<CDbTableInterface*> m_apTables;
+  CArray<HANDLE> m_ahRows;
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -66,6 +67,8 @@ public:
   void RecreateRowsContent();
   void RecreateTableSelectorContent();
   void CleanUpTablesData();
+  void CleanUpRowData();
+  afx_msg void OnBnClickedWriteRow();
 };
 
 #ifndef _DEBUG  // debug version in PhonebookView.cpp

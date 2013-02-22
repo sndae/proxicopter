@@ -110,6 +110,8 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
 
 HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
+  Close();
+  Open();
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {
@@ -140,6 +142,8 @@ HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   csCityAddress += _T(", ");
   csCityAddress += m_city_addr;
   a_csRowData.InsertAt(eColCityAddr, csCityAddress);
+
+
 
   return (HANDLE)pcRowId; 
 }
