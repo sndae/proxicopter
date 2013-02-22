@@ -20,7 +20,7 @@ CSubscribers::CSubscribers(CDatabase* pdb, const TCHAR *pszDBPath)
 	m_first_name = L"";
 	m_second_name = L"";
 	m_third_name = L"";
-	m_ident_nmb = 0;
+	m_ident_nmb = L"";
 	m_city_id = 0;
 	m_city_addr = L"";
 	m_nFields = 9;
@@ -70,7 +70,7 @@ void CSubscribers::DoFieldExchange(CFieldExchange* pFX)
 	RFX_Text(pFX, _T("[first_name]"), m_first_name);
 	RFX_Text(pFX, _T("[second_name]"), m_second_name);
 	RFX_Text(pFX, _T("[third_name]"), m_third_name);
-	RFX_Double(pFX, _T("[ident_nmb]"), m_ident_nmb);
+	RFX_Text(pFX, _T("[ident_nmb]"), m_ident_nmb);
 	RFX_Long(pFX, _T("[city_id]"), m_city_id);
 	RFX_Text(pFX, _T("[city_addr]"), m_city_addr);
 
@@ -101,7 +101,7 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
 	m_first_name  = a_csRowData[eColFirstName];
   m_second_name = a_csRowData[eColSecondName];
 	m_third_name  = a_csRowData[eColThirdName];
-	m_ident_nmb   = _ttoi(a_csRowData[eColIdentNumb]);
+	m_ident_nmb   = a_csRowData[eColIdentNumb];
   m_city_id     = cCityTable.ReadIdentifierByRowNumber(0);
   m_city_addr   = a_csRowData[eColCityAddr];
 
@@ -110,6 +110,9 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
 
 HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
+  Close();
+  Open();
+
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {
@@ -128,7 +131,7 @@ HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 	a_csRowData.InsertAt(eColFirstName,  m_first_name);
 	a_csRowData.InsertAt(eColSecondName, m_second_name);
 	a_csRowData.InsertAt(eColThirdName,  m_third_name);
-	a_csRowData.InsertAt(eColIdentNumb,  _itot(m_ident_nmb, szTemp, 10));
+	a_csRowData.InsertAt(eColIdentNumb,  m_ident_nmb);
 
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRowData;
@@ -176,7 +179,7 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 	m_first_name  = a_csRowData[eColFirstName];
 	m_second_name = a_csRowData[eColSecondName];
 	m_third_name  = a_csRowData[eColThirdName];
-  m_ident_nmb   = _ttoi(a_csRowData[eColIdentNumb]);
+  m_ident_nmb   = a_csRowData[eColIdentNumb];
   m_city_id     = cCityTable.ReadIdentifierByRowNumber(0);
   m_city_addr   = a_csRowData[eColCityAddr];
 

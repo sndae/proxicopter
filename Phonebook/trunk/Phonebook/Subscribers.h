@@ -27,7 +27,7 @@ public:
 	CStringW	m_first_name;
 	CStringW	m_second_name;
 	CStringW	m_third_name;
-	double	m_ident_nmb;
+	CStringW	m_ident_nmb;
 	long	m_city_id;
 	CStringW	m_city_addr;
 

@@ -25,9 +25,9 @@ CSubscribersPhoneNumbers::CSubscribersPhoneNumbers(CDatabase* pdb, const TCHAR *
 	m_nDefaultType = dynaset;
 
   CArray<CString> a_szFieldsNames;
-  a_szFieldsNames.InsertAt(eColSubscriberId,  _T("Име"));
-  a_szFieldsNames.InsertAt(eColPhoneId, _T("Презиме"));
-  a_szFieldsNames.InsertAt(eColPhoneNumb, _T("Презиме"));
+  a_szFieldsNames.InsertAt(eColSubscriberId,  _T("Код на абонат"));
+  a_szFieldsNames.InsertAt(eColPhoneId,       _T("Код на тип телефон"));
+  a_szFieldsNames.InsertAt(eColPhoneNumb,     _T("Телефон"));
 
   LoadDb(_T("Абонати"), a_szFieldsNames);
 }
@@ -146,6 +146,9 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
 
 HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
+  Close();
+  Open();
+
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {

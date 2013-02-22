@@ -110,6 +110,9 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
 HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
+  Close();
+  Open();
+
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {

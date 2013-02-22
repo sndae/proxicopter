@@ -110,8 +110,8 @@ void CPhonebookView::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	ResizeParentToFit();
 
- // m_TablePath.SetWindowTextW(L"phonebook.dbo");
- // m_DSN.SetWindowTextW(L"SQLEXPRESS");
+  m_TablePath.SetWindowTextW(L"phonebook.dbo");
+  m_DSN.SetWindowTextW(L"SQLEXPRESS");
 
 }
 
@@ -157,52 +157,49 @@ void CPhonebookView::OnBnClickedLoaddb()
 void CPhonebookView::OnCbnSelchangeRegisterSelector()
 {
   // TODO: Add your control notification handler code here
-
+  RecreateRowsContent();
 }
 
 void CPhonebookView::OnBnClickedSortbycol1()
 {
   // TODO: Add your control notification handler code here
-  CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
-  static CDbTableInterface::eSortType eType = CDbTableInterface::eDesc;
-  if(eType == CDbTableInterface::eDesc)
-    eType = CDbTableInterface::eAsc;
-  else
-    eType = CDbTableInterface::eDesc;
-
-  pTable->SortTableByColumn(0, eType);
-  
-  RecreateRowsContent();
-}
-
-void CPhonebookView::OnBnClickedSortbycol3()
-{
-  // TODO: Add your control notification handler code here
+  SortByCol(0);
 }
 
 void CPhonebookView::OnBnClickedSortbycol2()
 {
   // TODO: Add your control notification handler code here
+  SortByCol(1);
 }
+void CPhonebookView::OnBnClickedSortbycol3()
+{
+  // TODO: Add your control notification handler code here
+  SortByCol(2);
+}
+
 
 void CPhonebookView::OnBnClickedSortbycol4()
 {
   // TODO: Add your control notification handler code here
+  SortByCol(3);
 }
 
 void CPhonebookView::OnBnClickedSortbycol5()
 {
   // TODO: Add your control notification handler code here
+  SortByCol(4);
 }
 
 void CPhonebookView::OnBnClickedSortbycol6()
 {
   // TODO: Add your control notification handler code here
+  SortByCol(5);
 }
 
 void CPhonebookView::OnBnClickedSortbycol7()
 {
   // TODO: Add your control notification handler code here
+  SortByCol(6);
 }
 
 void CPhonebookView::ClearSortButtonsLabels()
@@ -215,6 +212,17 @@ void CPhonebookView::ClearSortButtonsLabels()
 
 void CPhonebookView::RecreateSortButtonsLabels()
 {
+  ClearSortButtonsLabels();
+
+  CDbTableInterface *pcTable = m_apTables[m_RegSelector.GetCurSel()];
+  CArray<CString> a_csFieldValues;
+  if(pcTable->GetColumnsRepresNames(a_csFieldValues))
+  {
+    for(int i = 0; (i < a_csFieldValues.GetCount()) && (i < COLUMN_NUMBER); i++)
+    {
+      m_SortByCol[i].SetWindowTextW(a_csFieldValues[i]);
+    }
+  }  
 
 }
 
@@ -246,19 +254,13 @@ void CPhonebookView::EnableSortButtonsAndRows()
 
 void CPhonebookView::RecreateRowsContent()
 {
-  int iCurTableSel = m_RegSelector.GetCurSel();
-  CDbTableInterface *pcTable = m_apTables[iCurTableSel];
-  CArray<CString> a_csFieldValues;
-  if(pcTable->GetColumnsRepresNames(a_csFieldValues))
-  {
-    for(int i = 0; (i < a_csFieldValues.GetCount()) && (i < COLUMN_NUMBER); i++)
-    {
-      m_SortByCol[i].SetWindowTextW(a_csFieldValues[i]);
-    }
-  }  
+  ClearAllRowsContent();
+
+  CDbTableInterface *pcTable = m_apTables[m_RegSelector.GetCurSel()];
 
   HANDLE hRow = 0;
-  a_csFieldValues.RemoveAll();
+  CArray<CString> a_csFieldValues;
+
   for(int iRow = 0; hRow = pcTable->ReadRow(a_csFieldValues, iRow); iRow++)
   {
     m_ahRows.Add(hRow);
@@ -272,6 +274,7 @@ void CPhonebookView::RecreateRowsContent()
     a_csFieldValues.RemoveAll();
   }
 
+  RecreateSortButtonsLabels();
 }
 
 void CPhonebookView::RecreateTableSelectorContent()
@@ -295,6 +298,7 @@ void CPhonebookView::RecreateTableSelectorContent()
   }
   
   m_RegSelector.SetCurSel(0);
+  
   RecreateRowsContent();
 }
 
@@ -318,4 +322,14 @@ void CPhonebookView::CleanUpRowData()
     delete m_ahRows.GetAt(iRowCnt);
   }
   m_ahRows.RemoveAll();
+}
+
+void CPhonebookView::SortByCol(int iColNmb)
+{
+  CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
+
+  if(pTable->SortTableByColumn(0, m_SortByCol[iColNmb].eCurrSortType) == TRUE)
+    m_SortByCol[iColNmb].InvertSortType();
+
+  RecreateRowsContent();  
 }

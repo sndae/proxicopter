@@ -4,6 +4,7 @@
 #pragma once
 #include "afxwin.h"
 #include "DBTablesContainer.h"
+#include "Sortbutton.h"
 class CPhonebookView : public CFormView
 {
 protected: // create from serialization only
@@ -48,7 +49,7 @@ public:
   afx_msg void OnBnClickedSortbycol1();
 #define COLUMN_NUMBER (7)
 #define ROW_NUMBER    (4)
-  CButton m_SortByCol[7];
+  CSortButton m_SortByCol[7];
   CEdit   m_TableFields[ROW_NUMBER][COLUMN_NUMBER];
   CEdit m_TablePath;
   CEdit m_DSN;
@@ -68,6 +69,7 @@ public:
   void RecreateTableSelectorContent();
   void CleanUpTablesData();
   void CleanUpRowData();
+  void SortByCol(int iColNmb);
   afx_msg void OnBnClickedWriteRow();
 };
 

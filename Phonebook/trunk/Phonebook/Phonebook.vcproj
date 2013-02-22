@@ -228,6 +228,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SortButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SortButton.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
