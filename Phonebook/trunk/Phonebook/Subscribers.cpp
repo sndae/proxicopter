@@ -83,14 +83,14 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
   MoveLast();
   int iIndex = m_id;
   if( !CanAppend() ||
-    IsColumnValuePresent(GetColumnRepresName(eColCode), a_csRowData[eColCode]))
+    IsColumnValuePresent(eColCode, a_csRowData[eColCode]))
   {
     return FALSE;
   }
 
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRelTableRowData;
-  cCityTable.FilterTableByColumnValue(cCityTable.GetColumnRepresName(CCities::eColCode), a_csRowData[eColCityId], eEquals);
+  cCityTable.FilterTableByColumnValue(CCities::eColCode, a_csRowData[eColCityId], eEquals);
   if(IsBOF())
     return FALSE;
   
@@ -110,8 +110,6 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
 
 HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
-  Close();
-  Open();
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {
@@ -143,8 +141,6 @@ HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   csCityAddress += m_city_addr;
   a_csRowData.InsertAt(eColCityAddr, csCityAddress);
 
-
-
   return (HANDLE)pcRowId; 
 }
 
@@ -168,7 +164,7 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRelTableRowData;
-  cCityTable.FilterTableByColumnValue(cCityTable.GetColumnRepresName(CCities::eColCode), a_csRowData[eColCityId], eEquals);
+  cCityTable.FilterTableByColumnValue(CCities::eColCode, a_csRowData[eColCityId], eEquals);
   if(IsBOF())
     return FALSE;
     

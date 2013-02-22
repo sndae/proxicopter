@@ -27,7 +27,7 @@ protected:
 public:
   using   CRecordset::operator new;
   using   CRecordset::operator delete;
-  enum    eSortType {eAlphabetically, eAlphabeticallyRev, eNumerically, eNumericallyRev};
+  enum    eSortType {eAsc = 1, eDesc};
   enum    eFileterType {eEquals, eBiggerThan, eBiggerThanOrEqual, eLessThan, eLessThanOrEqual, eContains};
   
   /*Constructor and deconstructor */
@@ -35,14 +35,14 @@ public:
   ~CDbTableInterface(void);
 
   /* Interface functions */
-  virtual BOOL     SortTableByColumn(const TCHAR *pszColumnName, eSortType eType);
-  virtual BOOL     FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter);
+  virtual BOOL     SortTableByColumn(int iColumnNmb, eSortType eType);
+  virtual BOOL     FilterTableByColumnValue(int iColNmb, const TCHAR *pszValue, eFileterType eFilter);
   virtual BOOL     DeleteRow(int iRowNumber);  
   virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
   virtual TCHAR*   GetColumnRepresName(int iColnumb)  {return m_pszColumnsRepresNames[m_iUserOffset + iColnumb].GetBuffer();};
   virtual TCHAR*   GetTableRepresName(){ return m_csTableRepresName.GetBuffer();};
   virtual TCHAR*   GetDBPath();
-  virtual BOOL     IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter=eEquals);
+  virtual BOOL     IsColumnValuePresent(int iColNmb, const TCHAR *pszValue, eFileterType eFilter=eEquals);
   virtual BOOL     ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData);
   virtual int      ReadIdentifierByRowNumber(int iRowNmb);
   /* pure virtual functions */

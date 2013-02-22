@@ -114,13 +114,8 @@ BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString>
   return Open(CRecordset::dynaset);
 }
 
-BOOL CDbTableInterface::SortTableByColumn(const TCHAR *pszColumnName, eSortType eType)
+BOOL CDbTableInterface::SortTableByColumn(int iColumnNmb, eSortType eType)
 {
-  int iColumnNmb = GetColumnNumberByRepresName(pszColumnName);
-  if((iColumnNmb == -1) || !pszColumnName)
-    return FALSE;
-
-
   CODBCFieldInfo tFieldInfo;
   GetODBCFieldInfo(iColumnNmb, tFieldInfo);
 
@@ -130,26 +125,17 @@ BOOL CDbTableInterface::SortTableByColumn(const TCHAR *pszColumnName, eSortType 
   m_strSort += _T(" ");
 
   switch(eType){
-    case eNumerically:
-    case eAlphabetically:     m_strSort += _T("ASC");  break;
-    case eAlphabeticallyRev:  m_strSort += _T("DESC");
-    case eNumericallyRev:     m_strSort += _T("DESC"); break;
+    case eAsc:  m_strSort += _T("ASC");  break;
+    case eDesc: m_strSort += _T("DESC"); break;
     default:  return FALSE;
   }
 
   return Open(CRecordset::dynaset);
 }
 
-BOOL  CDbTableInterface::FilterTableByColumnValue(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter)
+BOOL  CDbTableInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *pszValue, eFileterType eFilter)
 {
 #define SQL_VARCHAR2 (-9)
-  ASSERT(!pszColumnName || !pszValue);
-
-  int iColumnNmb = GetColumnNumberByRepresName(pszColumnName);
-  if(iColumnNmb == -1)
-    return FALSE;
-  
-
   CODBCFieldInfo tFieldInfo;
   GetODBCFieldInfo(iColumnNmb, tFieldInfo);
 
@@ -198,12 +184,12 @@ BOOL  CDbTableInterface::DeleteRow(int iRowNumber)
   return TRUE;
 }
 
-BOOL  CDbTableInterface::IsColumnValuePresent(const TCHAR *pszColumnName, const TCHAR *pszValue, eFileterType eFilter)
+BOOL  CDbTableInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue, eFileterType eFilter)
 {
-  if(!pszColumnName || !pszValue)
+  if(!pszValue)
     return FALSE;
 
-  FilterTableByColumnValue(pszColumnName, pszValue, eFilter);
+  FilterTableByColumnValue(iColNmb, pszValue, eFilter);
   if(!IsBOF()){
     MoveFirst();
   }else{
@@ -239,8 +225,6 @@ int CDbTableInterface::ReadIdentifierByRowNumber(int iRowNmb)
 
 BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData)
 {
-  CString strFilter = m_strFilter;
-  CString strSort   = m_strSort;
   Close(); 
   TCHAR szStr[64];
   _itot(iId, szStr, 10);
@@ -254,11 +238,6 @@ BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowDat
 
   HANDLE hRow = ReadRow(a_csRowData, 0);
   delete hRow;
-
-  Close();
-  m_strFilter = strFilter;
-  m_strSort = strSort;
-  Open();
 
   return TRUE;
 }

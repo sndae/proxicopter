@@ -6,7 +6,6 @@
 
 #include "PhonebookDoc.h"
 #include "PhonebookView.h"
-#include ".\phonebookview.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -25,7 +24,6 @@ BEGIN_MESSAGE_MAP(CPhonebookView, CFormView)
   ON_BN_CLICKED(IDC_SORTBYCOL5, &CPhonebookView::OnBnClickedSortbycol5)
   ON_BN_CLICKED(IDC_SORTBYCOL6, &CPhonebookView::OnBnClickedSortbycol6)
   ON_BN_CLICKED(IDC_SORTBYCOL7, &CPhonebookView::OnBnClickedSortbycol7)
-  ON_BN_CLICKED(IDC_WRITE_ROW, OnBnClickedWriteRow)
 END_MESSAGE_MAP()
 
 // CPhonebookView construction/destruction
@@ -159,12 +157,22 @@ void CPhonebookView::OnBnClickedLoaddb()
 void CPhonebookView::OnCbnSelchangeRegisterSelector()
 {
   // TODO: Add your control notification handler code here
-  RecreateRowsContent();
+
 }
 
 void CPhonebookView::OnBnClickedSortbycol1()
 {
   // TODO: Add your control notification handler code here
+  CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
+  static CDbTableInterface::eSortType eType = CDbTableInterface::eDesc;
+  if(eType == CDbTableInterface::eDesc)
+    eType = CDbTableInterface::eAsc;
+  else
+    eType = CDbTableInterface::eDesc;
+
+  pTable->SortTableByColumn(0, eType);
+  
+  RecreateRowsContent();
 }
 
 void CPhonebookView::OnBnClickedSortbycol3()
@@ -207,18 +215,7 @@ void CPhonebookView::ClearSortButtonsLabels()
 
 void CPhonebookView::RecreateSortButtonsLabels()
 {
-  ClearSortButtonsLabels();
 
-  int iCurTableSel = m_RegSelector.GetCurSel();
-  CDbTableInterface *pcTable = m_apTables[iCurTableSel];
-  CArray<CString> a_csFieldValues;
-  if(pcTable->GetColumnsRepresNames(a_csFieldValues))
-  {
-    for(int i = 0; (i < a_csFieldValues.GetCount()) && (i < COLUMN_NUMBER); i++)
-    {
-      m_SortByCol[i].SetWindowTextW(a_csFieldValues[i]);
-    }
-  }  
 }
 
 void CPhonebookView::ClearRowContent(int iRow)
@@ -239,7 +236,7 @@ void CPhonebookView::ClearAllRowsContent()
 
 void CPhonebookView::DisableSortButtonsAndRows()
 {
-  
+
 }
 
 void CPhonebookView::EnableSortButtonsAndRows()
@@ -249,15 +246,19 @@ void CPhonebookView::EnableSortButtonsAndRows()
 
 void CPhonebookView::RecreateRowsContent()
 {
-  RecreateSortButtonsLabels();
-
-  CleanUpRowData();
-  ClearAllRowsContent();
   int iCurTableSel = m_RegSelector.GetCurSel();
   CDbTableInterface *pcTable = m_apTables[iCurTableSel];
   CArray<CString> a_csFieldValues;
+  if(pcTable->GetColumnsRepresNames(a_csFieldValues))
+  {
+    for(int i = 0; (i < a_csFieldValues.GetCount()) && (i < COLUMN_NUMBER); i++)
+    {
+      m_SortByCol[i].SetWindowTextW(a_csFieldValues[i]);
+    }
+  }  
 
   HANDLE hRow = 0;
+  a_csFieldValues.RemoveAll();
   for(int iRow = 0; hRow = pcTable->ReadRow(a_csFieldValues, iRow); iRow++)
   {
     m_ahRows.Add(hRow);
@@ -317,8 +318,4 @@ void CPhonebookView::CleanUpRowData()
     delete m_ahRows.GetAt(iRowCnt);
   }
   m_ahRows.RemoveAll();
-}
-void CPhonebookView::OnBnClickedWriteRow()
-{
-  // TODO: Add your control notification handler code here
 }

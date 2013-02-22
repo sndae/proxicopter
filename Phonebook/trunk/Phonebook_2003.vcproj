@@ -199,6 +199,9 @@
 				RelativePath=".\Phonebook\Resource.h">
 			</File>
 			<File
+				RelativePath=".\Phonebook\res\resource.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\stdafx.h">
 			</File>
 			<File
@@ -236,5 +239,8 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="Phonebook\res\Phonebook_2003.rc"/>
 	</Globals>
 </VisualStudioProject>

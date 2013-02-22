@@ -110,8 +110,6 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
 HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
-  Close();
-  Open();
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {
@@ -138,8 +136,8 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   MoveLast();
   int iIndex = m_id;
   if( !CanAppend() ||
-      IsColumnValuePresent(GetColumnRepresName(eColCode), a_csRowData[eColCode]) ||
-      IsColumnValuePresent(GetColumnRepresName(eColName), a_csRowData[eColCode]) )
+      IsColumnValuePresent(eColCode, a_csRowData[eColCode]) ||
+      IsColumnValuePresent(eColName, a_csRowData[eColCode]) )
   {
     return FALSE;
   }

@@ -85,14 +85,14 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 
 
   CSubscribers cSubscrTable(m_pDatabase, GetDBPath());
-  cSubscrTable.FilterTableByColumnValue(cSubscrTable.GetColumnRepresName(CSubscribers::eColCode), a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals);
+  cSubscrTable.FilterTableByColumnValue(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals);
   if(IsBOF())
     return FALSE;
 
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
-  cPhonesTable.FilterTableByColumnValue(cPhonesTable.GetColumnRepresName(CPhones::eColCode), a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals);
+  cPhonesTable.FilterTableByColumnValue(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals);
   if(IsBOF())
     return FALSE;
 
@@ -106,9 +106,7 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 	m_phone_id = iPhonesId;
   m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
-  Update();
-
-  return TRUE;
+  return Update();
 }
 
 BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
@@ -122,14 +120,14 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
   }
 
   CSubscribers cSubscrTable(m_pDatabase, GetDBPath());
-  cSubscrTable.FilterTableByColumnValue(cSubscrTable.GetColumnRepresName(CSubscribers::eColCode), a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals);
+  cSubscrTable.FilterTableByColumnValue(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals);
   if(IsBOF())
     return FALSE;
 
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
-  cPhonesTable.FilterTableByColumnValue(cPhonesTable.GetColumnRepresName(CPhones::eColCode), a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals);
+  cPhonesTable.FilterTableByColumnValue(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals);
   if(IsBOF())
     return FALSE;
 
@@ -143,15 +141,11 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
 	m_phone_id = iPhonesId;
   m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
-  Update();
-
-  return TRUE;
+  return Update();
 }
 
 HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
-  Close();
-  Open();
   Move(iRowNmbr);
   if(IsEOF() || IsBOF())
   {
@@ -181,7 +175,6 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
   
   a_csRowData.InsertAt(eColPhoneNumb, m_phone_number);
 
-  
   return (HANDLE)pcRowId;
 }
 
