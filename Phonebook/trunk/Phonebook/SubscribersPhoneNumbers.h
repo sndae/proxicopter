@@ -38,7 +38,7 @@ public:
   virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
   virtual BOOL     AddRow(CArray<CString> &a_csRowData);
   virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);
-
+  virtual int      ReadIdentifierByRowNumber(int iRowNmb);
 // Implementation
 #ifdef _DEBUG
 	virtual void AssertValid() const;

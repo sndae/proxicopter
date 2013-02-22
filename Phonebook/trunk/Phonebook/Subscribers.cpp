@@ -90,8 +90,7 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
 
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRelTableRowData;
-  cCityTable.FilterTableByColumnValue(CCities::eColCode, a_csRowData[eColCityId], eEquals);
-  if(IsBOF())
+  if(!cCityTable.IsColumnValuePresent(CCities::eColCode, a_csRowData[eColCityId]))
     return FALSE;
   
   AddNew();
@@ -153,6 +152,8 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
     return FALSE;
 
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Close();
+  Open();
   Move(pRowId->m_iNmb);
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
@@ -167,8 +168,7 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRelTableRowData;
-  cCityTable.FilterTableByColumnValue(CCities::eColCode, a_csRowData[eColCityId], eEquals);
-  if(IsBOF())
+  if(!cCityTable.IsColumnValuePresent(CCities::eColCode, a_csRowData[eColCityId]))
     return FALSE;
     
   Edit();
@@ -187,6 +187,17 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
   return TRUE;
 }
+
+int CSubscribers::ReadIdentifierByRowNumber(int iRowNmb)
+{
+  Move(iRowNmb);
+  if(IsEOF() || IsBOF())
+  {
+    return 0;
+  }
+  return m_id;
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -110,6 +110,8 @@ BOOL CPhones::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
     return FALSE;
 
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Close();
+  Open();
   Move(pRowId->m_iNmb);
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
@@ -133,6 +135,17 @@ BOOL CPhones::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
   return TRUE;
 }
+
+int CPhones::ReadIdentifierByRowNumber(int iRowNmb)
+{
+  Move(iRowNmb);
+  if(IsEOF() || IsBOF())
+  {
+    return 0;
+  }
+  return m_id;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CPhones diagnostics

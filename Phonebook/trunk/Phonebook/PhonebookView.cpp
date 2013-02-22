@@ -17,6 +17,7 @@ IMPLEMENT_DYNCREATE(CPhonebookView, CFormView)
 BEGIN_MESSAGE_MAP(CPhonebookView, CFormView)
   ON_BN_CLICKED(IDC_LOADDB, &CPhonebookView::OnBnClickedLoaddb)
   ON_CBN_SELCHANGE(IDC_REGISTER_SELECTOR, &CPhonebookView::OnCbnSelchangeRegisterSelector)
+  ON_BN_CLICKED(IDC_WRITE_ROW,  &CPhonebookView::OnBnClickedWriteRow)  
   ON_BN_CLICKED(IDC_SORTBYCOL1, &CPhonebookView::OnBnClickedSortbycol1)
   ON_BN_CLICKED(IDC_SORTBYCOL3, &CPhonebookView::OnBnClickedSortbycol3)
   ON_BN_CLICKED(IDC_SORTBYCOL2, &CPhonebookView::OnBnClickedSortbycol2)
@@ -24,6 +25,38 @@ BEGIN_MESSAGE_MAP(CPhonebookView, CFormView)
   ON_BN_CLICKED(IDC_SORTBYCOL5, &CPhonebookView::OnBnClickedSortbycol5)
   ON_BN_CLICKED(IDC_SORTBYCOL6, &CPhonebookView::OnBnClickedSortbycol6)
   ON_BN_CLICKED(IDC_SORTBYCOL7, &CPhonebookView::OnBnClickedSortbycol7)
+  ON_EN_CHANGE(IDC_EDIT1, &CPhonebookView::OnEnChangeEdit1)
+  ON_EN_CHANGE(IDC_EDIT2, &CPhonebookView::OnEnChangeEdit1)
+  ON_EN_CHANGE(IDC_EDIT3, &CPhonebookView::OnEnChangeEdit1)
+  ON_EN_CHANGE(IDC_EDIT4, &CPhonebookView::OnEnChangeEdit1)
+  ON_EN_CHANGE(IDC_EDIT5, &CPhonebookView::OnEnChangeEdit1)
+  ON_EN_CHANGE(IDC_EDIT6, &CPhonebookView::OnEnChangeEdit1)
+  ON_EN_CHANGE(IDC_EDIT7, &CPhonebookView::OnEnChangeEdit1)
+
+  ON_EN_CHANGE(IDC_EDIT8, &CPhonebookView::OnEnChangeEdit8)
+  ON_EN_CHANGE(IDC_EDIT9, &CPhonebookView::OnEnChangeEdit8)
+  ON_EN_CHANGE(IDC_EDIT10, &CPhonebookView::OnEnChangeEdit8)
+  ON_EN_CHANGE(IDC_EDIT11, &CPhonebookView::OnEnChangeEdit8)
+  ON_EN_CHANGE(IDC_EDIT12, &CPhonebookView::OnEnChangeEdit8)
+  ON_EN_CHANGE(IDC_EDIT13, &CPhonebookView::OnEnChangeEdit8)
+  ON_EN_CHANGE(IDC_EDIT14, &CPhonebookView::OnEnChangeEdit8)
+
+  ON_EN_CHANGE(IDC_EDIT15, &CPhonebookView::OnEnChangeEdit15)
+  ON_EN_CHANGE(IDC_EDIT16, &CPhonebookView::OnEnChangeEdit15)
+  ON_EN_CHANGE(IDC_EDIT17, &CPhonebookView::OnEnChangeEdit15)
+  ON_EN_CHANGE(IDC_EDIT18, &CPhonebookView::OnEnChangeEdit15)
+  ON_EN_CHANGE(IDC_EDIT19, &CPhonebookView::OnEnChangeEdit15)
+  ON_EN_CHANGE(IDC_EDIT20, &CPhonebookView::OnEnChangeEdit15)
+  ON_EN_CHANGE(IDC_EDIT21, &CPhonebookView::OnEnChangeEdit15)
+
+  ON_EN_CHANGE(IDC_EDIT22, &CPhonebookView::OnEnChangeEdit22)
+  ON_EN_CHANGE(IDC_EDIT23, &CPhonebookView::OnEnChangeEdit22)
+  ON_EN_CHANGE(IDC_EDIT24, &CPhonebookView::OnEnChangeEdit22)
+  ON_EN_CHANGE(IDC_EDIT25, &CPhonebookView::OnEnChangeEdit22)
+  ON_EN_CHANGE(IDC_EDIT26, &CPhonebookView::OnEnChangeEdit22)
+  ON_EN_CHANGE(IDC_EDIT27, &CPhonebookView::OnEnChangeEdit22)
+  ON_EN_CHANGE(IDC_EDIT28, &CPhonebookView::OnEnChangeEdit22)
+
 END_MESSAGE_MAP()
 
 // CPhonebookView construction/destruction
@@ -94,7 +127,8 @@ void CPhonebookView::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_TABLES_PATH, m_TablePath);
   DDX_Control(pDX, IDC_DSN, m_DSN);
 
-  ClearSortButtonsLabels();
+  for(int i = 0; i < sizeof(m_SortByCol)/sizeof(m_SortByCol[0]); i++)
+    m_SortByCol[i].EnableWindow(0);
 }
 
 BOOL CPhonebookView::PreCreateWindow(CREATESTRUCT& cs)
@@ -112,7 +146,6 @@ void CPhonebookView::OnInitialUpdate()
 
   m_TablePath.SetWindowTextW(L"phonebook.dbo");
   m_DSN.SetWindowTextW(L"SQLEXPRESS");
-
 }
 
 
@@ -138,6 +171,29 @@ CPhonebookDoc* CPhonebookView::GetDocument() const // non-debug version is inlin
 
 
 // CPhonebookView message handlers
+void CPhonebookView::OnBnClickedWriteRow()
+{
+  CString csMessage;
+  csMessage.Format(_T("Would you like to write data at row %d ?"), m_iLastRowClicked + 1);
+  if(MessageBox(csMessage, 0, MB_OKCANCEL|MB_ICONINFORMATION) == IDOK)
+  {
+    CDbTableInterface *pcTable = m_apTables[m_RegSelector.GetCurSel()];
+    CArray<CString> a_csFieldValues;
+    for(int i = 0; i < pcTable->GetColumnsNumber(); i++)
+    {
+      m_TableFields[m_iLastRowClicked][i].GetWindowTextW(csMessage);
+      a_csFieldValues.Add(csMessage);
+    }
+    if(pcTable->WriteRow(a_csFieldValues, m_ahRows[m_iLastRowClicked]) == FALSE)
+    {
+      csMessage = _T("");
+      csMessage.Format(_T("Problem while trying to write at row %d emerged. \nTry table update."),  m_iLastRowClicked + 1); 
+      MessageBox(csMessage, 0, MB_OK|MB_ICONWARNING);
+    }else{
+      RecreateRowsContent();
+    }
+  }
+}
 
 void CPhonebookView::OnBnClickedLoaddb()
 {
@@ -202,25 +258,22 @@ void CPhonebookView::OnBnClickedSortbycol7()
   SortByCol(6);
 }
 
-void CPhonebookView::ClearSortButtonsLabels()
-{
-  for(int i = 0; i < sizeof(m_SortByCol)/sizeof(m_SortByCol[0]); i++)
-  {
-    m_SortByCol[i].SetWindowTextW(L"");
-  }
-}
-
 void CPhonebookView::RecreateSortButtonsLabels()
 {
-  ClearSortButtonsLabels();
-
   CDbTableInterface *pcTable = m_apTables[m_RegSelector.GetCurSel()];
   CArray<CString> a_csFieldValues;
   if(pcTable->GetColumnsRepresNames(a_csFieldValues))
   {
-    for(int i = 0; (i < a_csFieldValues.GetCount()) && (i < COLUMN_NUMBER); i++)
+    int i = 0;
+    for( ; (i < a_csFieldValues.GetCount()) && (i < sizeof(m_SortByCol)/sizeof(m_SortByCol[0])); i++)
     {
       m_SortByCol[i].SetWindowTextW(a_csFieldValues[i]);
+      m_SortByCol[i].EnableWindow();
+    }
+    for( ; i < sizeof(m_SortByCol)/sizeof(m_SortByCol[0]); i++)
+    {
+      m_SortByCol[i].SetWindowTextW(_T(""));
+      m_SortByCol[i].EnableWindow(0);
     }
   }  
 
@@ -242,20 +295,11 @@ void CPhonebookView::ClearAllRowsContent()
   }
 }
 
-void CPhonebookView::DisableSortButtonsAndRows()
-{
-
-}
-
-void CPhonebookView::EnableSortButtonsAndRows()
-{
-
-}
 
 void CPhonebookView::RecreateRowsContent()
 {
   ClearAllRowsContent();
-
+  CleanUpRowData();
   CDbTableInterface *pcTable = m_apTables[m_RegSelector.GetCurSel()];
 
   HANDLE hRow = 0;
@@ -328,8 +372,52 @@ void CPhonebookView::SortByCol(int iColNmb)
 {
   CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
 
-  if(pTable->SortTableByColumn(0, m_SortByCol[iColNmb].eCurrSortType) == TRUE)
+  if(pTable->SortTableByColumn(iColNmb, m_SortByCol[iColNmb].eCurrSortType) == TRUE)
     m_SortByCol[iColNmb].InvertSortType();
 
   RecreateRowsContent();  
+}
+
+void CPhonebookView::OnEnChangeEdit1()
+{
+  // TODO:  If this is a RICHEDIT control, the control will not
+  // send this notification unless you override the CFormView::OnInitDialog()
+  // function and call CRichEditCtrl().SetEventMask()
+  // with the ENM_CHANGE flag ORed into the mask.
+
+  // TODO:  Add your control notification handler code here
+  m_iLastRowClicked = 0;
+}
+
+void CPhonebookView::OnEnChangeEdit8()
+{
+  // TODO:  If this is a RICHEDIT control, the control will not
+  // send this notification unless you override the CFormView::OnInitDialog()
+  // function and call CRichEditCtrl().SetEventMask()
+  // with the ENM_CHANGE flag ORed into the mask.
+
+  // TODO:  Add your control notification handler code here
+  m_iLastRowClicked = 1;
+}
+
+void CPhonebookView::OnEnChangeEdit15()
+{
+  // TODO:  If this is a RICHEDIT control, the control will not
+  // send this notification unless you override the CFormView::OnInitDialog()
+  // function and call CRichEditCtrl().SetEventMask()
+  // with the ENM_CHANGE flag ORed into the mask.
+
+  // TODO:  Add your control notification handler code here
+  m_iLastRowClicked =2;
+}
+
+void CPhonebookView::OnEnChangeEdit22()
+{
+  // TODO:  If this is a RICHEDIT control, the control will not
+  // send this notification unless you override the CFormView::OnInitDialog()
+  // function and call CRichEditCtrl().SetEventMask()
+  // with the ENM_CHANGE flag ORed into the mask.
+
+  // TODO:  Add your control notification handler code here
+  m_iLastRowClicked = 3;
 }

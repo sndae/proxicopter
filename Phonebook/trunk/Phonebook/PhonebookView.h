@@ -44,7 +44,7 @@ protected:
 public:
   afx_msg void OnBnClickedLoaddb();
   CComboBox m_RegSelector;
-
+  int m_iLastRowClicked;
   afx_msg void OnCbnSelchangeRegisterSelector();
   afx_msg void OnBnClickedSortbycol1();
 #define COLUMN_NUMBER (7)
@@ -63,14 +63,16 @@ public:
   void RecreateSortButtonsLabels();
   void ClearRowContent(int iRow);
   void ClearAllRowsContent();
-  void DisableSortButtonsAndRows();
-  void EnableSortButtonsAndRows();
   void RecreateRowsContent();
   void RecreateTableSelectorContent();
   void CleanUpTablesData();
   void CleanUpRowData();
   void SortByCol(int iColNmb);
   afx_msg void OnBnClickedWriteRow();
+  afx_msg void OnEnChangeEdit1();
+  afx_msg void OnEnChangeEdit8();
+  afx_msg void OnEnChangeEdit15();
+  afx_msg void OnEnChangeEdit22();
 };
 
 #ifndef _DEBUG  // debug version in PhonebookView.cpp

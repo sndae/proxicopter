@@ -7,9 +7,9 @@ m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
   if(pszDBPath)
     m_csDBPath = pszDBPath;
 
-  m_pszColumnsRepresNames.Add(m_pszIdFieldName);
-  m_pszColumnsRepresNames.Add(m_pszRevNmbFieldName);   
-  m_iUserOffset = m_pszColumnsRepresNames.GetCount();
+  m_acsColumnsRepresNames.Add(m_pszIdFieldName);
+  m_acsColumnsRepresNames.Add(m_pszRevNmbFieldName);   
+  m_iUserOffset = m_acsColumnsRepresNames.GetCount();
 }
 
 CDbTableInterface::~CDbTableInterface(void)
@@ -81,8 +81,8 @@ BOOL CDbTableInterface::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
 BOOL CDbTableInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
 {
-  for(int i = m_iUserOffset; i < m_pszColumnsRepresNames.GetCount(); i++){
-    acsRowData.Add(m_pszColumnsRepresNames[i]);
+  for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++){
+    acsRowData.Add(m_acsColumnsRepresNames[i]);
   } 
 
   return TRUE;
@@ -95,9 +95,9 @@ int CDbTableInterface::GetColumnNumberByRepresName(const TCHAR *pszColumnName)
 
   CString csKeyWord(pszColumnName);
   csKeyWord.MakeUpper();
-  for(int i = m_iUserOffset; i < m_pszColumnsRepresNames.GetCount(); i++)
+  for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++)
   {
-    CString csCurrWord = m_pszColumnsRepresNames[i];
+    CString csCurrWord = m_acsColumnsRepresNames[i];
     csCurrWord.MakeUpper();
     if(csCurrWord == csKeyWord)
       return i;
@@ -109,7 +109,7 @@ int CDbTableInterface::GetColumnNumberByRepresName(const TCHAR *pszColumnName)
 BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName)
 {
   m_csTableRepresName = csTableName;
-  m_pszColumnsRepresNames.Append(a_csFieldsName);
+  m_acsColumnsRepresNames.Append(a_csFieldsName);
 
   return Open(CRecordset::dynaset);
 }
@@ -117,7 +117,7 @@ BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString>
 BOOL CDbTableInterface::SortTableByColumn(int iColumnNmb, eSortType eType)
 {
   CODBCFieldInfo tFieldInfo;
-  GetODBCFieldInfo(iColumnNmb, tFieldInfo);
+  GetODBCFieldInfo(iColumnNmb + m_iUserOffset, tFieldInfo);
 
   Close();
   m_strFilter = _T("");
@@ -137,7 +137,7 @@ BOOL  CDbTableInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *p
 {
 #define SQL_VARCHAR2 (-9)
   CODBCFieldInfo tFieldInfo;
-  GetODBCFieldInfo(iColumnNmb, tFieldInfo);
+  GetODBCFieldInfo(iColumnNmb + m_iUserOffset, tFieldInfo);
 
   Close();  
   m_strSort = _T("");
@@ -212,15 +212,6 @@ TCHAR* CDbTableInterface::GetDBPath()
     return m_csDBPath.GetBuffer();
   
   return 0;
-}
-
-int CDbTableInterface::ReadIdentifierByRowNumber(int iRowNmb)
-{
-  Move(iRowNmb);
-  CDBVariant varValue;
-  GetFieldValue(short(0), varValue);
-
-  return varValue.m_iVal;
 }
 
 BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData)

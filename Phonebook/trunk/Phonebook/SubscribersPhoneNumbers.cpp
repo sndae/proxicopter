@@ -29,7 +29,7 @@ CSubscribersPhoneNumbers::CSubscribersPhoneNumbers(CDatabase* pdb, const TCHAR *
   a_szFieldsNames.InsertAt(eColPhoneId,       _T("Код на тип телефон"));
   a_szFieldsNames.InsertAt(eColPhoneNumb,     _T("Телефон"));
 
-  LoadDb(_T("Абонати"), a_szFieldsNames);
+  LoadDb(_T("Телефонни номера на абонати"), a_szFieldsNames);
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -71,6 +71,8 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
     return FALSE;
 
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
+  Close();
+  Open();
   Move(pRowId->m_iNmb);
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
@@ -85,15 +87,13 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 
 
   CSubscribers cSubscrTable(m_pDatabase, GetDBPath());
-  cSubscrTable.FilterTableByColumnValue(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals);
-  if(IsBOF())
+  if(!cSubscrTable.IsColumnValuePresent(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals))
     return FALSE;
 
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
-  cPhonesTable.FilterTableByColumnValue(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals);
-  if(IsBOF())
+  if(!cPhonesTable.IsColumnValuePresent(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId]))
     return FALSE;
 
   int iPhonesId = cPhonesTable.ReadIdentifierByRowNumber(0);
@@ -109,6 +109,17 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
   return Update();
 }
 
+int CSubscribersPhoneNumbers::ReadIdentifierByRowNumber(int iRowNmb)
+{
+  Move(iRowNmb);
+  if(IsEOF() || IsBOF())
+  {
+    return 0;
+  }
+  return m_id;
+}
+
+
 BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
 {
   ReloadCompleteTable();
@@ -120,15 +131,13 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
   }
 
   CSubscribers cSubscrTable(m_pDatabase, GetDBPath());
-  cSubscrTable.FilterTableByColumnValue(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals);
-  if(IsBOF())
+  if(!cSubscrTable.IsColumnValuePresent(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals))
     return FALSE;
 
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
-  cPhonesTable.FilterTableByColumnValue(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals);
-  if(IsBOF())
+  if(!cPhonesTable.IsColumnValuePresent(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals))
     return FALSE;
 
   int iPhonesId = cPhonesTable.ReadIdentifierByRowNumber(0);
@@ -174,7 +183,7 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
   if(! cPhones.ReadRowByIdentifier(m_phone_id, a_csRelTableRowData))
     return FALSE;
 
-  a_csRowData.InsertAt(eColPhoneId, a_csRelTableRowData[CPhones::eColPhoneType]);
+  a_csRowData.InsertAt(eColPhoneId, a_csRelTableRowData[CPhones::eColCode]);
   
   a_csRowData.InsertAt(eColPhoneNumb, m_phone_number);
 
