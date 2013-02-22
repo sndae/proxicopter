@@ -106,7 +106,7 @@ INSERT INTO [phonebook].[dbo].[subscribers]
            ,N'Костов'
            ,N'Люцканов' 
            ,N'8606070000'
-           ,'2'
+           ,'0'
            ,'Синчец 9')
 
 INSERT INTO [phonebook].[dbo].[subscribers]
@@ -127,7 +127,7 @@ INSERT INTO [phonebook].[dbo].[subscribers]
            ,N'Георгиев'
            ,N'Темелков' 
            ,N'8605280000'
-           ,'0'
+           ,'2'
            ,'Младост 3, бл. 32')
 
            
