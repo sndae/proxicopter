@@ -61,6 +61,7 @@ BEGIN_MESSAGE_MAP(CPhonebookView, CFormView)
   ON_BN_CLICKED(IDC_SCROLLUP, &CPhonebookView::OnBnClickedScrollup)
   ON_BN_CLICKED(IDC_SCROLLDOWN, &CPhonebookView::OnBnClickedScrolldown)
   ON_BN_CLICKED(IDC_ADDROW, &CPhonebookView::OnBnClickedAddrow)
+  ON_BN_CLICKED(IDC_SEARCHROW, &CPhonebookView::OnBnClickedSearchrow)
 END_MESSAGE_MAP()
 
 // CPhonebookView construction/destruction
@@ -496,5 +497,29 @@ void CPhonebookView::OnBnClickedAddrow()
       RecreateRowsContent();
       OnBnClickedScrolldown();
     }
+  }
+}
+
+void CPhonebookView::OnBnClickedSearchrow()
+{
+  // TODO: Add your control notification handler code here
+  if((m_ahRows.GetCount() == ROW_NUMBER) || (m_iLastRowClicked != m_ahRows.GetCount()))
+  {
+    MessageBox(_T("Please scroll to an empty row via 'Scroll down' button"), 0, MB_OK|MB_ICONINFORMATION);
+  }
+  else
+  {
+    CArray<CString> a_csRowData;
+    CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
+    CString csWindowText;
+    int iColNmb = 0;
+    for( ; iColNmb < pTable->GetColumnsNumber(); iColNmb++)
+    {
+      m_TableFields[m_iLastRowClicked][iColNmb].GetWindowTextW(csWindowText);
+      if(csWindowText.GetLength() != 0)
+        break;
+    }
+    pTable->FilterTableByColumnValue(iColNmb, csWindowText, CDbTableInterface::eEquals);
+    RecreateRowsContent();
   }
 }

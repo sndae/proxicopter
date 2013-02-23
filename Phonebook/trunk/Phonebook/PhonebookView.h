@@ -78,6 +78,7 @@ public:
   afx_msg void OnBnClickedScrollup();
   afx_msg void OnBnClickedScrolldown();
   afx_msg void OnBnClickedAddrow();
+  afx_msg void OnBnClickedSearchrow();
 };
 
 #ifndef _DEBUG  // debug version in PhonebookView.cpp
