@@ -172,9 +172,14 @@ BOOL  CDbTableInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *p
   return Open(CRecordset::dynaset);
 }
 
-BOOL  CDbTableInterface::DeleteRow(int iRowNumber)
+BOOL  CDbTableInterface::DeleteRow(HANDLE hRow)
 {
-  Move(iRowNumber);
+  if(!hRow)
+    return FALSE;
+  
+  CRowIdent *pRow = static_cast<CRowIdent*>(hRow);
+  ReloadCompleteTable();
+  Move(pRow->m_iNmb);
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
 
@@ -188,6 +193,9 @@ BOOL  CDbTableInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue
 {
   if(!pszValue)
     return FALSE;
+
+  //if(!IsBOF())
+  //  return TRUE;
 
   FilterTableByColumnValue(iColNmb, pszValue, eFilter);
   if(!IsBOF()){
@@ -223,7 +231,7 @@ BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowDat
   m_strFilter += m_pszIdFieldName;
   m_strFilter += _T(" = ");
   m_strFilter += szStr;
-  Open();
+  Open(CRecordset::dynaset);
   if(IsBOF())
     return FALSE;
 
@@ -232,4 +240,3 @@ BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowDat
 
   return TRUE;
 }
-

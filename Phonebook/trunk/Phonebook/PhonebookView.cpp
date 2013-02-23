@@ -57,6 +57,10 @@ BEGIN_MESSAGE_MAP(CPhonebookView, CFormView)
   ON_EN_CHANGE(IDC_EDIT27, &CPhonebookView::OnEnChangeEdit22)
   ON_EN_CHANGE(IDC_EDIT28, &CPhonebookView::OnEnChangeEdit22)
 
+  ON_BN_CLICKED(IDC_DELETE_ROW, &CPhonebookView::OnBnClickedDeleteRow)
+  ON_BN_CLICKED(IDC_SCROLLUP, &CPhonebookView::OnBnClickedScrollup)
+  ON_BN_CLICKED(IDC_SCROLLDOWN, &CPhonebookView::OnBnClickedScrolldown)
+  ON_BN_CLICKED(IDC_ADDROW, &CPhonebookView::OnBnClickedAddrow)
 END_MESSAGE_MAP()
 
 // CPhonebookView construction/destruction
@@ -129,6 +133,8 @@ void CPhonebookView::DoDataExchange(CDataExchange* pDX)
 
   for(int i = 0; i < sizeof(m_SortByCol)/sizeof(m_SortByCol[0]); i++)
     m_SortByCol[i].EnableWindow(0);
+
+  m_iRowsOffset = 0;
 }
 
 BOOL CPhonebookView::PreCreateWindow(CREATESTRUCT& cs)
@@ -174,6 +180,11 @@ CPhonebookDoc* CPhonebookView::GetDocument() const // non-debug version is inlin
 void CPhonebookView::OnBnClickedWriteRow()
 {
   CString csMessage;
+  if(m_iLastRowClicked >= m_ahRows.GetCount()){
+    MessageBox(_T("Invalid row"), MB_OK, MB_ICONSTOP);
+    return;
+  }
+
   csMessage.Format(_T("Would you like to write data at row %d ?"), m_iLastRowClicked + 1);
   if(MessageBox(csMessage, 0, MB_OKCANCEL|MB_ICONINFORMATION) == IDOK)
   {
@@ -187,7 +198,7 @@ void CPhonebookView::OnBnClickedWriteRow()
     if(pcTable->WriteRow(a_csFieldValues, m_ahRows[m_iLastRowClicked]) == FALSE)
     {
       csMessage = _T("");
-      csMessage.Format(_T("Problem while trying to write at row %d emerged. \nTry table update."),  m_iLastRowClicked + 1); 
+      csMessage.Format(_T("Problem while trying to write at row %d emerged. \nValidate field values or try table update."),  m_iLastRowClicked + 1); 
       MessageBox(csMessage, 0, MB_OK|MB_ICONWARNING);
     }else{
       RecreateRowsContent();
@@ -213,6 +224,7 @@ void CPhonebookView::OnBnClickedLoaddb()
 void CPhonebookView::OnCbnSelchangeRegisterSelector()
 {
   // TODO: Add your control notification handler code here
+  m_iRowsOffset = 0;
   RecreateRowsContent();
 }
 
@@ -304,21 +316,21 @@ void CPhonebookView::RecreateRowsContent()
 
   HANDLE hRow = 0;
   CArray<CString> a_csFieldValues;
+  
+  RecreateSortButtonsLabels();
 
-  for(int iRow = 0; hRow = pcTable->ReadRow(a_csFieldValues, iRow); iRow++)
+  for(int iRow = 0; (hRow = pcTable->ReadRow(a_csFieldValues, iRow + m_iRowsOffset)) && (iRow < ROW_NUMBER); iRow++)
   {
     m_ahRows.Add(hRow);
     
     if(hRow){
       for(int i = 0; i < a_csFieldValues.GetCount() && (i < COLUMN_NUMBER); i++)
       {
-        m_TableFields[iRow][i].SetWindowTextW(a_csFieldValues[i]);
+          m_TableFields[iRow ][i].SetWindowTextW(a_csFieldValues[i]);
       }
     }
     a_csFieldValues.RemoveAll();
   }
-
-  RecreateSortButtonsLabels();
 }
 
 void CPhonebookView::RecreateTableSelectorContent()
@@ -342,7 +354,7 @@ void CPhonebookView::RecreateTableSelectorContent()
   }
   
   m_RegSelector.SetCurSel(0);
-  
+
   RecreateRowsContent();
 }
 
@@ -420,4 +432,69 @@ void CPhonebookView::OnEnChangeEdit22()
 
   // TODO:  Add your control notification handler code here
   m_iLastRowClicked = 3;
+}
+
+void CPhonebookView::OnBnClickedDeleteRow()
+{
+  // TODO: Add your control notification handler code here
+  if(m_iLastRowClicked >= m_ahRows.GetCount()){
+    MessageBox(_T("Invalid row"), MB_OK, MB_ICONSTOP);
+    return;
+  }
+  CString csMessage;
+  csMessage.Format(_T("Are you sure you want to delete row %d ?"), m_iLastRowClicked + 1);
+  if(MessageBox(csMessage, 0, MB_OKCANCEL|MB_ICONINFORMATION) == IDOK)
+  {
+    CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
+    pTable->DeleteRow(m_ahRows[m_iLastRowClicked]);
+  }else{
+    RecreateRowsContent();
+  }
+}
+
+void CPhonebookView::OnBnClickedScrollup()
+{
+  // TODO: Add your control notification handler code here
+  if(m_iRowsOffset){
+    m_iRowsOffset--;
+    RecreateRowsContent();
+  }
+}
+
+void CPhonebookView::OnBnClickedScrolldown()
+{
+  // TODO: Add your control notification handler code here
+  if(m_ahRows.GetCount() > (ROW_NUMBER - 1))
+  {
+    m_iRowsOffset++;
+    RecreateRowsContent();
+  }
+}
+
+void CPhonebookView::OnBnClickedAddrow()
+{
+  // TODO: Add your control notification handler code here
+  if((m_ahRows.GetCount() == ROW_NUMBER) || (m_iLastRowClicked != m_ahRows.GetCount()))
+  {
+    MessageBox(_T("Please scroll to an empty row via 'Scroll down' button"), 0, MB_OK|MB_ICONINFORMATION);
+  }
+  else
+  {
+    CArray<CString> a_csRowData;
+    CDbTableInterface *pTable = m_apTables[m_RegSelector.GetCurSel()];
+    CString csWindowText;
+    for(int i = 0; i < pTable->GetColumnsNumber(); i++)
+    {
+      CString csWindowText;
+      m_TableFields[m_iLastRowClicked][i].GetWindowTextW(csWindowText);
+      a_csRowData.InsertAt(i, csWindowText);
+    }
+
+    if(!pTable->AddRow(a_csRowData)){
+      MessageBox(_T("Adding row failed. Validate fields values"), 0, MB_OK|MB_ICONEXCLAMATION);    
+    }else{
+      RecreateRowsContent();
+      OnBnClickedScrolldown();
+    }
+  }
 }

@@ -37,7 +37,7 @@ public:
   /* Interface functions */
   virtual BOOL     SortTableByColumn(int iColumnNmb, eSortType eType);
   virtual BOOL     FilterTableByColumnValue(int iColNmb, const TCHAR *pszValue, eFileterType eFilter);
-  virtual BOOL     DeleteRow(int iRowNumber);  
+  virtual BOOL     DeleteRow(HANDLE hRow);  
   virtual BOOL     GetColumnsRepresNames(CArray<CString> &a_csRowData);
   virtual TCHAR*   GetColumnRepresName(int iColnumb)  {return m_acsColumnsRepresNames[m_iUserOffset + iColnumb].GetBuffer();};
   virtual int      GetColumnsNumber(){return m_acsColumnsRepresNames.GetCount() - m_iUserOffset;};

@@ -72,7 +72,7 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
   Close();
-  Open();
+  Open(CRecordset::dynaset);
   Move(pRowId->m_iNmb);
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
@@ -122,9 +122,15 @@ int CSubscribersPhoneNumbers::ReadIdentifierByRowNumber(int iRowNmb)
 
 BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
 {
-  ReloadCompleteTable();
-  MoveLast();
-  int iIndex = m_id;
+  int iIndex = 0;
+  try{
+    MoveLast();
+    iIndex = m_id;
+  }
+  catch(CDBException*){
+    iIndex = 0;
+  }
+
   if(!CanAppend())
   {
     return FALSE;
@@ -150,15 +156,23 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
 	m_phone_id = iPhonesId;
   m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
-  return Update();
+  if(!Update())
+    return FALSE;
+
+  ReloadCompleteTable();
+  return TRUE;
 }
 
 HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 {
   Close();
-  Open();
+  Open(CRecordset::dynaset);
 
-  Move(iRowNmbr);
+  try{
+    Move(iRowNmbr);
+  }catch(CDBException *){
+    return 0;
+  }
   if(IsEOF() || IsBOF())
   {
     return 0;
