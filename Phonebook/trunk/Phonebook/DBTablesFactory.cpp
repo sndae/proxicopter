@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "DBTablesContainer.h"
+#include "DBTablesFactory.h"
 #include "DBTableInterface.h"
 
 CDBTablesFactory::CDBTablesFactory(const TCHAR *pszDSNName, const TCHAR *pszDBName)

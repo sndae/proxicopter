@@ -200,7 +200,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DBTablesContainer.cpp"
+				RelativePath=".\DBTablesFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DBTablesFactory.h"
 				>
 			</File>
 			<File
@@ -279,14 +283,6 @@
 			</File>
 			<File
 				RelativePath=".\Cities.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DbTableInterface.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DBTablesContainer.h"
 				>
 			</File>
 			<File

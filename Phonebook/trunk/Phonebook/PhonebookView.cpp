@@ -77,8 +77,8 @@ CPhonebookView::~CPhonebookView()
 {
   CleanUpTablesData();
   
-  if(m_pTablesContainer)
-    delete m_pTablesContainer;
+  if(m_pTablesFactory)
+    delete m_pTablesFactory;
 }
 
 void CPhonebookView::DoDataExchange(CDataExchange* pDX)
@@ -93,7 +93,7 @@ void CPhonebookView::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_SORTBYCOL6, m_SortByCol[5]);
   DDX_Control(pDX, IDC_SORTBYCOL7, m_SortByCol[6]);
 
-  m_pTablesContainer = 0;
+  m_pTablesFactory = 0;
   /* row 1 */
   DDX_Control(pDX, IDC_EDIT1, m_TableFields[0][0]);
   DDX_Control(pDX, IDC_EDIT2, m_TableFields[0][1]);
@@ -210,14 +210,14 @@ void CPhonebookView::OnBnClickedWriteRow()
 void CPhonebookView::OnBnClickedLoaddb()
 {
   // TODO: Add your control notification handler code here
-  if(m_pTablesContainer)
-    delete m_pTablesContainer;
+  if(m_pTablesFactory)
+    delete m_pTablesFactory;
 
   CString csDSN;
   m_DSN.GetWindowTextW(csDSN);
   CString csDBPath;
   m_TablePath.GetWindowTextW(csDBPath);
-  m_pTablesContainer = new CDBTablesFactory(csDSN, csDBPath);
+  m_pTablesFactory = new CDBTablesFactory(csDSN, csDBPath);
 
   RecreateTableSelectorContent();
 }
@@ -343,12 +343,12 @@ void CPhonebookView::RecreateTableSelectorContent()
  
   CleanUpTablesData();
 
-  CDbTableInterface *pcTable = m_pTablesContainer->GetFirstTable();
+  CDbTableInterface *pcTable = m_pTablesFactory->GetFirstTable();
   if(pcTable){
     m_apTables.Add(pcTable);
     m_RegSelector.AddString(pcTable->GetTableRepresName());
   }
-  while(pcTable = m_pTablesContainer->GetNextTable())
+  while(pcTable = m_pTablesFactory->GetNextTable())
   {
     m_apTables.Add(pcTable);
     m_RegSelector.AddString(pcTable->GetTableRepresName());
