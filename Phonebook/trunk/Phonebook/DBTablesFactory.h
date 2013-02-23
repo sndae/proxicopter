@@ -6,7 +6,7 @@
 #include "Subscribers.h"
 #include "SubscribersPhoneNumbers.h"
 
-class CDBTablesContainer
+class CDBTablesFactory
 {
   int m_iTablesCounter;
   TCHAR m_szDBName[64];
@@ -16,6 +16,6 @@ class CDBTablesContainer
 public:
   CDbTableInterface *GetFirstTable(void);
   CDbTableInterface *GetNextTable(void);
-  CDBTablesContainer(const TCHAR *pszDSNName = 0, const TCHAR *pszDBName = 0);
-  ~CDBTablesContainer(void);
+  CDBTablesFactory(const TCHAR *pszDSNName = 0, const TCHAR *pszDBName = 0);
+  ~CDBTablesFactory(void);
 };

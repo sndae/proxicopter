@@ -37,7 +37,7 @@ protected:
 #define COLUMN_NUMBER (7)
 #define ROW_NUMBER    (4)
   CComboBox m_RegSelector;
-  CDBTablesContainer *m_pTablesContainer;
+  CDBTablesFactory *m_pTablesContainer;
   CArray<CDbTableInterface*> m_apTables;
   CSortButton m_SortByCol[COLUMN_NUMBER];
   CEdit   m_TableFields[ROW_NUMBER][COLUMN_NUMBER];

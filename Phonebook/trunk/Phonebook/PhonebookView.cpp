@@ -217,7 +217,7 @@ void CPhonebookView::OnBnClickedLoaddb()
   m_DSN.GetWindowTextW(csDSN);
   CString csDBPath;
   m_TablePath.GetWindowTextW(csDBPath);
-  m_pTablesContainer = new CDBTablesContainer(csDSN, csDBPath);
+  m_pTablesContainer = new CDBTablesFactory(csDSN, csDBPath);
 
   RecreateTableSelectorContent();
 }

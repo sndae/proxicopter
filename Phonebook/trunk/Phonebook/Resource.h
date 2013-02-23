@@ -54,6 +54,8 @@
 #define IDC_SCROLLDOWN                  1060
 #define IDC_BUTTON4                     1061
 #define IDC_ADDROW                      1061
+#define IDC_BUTTON1                     1062
+#define IDC_SEARCHROW                   1062
 
 // Next default values for new objects
 // 
@@ -61,7 +63,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1062
+#define _APS_NEXT_CONTROL_VALUE         1063
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

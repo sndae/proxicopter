@@ -2,7 +2,7 @@
 #include "DBTablesContainer.h"
 #include "DBTableInterface.h"
 
-CDBTablesContainer::CDBTablesContainer(const TCHAR *pszDSNName, const TCHAR *pszDBName)
+CDBTablesFactory::CDBTablesFactory(const TCHAR *pszDSNName, const TCHAR *pszDBName)
 {
   if(!m_Database.Open(pszDSNName))
     return;
@@ -11,18 +11,18 @@ CDBTablesContainer::CDBTablesContainer(const TCHAR *pszDSNName, const TCHAR *psz
     _tcscpy(m_szDBName, pszDBName);
 }
 
-CDBTablesContainer::~CDBTablesContainer(void)
+CDBTablesFactory::~CDBTablesFactory(void)
 {
   m_Database.Close();
 }
 
-CDbTableInterface *CDBTablesContainer::GetFirstTable(void)
+CDbTableInterface *CDBTablesFactory::GetFirstTable(void)
 {
   m_iTablesCounter = 0;
   return GetNextTable();
 }
 
-CDbTableInterface *CDBTablesContainer::GetNextTable(void)
+CDbTableInterface *CDBTablesFactory::GetNextTable(void)
 {
   CDbTableInterface *pcTable = 0;
   switch(m_iTablesCounter++)
