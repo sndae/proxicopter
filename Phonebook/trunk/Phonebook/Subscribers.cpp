@@ -64,9 +64,9 @@ void CSubscribers::DoFieldExchange(CFieldExchange* pFX)
 // Macros such as RFX_Text() and RFX_Int() are dependent on the
 // type of the member variable, not the type of the field in the database.
 // ODBC will try to automatically convert the column value to the requested type
-  RFX_Double(pFX, _T("[id]"), m_id);
-	RFX_Double(pFX, _T("[rev_nmb]"), m_rev_nmb);
-	RFX_Double(pFX, _T("[code]"), m_code);
+  RFX_Int(pFX, _T("[id]"), m_id);
+	RFX_Int(pFX, _T("[rev_nmb]"), m_rev_nmb);
+	RFX_Int(pFX, _T("[code]"), m_code);
 	RFX_Text(pFX, _T("[first_name]"), m_first_name);
 	RFX_Text(pFX, _T("[second_name]"), m_second_name);
 	RFX_Text(pFX, _T("[third_name]"), m_third_name);

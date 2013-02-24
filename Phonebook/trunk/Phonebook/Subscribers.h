@@ -21,9 +21,9 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	double	m_id;
-	double	m_rev_nmb;
-	double	m_code;
+	int	m_id;
+	int	m_rev_nmb;
+	int	m_code;
 	CStringW	m_first_name;
 	CStringW	m_second_name;
 	CStringW	m_third_name;
