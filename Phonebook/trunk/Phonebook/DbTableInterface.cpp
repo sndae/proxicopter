@@ -124,11 +124,13 @@ BOOL  CDbTableInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue
 
   FilterTableByColumnValue(iColNmb, pszValue, eFilter);
   
-  if(!IsBOF())
-    MoveFirst();  
-  else
+  if(!IsBOF()){
+    MoveFirst();
+  }else{
+    ReloadCompleteTable();  
     return FALSE;
-  
+  }
+
   return TRUE;
 }
 

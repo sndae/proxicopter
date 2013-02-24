@@ -86,6 +86,12 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
   Close();
   Open(CRecordset::dynaset);
+  if(IsColumnValuePresent(eColCode, a_csRowData[eColCode]) ||
+    IsColumnValuePresent(eColName, a_csRowData[eColName])){
+    ReloadCompleteTable(); 
+    return FALSE;
+  }
+   
   Move(pRowId->m_iNmb);
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
@@ -158,6 +164,7 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
       IsColumnValuePresent(eColCode, a_csRowData[eColCode]) ||
       IsColumnValuePresent(eColName, a_csRowData[eColName]) )
   {
+    ReloadCompleteTable(); 
     return FALSE;
   }
   

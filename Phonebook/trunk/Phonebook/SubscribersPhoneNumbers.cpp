@@ -93,7 +93,7 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
-  /* is there a phone woe of such phone code ? */
+  /* is there a phone code of such phone code ? */
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
   if(!cPhonesTable.IsColumnValuePresent(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId]))
     return FALSE;

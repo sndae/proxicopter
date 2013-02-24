@@ -73,6 +73,7 @@ BOOL CPhones::AddRow(CArray<CString> &a_csRowData)
   if( !CanAppend() ||
       IsColumnValuePresent(eColCode, a_csRowData[eColCode]))
   {
+    ReloadCompleteTable(); 
     return FALSE;
   }
   
