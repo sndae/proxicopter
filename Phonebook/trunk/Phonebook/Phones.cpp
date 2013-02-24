@@ -69,6 +69,7 @@ BOOL CPhones::AddRow(CArray<CString> &a_csRowData)
     iIndex = 0;
   }
 
+    /* validate if the same phone code has not already been appended */
   if( !CanAppend() ||
       IsColumnValuePresent(eColCode, a_csRowData[eColCode]))
   {
@@ -100,11 +101,10 @@ HANDLE CPhones::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
     return 0;
   }
   if(IsEOF() || IsBOF())
-  {
     return 0;
-  }
 
   CDBVariant cDBVariant;
+  /* create a row identifier struct */
   CRowIdent *pcRowId = new CRowIdent();
   
   pcRowId->m_iRev = m_rev_nmb;
@@ -123,6 +123,7 @@ BOOL CPhones::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(!hRow)
     return FALSE;
 
+  /* cast the row handle to a row identifier struct */
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
   Close();
   Open(CRecordset::dynaset);

@@ -228,10 +228,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Phones.h"
-				>
-			</File>
-			<File
 				RelativePath=".\SortButton.cpp"
 				>
 			</File>
@@ -267,10 +263,6 @@
 				RelativePath=".\SubscribersPhoneNumbers.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\SubscribersPhoneNumbers.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -302,6 +294,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Phones.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
@@ -311,6 +307,10 @@
 			</File>
 			<File
 				RelativePath=".\Subscribers.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SubscribersPhoneNumbers.h"
 				>
 			</File>
 			<File

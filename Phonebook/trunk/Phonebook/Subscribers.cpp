@@ -88,12 +88,14 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
     iIndex = 0;
   }
 
+  /* validate if the same city code and name, have not already been appended */
   if( !CanAppend() ||
     IsColumnValuePresent(eColCode, a_csRowData[eColCode]))
   {
     return FALSE;
   }
 
+  /* does any city row contain such city code ?*/
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRelTableRowData;
   if(!cCityTable.IsColumnValuePresent(CCities::eColCode, a_csRowData[eColCityId]))
@@ -107,7 +109,7 @@ BOOL CSubscribers::AddRow(CArray<CString> &a_csRowData)
   m_second_name = a_csRowData[eColSecondName];
 	m_third_name  = a_csRowData[eColThirdName];
 	m_ident_nmb   = a_csRowData[eColIdentNumb];
-  m_city_id     = cCityTable.ReadIdentifierByRowNumber(0);
+  m_city_id     = cCityTable.ReadIdentifierByRowNumber(0); /* get the city row identifier */
   m_city_addr   = a_csRowData[eColCityAddr];
 
   if(!Update())
@@ -129,11 +131,10 @@ HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   }
 
   if(IsEOF() || IsBOF())
-  {
     return 0;
-  }
 
   CDBVariant cDBVariant;
+  /* create a row identifier struct */
   CRowIdent *pcRowId = new CRowIdent();
   
   pcRowId->m_iRev = m_rev_nmb;
@@ -147,6 +148,7 @@ HANDLE CSubscribers::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
 	a_csRowData.InsertAt(eColThirdName,  m_third_name);
 	a_csRowData.InsertAt(eColIdentNumb,  m_ident_nmb);
 
+  /* read the city row of such a city identifier and insert its name into the array */ 
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRowData;
   if(! cCityTable.ReadRowByIdentifier(m_city_id, csRowData))
@@ -166,6 +168,7 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(!hRow)
     return FALSE;
 
+  /* has the revision number been incremented since the last read ? */
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
   Close();
   Open(CRecordset::dynaset);
@@ -181,6 +184,7 @@ BOOL CSubscribers::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
     return FALSE;
 
+  /* does any city row contain such city code ?*/
   CCities cCityTable(m_pDatabase, GetDBPath());
   CArray<CString> csRelTableRowData;
   if(!cCityTable.IsColumnValuePresent(CCities::eColCode, a_csRowData[eColCityId]))
@@ -207,9 +211,8 @@ int CSubscribers::ReadIdentifierByRowNumber(int iRowNmb)
 {
   Move(iRowNmb);
   if(IsEOF() || IsBOF())
-  {
     return 0;
-  }
+
   return m_id;
 }
 

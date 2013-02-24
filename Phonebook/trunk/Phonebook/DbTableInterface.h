@@ -4,25 +4,24 @@
 
 class CDbTableInterface :
   virtual private  CRecordset
-{;
-  CString m_csTableRepresName;
-  CString m_csDBPath;
-  CArray<CString> m_acsColumnsRepresNames;
-  const TCHAR* m_pszIdFieldName;
-  const TCHAR* m_pszRevNmbFieldName;
+{
+  CString m_csTableRepresName;  //Table representation name
+  CString m_csDBPath;           // Path to the database
+  CArray<CString> m_acsColumnsRepresNames;  // Array of columns representation names
+  const TCHAR* m_pszIdFieldName;     // Name of the identifier name
+  const TCHAR* m_pszRevNmbFieldName; // Name of the revision number name
 protected:
-  int m_iUserOffset; 
+  int m_iUserOffset; // offset of the user columns (identifier + revision = 2)
   /* Row identification class */
-  struct CRowIdent{
+  struct CRowIdent
+  {
     int m_iRev;
     int m_iNmb;
     int m_iId;
     CRowIdent(){};
     CRowIdent(int iNmb, int iRev, int iId):m_iNmb(iNmb), m_iRev(iRev), m_iId(iId){};
   };
-
   virtual BOOL     LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName);
-  virtual int      GetColumnNumberByRepresName(const TCHAR *pszColumnName);
   virtual void     ReloadCompleteTable();
 public:
   using   CRecordset::operator new;

@@ -31,10 +31,13 @@ public:
 	// Wizard generated virtual function overrides
 	public:
 	virtual CString GetDefaultConnect();	// Default connection string
+  /* helper enumeration of the SQL columns expected to be encountered */
   enum    eTableColumns{eColSubscriberId=0, eColPhoneId, eColPhoneNumb};
 
 	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
+  
+  /* Implementation of the pure virtual functions inherited from CDbTableInterface */
   virtual BOOL     WriteRow(CArray<CString> &a_csRowData, HANDLE hRow);
   virtual BOOL     AddRow(CArray<CString> &a_csRowData);
   virtual HANDLE   ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr);

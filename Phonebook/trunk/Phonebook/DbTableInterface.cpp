@@ -4,113 +4,39 @@
 CDbTableInterface::CDbTableInterface(const TCHAR *pszDBPath):
 m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
 {
+  /* Read DB path, if set */
   if(pszDBPath)
     m_csDBPath = pszDBPath;
 
-  m_acsColumnsRepresNames.Add(m_pszIdFieldName);
-  m_acsColumnsRepresNames.Add(m_pszRevNmbFieldName);   
+  /* Insert identifier and revision number names at the beginning ot the representation names array */
+  m_acsColumnsRepresNames.InsertAt(0, m_pszIdFieldName);
+  m_acsColumnsRepresNames.InsertAt(1, m_pszRevNmbFieldName);   
   m_iUserOffset = m_acsColumnsRepresNames.GetCount();
 }
 
 CDbTableInterface::~CDbTableInterface(void)
 {
- // Close();
+
 }
-#if 0
-HANDLE CDbTableInterface::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
-{
-  Move(iRowNmbr);
-  if(IsEOF() || IsBOF())
-    return 0;
-
-  CString szFieldData;
-
-  CDBVariant cDBVariant;
-  CRowIdent *pcRowId = new CRowIdent();
-  
-  GetFieldValue(m_pszRevNmbFieldName, cDBVariant);
-  pcRowId->m_iRev = cDBVariant.m_iVal;
-  GetFieldValue(m_pszIdFieldName, cDBVariant);
-  pcRowId->m_iId = cDBVariant.m_iVal;
-  pcRowId->m_iNmb = iRowNmbr;
-
-  for(int i = m_iUserOffset; i < GetODBCFieldCount(); i++){
-    GetFieldValue(i, szFieldData);
-    a_csRowData.Add(szFieldData);
-  }
-
-  return (HANDLE)pcRowId; 
-}
-
-BOOL CDbTableInterface::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
-{
-  if(!hRow)
-    return FALSE;
-
-  CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
-  Move(pRowId->m_iNmb);
-  if(IsEOF() || IsBOF() || !CanUpdate())
-    return FALSE;
-
-  CDBVariant cDBVariant;
-  GetFieldValue(m_pszRevNmbFieldName, cDBVariant);
-  if(cDBVariant.m_iVal != pRowId->m_iRev){
-    return FALSE;
-  }
-
-  GetFieldValue(m_pszIdFieldName, cDBVariant);
-  if(cDBVariant.m_iVal != pRowId->m_iId){
-    return FALSE;
-  }
-
-  if(a_csRowData.GetCount() != (GetODBCFieldCount() - m_iUserOffset)){
-    return FALSE;
-  }
-
-  CString szTemp;
-  szTemp.Format(_T("%d"), pRowId->m_iId);
-  a_csRowData.InsertAt(0, szTemp);
-
-  szTemp.Format(_T("%d"), ++pRowId->m_iId);
-  a_csRowData.InsertAt(1, szTemp);
-
-  return EditAndUpdateFields(a_csRowData);
-}
-
-#endif
 
 BOOL CDbTableInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
 {
-  for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++){
+  /* return an array of user representation column names */
+  for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++)
+  {
     acsRowData.Add(m_acsColumnsRepresNames[i]);
   } 
 
   return TRUE;
 }
 
-int CDbTableInterface::GetColumnNumberByRepresName(const TCHAR *pszColumnName)
-{
-  if(!pszColumnName)
-    return -1;
-
-  CString csKeyWord(pszColumnName);
-  csKeyWord.MakeUpper();
-  for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++)
-  {
-    CString csCurrWord = m_acsColumnsRepresNames[i];
-    csCurrWord.MakeUpper();
-    if(csCurrWord == csKeyWord)
-      return i;
-  }
-
-  return -1;
-}
-
 BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName)
 {
+  /* Append user representation names to the columns to the existing ones*/
   m_csTableRepresName = csTableName;
   m_acsColumnsRepresNames.Append(a_csFieldsName);
 
+  /* load database in dynamic mode */
   return Open(CRecordset::dynaset);
 }
 
@@ -124,7 +50,8 @@ BOOL CDbTableInterface::SortTableByColumn(int iColumnNmb, eSortType eType)
   m_strSort = tFieldInfo.m_strName;
   m_strSort += _T(" ");
 
-  switch(eType){
+  switch(eType)
+  {
     case eAsc:  m_strSort += _T("ASC");  break;
     case eDesc: m_strSort += _T("DESC"); break;
     default:  return FALSE;
@@ -164,7 +91,8 @@ BOOL  CDbTableInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *p
       m_strFilter += _T("%)'");
     else
       return FALSE;
-  }else if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_VARCHAR2))
+  }
+  else if((tFieldInfo.m_nSQLType == SQL_VARCHAR) || (tFieldInfo.m_nSQLType == SQL_VARCHAR2))
   {
     m_strFilter += _T("'");
   }
@@ -194,15 +122,13 @@ BOOL  CDbTableInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue
   if(!pszValue)
     return FALSE;
 
-  //if(!IsBOF())
-  //  return TRUE;
-
   FilterTableByColumnValue(iColNmb, pszValue, eFilter);
-  if(!IsBOF()){
-    MoveFirst();
-  }else{
+  
+  if(!IsBOF())
+    MoveFirst();  
+  else
     return FALSE;
-  }
+  
   return TRUE;
 }
 

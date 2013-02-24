@@ -70,6 +70,7 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
   if(!hRow)
     return FALSE;
 
+  /* has the revision number been incremented since the last read ? */
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
   Close();
   Open(CRecordset::dynaset);
@@ -85,13 +86,14 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
   if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
     return FALSE;
 
-
+  /* is there a subscriber row of such subscriber code ? */
   CSubscribers cSubscrTable(m_pDatabase, GetDBPath());
   if(!cSubscrTable.IsColumnValuePresent(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals))
     return FALSE;
 
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
+  /* is there a phone woe of such phone code ? */
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
   if(!cPhonesTable.IsColumnValuePresent(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId]))
     return FALSE;
@@ -113,9 +115,8 @@ int CSubscribersPhoneNumbers::ReadIdentifierByRowNumber(int iRowNmb)
 {
   Move(iRowNmb);
   if(IsEOF() || IsBOF())
-  {
     return 0;
-  }
+
   return m_id;
 }
 
@@ -132,20 +133,22 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
   }
 
   if(!CanAppend())
-  {
     return FALSE;
-  }
 
+  /* is there a subscriber row of such subscriber code ? */
   CSubscribers cSubscrTable(m_pDatabase, GetDBPath());
   if(!cSubscrTable.IsColumnValuePresent(CSubscribers::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColSubscriberId], eEquals))
     return FALSE;
 
+  /* get the subscriber row identifier */
   int iSubscriberId = cSubscrTable.ReadIdentifierByRowNumber(0); 
 
+  /* is there a phone row of such phone code ? */
   CPhones cPhonesTable(m_pDatabase, GetDBPath());
   if(!cPhonesTable.IsColumnValuePresent(CPhones::eColCode, a_csRowData[CSubscribersPhoneNumbers::eColPhoneId], eEquals))
     return FALSE;
 
+  /* get the phone row identifier */
   int iPhonesId = cPhonesTable.ReadIdentifierByRowNumber(0);
 
   AddNew();
@@ -173,10 +176,9 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
   }catch(CDBException *){
     return 0;
   }
+  
   if(IsEOF() || IsBOF())
-  {
     return 0;
-  }
 
   CDBVariant cDBVariant;
   CRowIdent *pcRowId = new CRowIdent();
@@ -185,6 +187,7 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
   pcRowId->m_iId = m_id;
   pcRowId->m_iNmb = iRowNmbr;
 
+  /* read the subscriber row of such a subscriber identifier and insert its code into the array */ 
   CSubscribers cSubsTable(m_pDatabase, GetDBPath());
   CArray<CString> a_csRelTableRowData;
   if(! cSubsTable.ReadRowByIdentifier(m_subscriber_id, a_csRelTableRowData))
@@ -192,6 +195,7 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
 
   a_csRowData.InsertAt(eColSubscriberId, a_csRelTableRowData[CSubscribers::eColCode]);
   
+  /* read the phone row of such a city identifier and insert its code into the array */ 
   CPhones cPhones(m_pDatabase, GetDBPath());
   a_csRelTableRowData.RemoveAll();
   if(! cPhones.ReadRowByIdentifier(m_phone_id, a_csRelTableRowData))

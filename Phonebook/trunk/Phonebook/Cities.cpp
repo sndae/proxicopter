@@ -82,6 +82,7 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(!hRow)
     return FALSE;
 
+  /* cast the row handle to a row identifier struct */
   CRowIdent *pRowId = static_cast<CRowIdent*>(hRow);
   Close();
   Open(CRecordset::dynaset);
@@ -89,6 +90,7 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   if(IsEOF() || IsBOF() || !CanUpdate())
     return FALSE;
 
+  /* has the revision number been incremented since the last read ? */
   if(m_id != pRowId->m_iId)
     return FALSE;
   else if(m_rev_nmb != pRowId->m_iRev)
@@ -126,6 +128,7 @@ HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   }
 
   CDBVariant cDBVariant;
+  /* create a row identifier struct */
   CRowIdent *pcRowId = new CRowIdent();
   
   pcRowId->m_iRev = m_rev_nmb;
@@ -150,9 +153,10 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
     iIndex = 0;
   }
   
+  /* validate if the same city code and name, have not already been appended */
   if( !CanAppend() ||
       IsColumnValuePresent(eColCode, a_csRowData[eColCode]) ||
-      IsColumnValuePresent(eColName, a_csRowData[eColCode]) )
+      IsColumnValuePresent(eColName, a_csRowData[eColName]) )
   {
     return FALSE;
   }
@@ -175,9 +179,8 @@ int CCities::ReadIdentifierByRowNumber(int iRowNmb)
 {
   Move(iRowNmb);
   if(IsEOF() || IsBOF())
-  {
     return 0;
-  }
+  
   return m_id;
 }
 
