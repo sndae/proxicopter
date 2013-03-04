@@ -1,7 +1,8 @@
 #include "StdAfx.h"
-#include ".\dbtableinterface.h"
+#include ".\dbtablecommoninterface.h"
 
-CDbTableInterface::CDbTableInterface(const TCHAR *pszDBPath):
+
+CDbTableCommonInterface::CDbTableCommonInterface(const TCHAR *pszDBPath):
 m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
 {
   /* Read DB path, if set */
@@ -14,12 +15,7 @@ m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
   m_iUserOffset = m_acsColumnsRepresNames.GetCount();
 }
 
-CDbTableInterface::~CDbTableInterface(void)
-{
-
-}
-
-BOOL CDbTableInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
+BOOL CDbTableCommonInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
 {
   /* return an array of user representation column names */
   for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++)
@@ -30,7 +26,7 @@ BOOL CDbTableInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
   return TRUE;
 }
 
-BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName)
+BOOL CDbTableCommonInterface::LoadDb(const CString &csTableName, const CArray<CString> &a_csFieldsName)
 {
   /* Append user representation names to the columns to the existing ones*/
   m_csTableRepresName = csTableName;
@@ -40,7 +36,7 @@ BOOL CDbTableInterface::LoadDb(const CString &csTableName, const CArray<CString>
   return Open(CRecordset::dynaset);
 }
 
-BOOL CDbTableInterface::SortTableByColumn(int iColumnNmb, eSortType eType)
+BOOL CDbTableCommonInterface::SortTableByColumn(int iColumnNmb, eSortType eType)
 {
   CODBCFieldInfo tFieldInfo;
   GetODBCFieldInfo(iColumnNmb + m_iUserOffset, tFieldInfo);
@@ -60,7 +56,7 @@ BOOL CDbTableInterface::SortTableByColumn(int iColumnNmb, eSortType eType)
   return Open(CRecordset::dynaset);
 }
 
-BOOL  CDbTableInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *pszValue, eFileterType eFilter)
+BOOL  CDbTableCommonInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *pszValue, eFileterType eFilter)
 {
 #define SQL_VARCHAR2 (-9)
   CODBCFieldInfo tFieldInfo;
@@ -100,7 +96,7 @@ BOOL  CDbTableInterface::FilterTableByColumnValue(int iColumnNmb, const TCHAR *p
   return Open(CRecordset::dynaset);
 }
 
-BOOL  CDbTableInterface::DeleteRow(HANDLE hRow)
+BOOL  CDbTableCommonInterface::DeleteRow(HANDLE hRow)
 {
   if(!hRow)
     return FALSE;
@@ -117,7 +113,7 @@ BOOL  CDbTableInterface::DeleteRow(HANDLE hRow)
   return TRUE;
 }
 
-BOOL  CDbTableInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue, eFileterType eFilter)
+BOOL  CDbTableCommonInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue, eFileterType eFilter)
 {
   if(!pszValue)
     return FALSE;
@@ -134,7 +130,7 @@ BOOL  CDbTableInterface::IsColumnValuePresent(int iColNmb, const TCHAR *pszValue
   return TRUE;
 }
 
-void CDbTableInterface::ReloadCompleteTable()
+void CDbTableCommonInterface::ReloadCompleteTable()
 {
   Close();
   m_strFilter = _T("");
@@ -142,7 +138,7 @@ void CDbTableInterface::ReloadCompleteTable()
   Open(CRecordset::dynaset);
 }
 
-TCHAR* CDbTableInterface::GetDBPath()
+TCHAR* CDbTableCommonInterface::GetDBPath()
 {
   if(m_csDBPath.GetLength() != 0)
     return m_csDBPath.GetBuffer();
@@ -150,7 +146,7 @@ TCHAR* CDbTableInterface::GetDBPath()
   return 0;
 }
 
-BOOL CDbTableInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData)
+BOOL CDbTableCommonInterface::ReadRowByIdentifier(int iId, CArray<CString> &a_csRowData)
 {
   Close(); 
   TCHAR szStr[64];

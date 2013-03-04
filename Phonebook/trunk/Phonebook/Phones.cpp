@@ -11,7 +11,7 @@
 IMPLEMENT_DYNAMIC(CPhones, CRecordset)
 
 CPhones::CPhones(CDatabase* pdb, const TCHAR *pszDBPath)
-	: CDbTableInterface(pszDBPath), CRecordset(pdb)
+	: CDbTableCommonInterface(pszDBPath), CRecordset(pdb)
 {
 	m_id = 0;
 	m_rev_nmb = 0;

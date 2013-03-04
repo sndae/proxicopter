@@ -3,9 +3,9 @@
 #pragma once
 
 // code generated on Tuesday, February 19, 2013, 1:38 PM
-#include "DbTableInterface.h"
+#include "DbTableCommonInterface.h"
 
-class CCities :  virtual private CRecordset, public CDbTableInterface
+class CCities :  virtual private CRecordset, public CDbTableCommonInterface
 {
 public:
 	CCities(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);

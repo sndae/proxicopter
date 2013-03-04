@@ -12,7 +12,7 @@
 IMPLEMENT_DYNAMIC(CSubscribers, CRecordset)
 
 CSubscribers::CSubscribers(CDatabase* pdb, const TCHAR *pszDBPath)
-	: CDbTableInterface(pszDBPath), CRecordset(pdb)
+	: CDbTableCommonInterface(pszDBPath), CRecordset(pdb)
 {
 	m_id = 0;
 	m_rev_nmb = 0;

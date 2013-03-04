@@ -134,10 +134,13 @@
 				RelativePath=".\Phonebook\Cities.cpp">
 			</File>
 			<File
-				RelativePath=".\Phonebook\DbTableInterface.cpp">
+				RelativePath=".\Phonebook\DbTableCommonInterface.cpp">
 			</File>
 			<File
-				RelativePath=".\Phonebook\DBTablesContainer.cpp">
+				RelativePath=".\Phonebook\DBTablesFactory.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\DBTablesFactory.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\MainFrm.cpp">
@@ -153,6 +156,12 @@
 			</File>
 			<File
 				RelativePath=".\Phonebook\Phones.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\SortButton.cpp">
+			</File>
+			<File
+				RelativePath=".\Phonebook\SortButton.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\stdafx.cpp">
@@ -175,10 +184,10 @@
 				RelativePath=".\Phonebook\Cities.h">
 			</File>
 			<File
-				RelativePath=".\Phonebook\DbTableInterface.h">
+				RelativePath=".\Phonebook\DbTableCommonInterface.h">
 			</File>
 			<File
-				RelativePath=".\Phonebook\DBTablesContainer.h">
+				RelativePath=".\Phonebook\DbTableInterface.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\MainFrm.h">
@@ -196,10 +205,10 @@
 				RelativePath=".\Phonebook\Phones.h">
 			</File>
 			<File
-				RelativePath=".\Phonebook\Resource.h">
+				RelativePath=".\Phonebook\res\resource.h">
 			</File>
 			<File
-				RelativePath=".\Phonebook\res\resource.h">
+				RelativePath=".\Phonebook\Resource.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\stdafx.h">

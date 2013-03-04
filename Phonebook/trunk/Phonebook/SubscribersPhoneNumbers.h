@@ -3,9 +3,9 @@
 #pragma once
 
 // code generated on 20 февруари 2013 г., 23:56 ч.
-#include "DbTableInterface.h"
+#include "DbTableCommonInterface.h"
 
-class CSubscribersPhoneNumbers : virtual private CRecordset, public CDbTableInterface
+class CSubscribersPhoneNumbers : virtual private CRecordset, public CDbTableCommonInterface
 {
 public:
 	CSubscribersPhoneNumbers(CDatabase* pDatabase, const TCHAR *pszDBPath = 0);

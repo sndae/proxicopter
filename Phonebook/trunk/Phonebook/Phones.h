@@ -1,10 +1,10 @@
 // phones.h : Declaration of the CPhones
 
 #pragma once
-#include "DbTableInterface.h"
+#include "DbTableCommonInterface.h"
 // code generated on 20 февруари 2013 г., 21:19 ч.
 
-class CPhones :  virtual private CRecordset, public CDbTableInterface
+class CPhones :  virtual private CRecordset, public CDbTableCommonInterface
 {
 public:
 	CPhones(CDatabase* pdb, const TCHAR *pszDBPath);
