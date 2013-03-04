@@ -15,7 +15,7 @@ m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
   m_iUserOffset = m_acsColumnsRepresNames.GetCount();
 }
 
-BOOL CDbTableCommonInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)
+BOOL CDbTableCommonInterface::GetColumnsRepresNames(CArray<CString> &acsRowData)const
 {
   /* return an array of user representation column names */
   for(int i = m_iUserOffset; i < m_acsColumnsRepresNames.GetCount(); i++)
@@ -138,7 +138,7 @@ void CDbTableCommonInterface::ReloadCompleteTable()
   Open(CRecordset::dynaset);
 }
 
-TCHAR* CDbTableCommonInterface::GetDBPath()
+TCHAR* CDbTableCommonInterface::GetDBPath()const
 {
   if(m_csDBPath.GetLength() != 0)
     return m_csDBPath.GetBuffer();
