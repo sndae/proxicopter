@@ -46,8 +46,39 @@ void CCitiesView::OnInitialUpdate()
 
 	// TODO: You may populate your ListView with items by directly accessing
 	//  its list control through a call to GetListCtrl().
+  long lWndStyle = GetWindowLong(m_hWnd, GWL_STYLE);
+  lWndStyle |= LVS_REPORT;
+  SetWindowLong(m_hWnd, GWL_STYLE, lWndStyle);  
+  CListCtrl& oListCtrl = GetListCtrl();
+
+  oListCtrl.InsertColumn(eCode, _T("Код"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(eName, _T("Име"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(eArea, _T("Област"), LVCFMT_LEFT);
+  oListCtrl.SetColumnWidth(eCode, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(eName, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(eArea, LVSCW_AUTOSIZE_USEHEADER);
+
+  UpdateColumnsContent();
 }
 
+void CCitiesView::UpdateColumnsContent()
+{
+  CCitiesDoc *poDoc = GetDocument();
+  CCitiesArray oCitiesArray;
+  if(poDoc->SelectAll(oCitiesArray) == TRUE)
+  {
+    CListCtrl& oListCtrl = GetListCtrl();   
+    for(int i = 0; i < oCitiesArray.GetCount(); i++)
+    {
+      int iRowIdx = oListCtrl.InsertItem(eCode, oCitiesArray[i]->m_szCode);
+      oListCtrl.SetItemText(iRowIdx, eName, oCitiesArray[i]->m_szName);
+      oListCtrl.SetItemText(iRowIdx, eArea, oCitiesArray[i]->m_szArea);
+    }
+    oListCtrl.SetColumnWidth(eCode, LVSCW_AUTOSIZE_USEHEADER);
+    oListCtrl.SetColumnWidth(eName, LVSCW_AUTOSIZE);
+    oListCtrl.SetColumnWidth(eArea, LVSCW_AUTOSIZE);
+  }
+}
 
 // CCitiesView diagnostics
 

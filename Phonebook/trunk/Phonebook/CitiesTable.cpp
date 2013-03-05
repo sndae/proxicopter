@@ -27,7 +27,7 @@ CCitiesTable::CCitiesTable(CDatabase* pdb)
 	m_nFields = 5;
 	m_nDefaultType = dynaset;
 }
-#error Security Issue: The connection string may contain a password
+//#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
 // other sensitive information. Please remove the #error after reviewing
 // the connection string for any security related issues. You may want to
@@ -54,6 +54,25 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
 	RFX_Text(pFX, _T("[NAME]"), m_NAME);
 	RFX_Text(pFX, _T("[AREA]"), m_AREA);
 
+}
+
+BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
+{
+  //Close();  
+  m_strFilter = _T("");
+  m_strSort   = _T("");
+  Open(CRecordset::dynaset);
+  if(IsBOF() == 0)
+  {
+    int iRowCntr = 0;
+    for(int i = 0; IsEOF() == 0; Move(i++))
+    {
+      CCities *poCity = new CCities(int(m_ID), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer());
+      oCitiesArray.Add(poCity);
+    }
+  }
+
+  return TRUE;
 }
 /////////////////////////////////////////////////////////////////////////////
 // CCitiesTable diagnostics

@@ -5,8 +5,9 @@
 #pragma once
 
 // code generated on 05 март 2013 г., 19:08 ч.
+#include "Cities.h"
 
-class CCitiesTable : public CRecordset
+class CCitiesTable : private CRecordset
 {
 public:
 	CCitiesTable(CDatabase* pDatabase = NULL);
@@ -36,6 +37,7 @@ public:
 	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
+  BOOL SelectAll(CCitiesArray &oCitiesArray);
 // Implementation
 #ifdef _DEBUG
 	virtual void AssertValid() const;

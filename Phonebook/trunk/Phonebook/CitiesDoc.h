@@ -3,7 +3,7 @@
 
 
 #pragma once
-
+#include "CitiesTable.h"
 
 class CCitiesDoc : public CDocument
 {
@@ -25,13 +25,14 @@ public:
 // Implementation
 public:
 	virtual ~CCitiesDoc();
+  BOOL SelectAll(CCitiesArray &oCitiesArray);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:
-
+  CCitiesTable m_oCityTable;
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()

@@ -27,6 +27,10 @@ protected:
 // Implementation
 public:
 	virtual ~CCitiesView();
+  void UpdateColumnsContent();
+private:
+  enum eColPos{eCode = 0, eName, eArea};
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

@@ -59,6 +59,10 @@ void CCitiesDoc::Serialize(CArchive& ar)
 	}
 }
 
+BOOL CCitiesDoc::SelectAll(CCitiesArray &oCitiesArray)
+{
+  return m_oCityTable.SelectAll(oCitiesArray);
+}
 
 // CCitiesDoc diagnostics
 
