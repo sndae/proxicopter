@@ -131,47 +131,27 @@
 				RelativePath=".\Phonebook\ChildFrm.cpp">
 			</File>
 			<File
-				RelativePath=".\Phonebook\Cities.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\DbTableCommonInterface.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\DBTablesFactory.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\DBTablesFactory.h">
-			</File>
-			<File
 				RelativePath=".\Phonebook\MainFrm.cpp">
 			</File>
 			<File
-				RelativePath=".\Phonebook\Phonebook.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\PhonebookDoc.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\PhonebookView.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\Phones.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\SortButton.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\SortButton.h">
+				RelativePath=".\Phonebook\PhoneBook.cpp">
 			</File>
 			<File
 				RelativePath=".\Phonebook\stdafx.cpp">
 			</File>
-			<File
-				RelativePath=".\Phonebook\Subscribers.cpp">
-			</File>
-			<File
-				RelativePath=".\Phonebook\SubscribersPhoneNumbers.cpp">
-			</File>
+			<Filter
+				Name="Cities"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\CitiesDoc.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\CitiesTable.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\CitiesView.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -181,60 +161,52 @@
 				RelativePath=".\Phonebook\ChildFrm.h">
 			</File>
 			<File
-				RelativePath=".\Phonebook\Cities.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\DbTableCommonInterface.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\DbTableInterface.h">
-			</File>
-			<File
 				RelativePath=".\Phonebook\MainFrm.h">
 			</File>
 			<File
-				RelativePath=".\Phonebook\Phonebook.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\PhonebookDoc.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\PhonebookView.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\Phones.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\res\resource.h">
+				RelativePath=".\Phonebook\PhoneBook.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\Resource.h">
 			</File>
 			<File
+				RelativePath=".\Phonebook\RowsPtrArray.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\stdafx.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\Subscribers.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\SubscribersPhoneNumbers.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\targetver.h">
 			</File>
+			<Filter
+				Name="Cities"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\Cities.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\CitiesDoc.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\CitiesTable.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\CitiesView.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\Phonebook\res\Phonebook.ico">
+				RelativePath=".\Phonebook\res\PhoneBook.ico">
 			</File>
 			<File
-				RelativePath=".\Phonebook\res\Phonebook_2003.rc">
+				RelativePath=".\Phonebook\PhoneBook.rc">
 			</File>
 			<File
-				RelativePath=".\Phonebook\res\PhonebookDoc.ico">
+				RelativePath=".\Phonebook\res\PhoneBookDoc.ico">
 			</File>
 			<File
 				RelativePath=".\Phonebook\res\Toolbar.bmp">
@@ -250,6 +222,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="Phonebook\res\Phonebook_2003.rc"/>
+			Value="Phonebook\PhoneBook.rc"/>
 	</Globals>
 </VisualStudioProject>

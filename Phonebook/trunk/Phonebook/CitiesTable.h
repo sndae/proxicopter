@@ -29,15 +29,22 @@ public:
 	CStringW	m_NAME;
 	CStringW	m_AREA;
 
+  BOOL bSQLEn;
+
 // Overrides
 	// Wizard generated virtual function overrides
 	public:
 	virtual CString GetDefaultConnect();	// Default connection string
-
-	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
+  virtual CString GetDefaultSQL(); 	// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
   BOOL SelectAll(CCitiesArray &oCitiesArray);
+  BOOL SelectWhereId(const int iId, CCities &oCity);
+  BOOL UpdateWhereId(const int iId, const CCities &oCity);
+  BOOL Insert(const CCities &oCity);
+  BOOL DeleteWhereId(const int iId);
+  BOOL Sort(const int iCol, const BOOL bAsc);
+  BOOL SelectByContent(const CCities &oCity);
 // Implementation
 #ifdef _DEBUG
 	virtual void AssertValid() const;

@@ -14,6 +14,8 @@ protected: // create from serialization only
 // Attributes
 public:
 	CCitiesDoc* GetDocument() const;
+protected:
+  int m_iCurrRowSelected;
 
 // Operations
 public:
@@ -41,6 +43,10 @@ protected:
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
+  OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+
+public:
+  afx_msg void OnRowFind();
 };
 
 #ifndef _DEBUG  // debug version in CitiesView.cpp

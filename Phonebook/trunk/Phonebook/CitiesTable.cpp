@@ -26,6 +26,8 @@ CCitiesTable::CCitiesTable(CDatabase* pdb)
 	m_AREA = L"";
 	m_nFields = 5;
 	m_nDefaultType = dynaset;
+
+  bSQLEn = FALSE;
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -39,7 +41,10 @@ CString CCitiesTable::GetDefaultConnect()
 
 CString CCitiesTable::GetDefaultSQL()
 {
-	return _T("[dbo].[CITIES]");
+  if(bSQLEn)
+  	return _T("[dbo].[CITIES]");
+  else
+    return _T("[Cities$]");
 }
 
 void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
@@ -58,9 +63,12 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
 
 BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 {
-  //Close();  
+  if(IsOpen())
+    Close();  
+  
   m_strFilter = _T("");
   m_strSort   = _T("");
+    
   Open(CRecordset::dynaset);
   if(IsBOF() == 0)
   {
@@ -74,6 +82,75 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 
   return TRUE;
 }
+
+BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
+{
+  if(IsOpen())
+    Close(); 
+
+  m_strFilter = _T("ID = ");
+  m_strFilter.Format(_T("%d"), iId);
+  Open(CRecordset::dynaset);
+
+  Move(0);
+  oCity.m_iId = m_ID;
+  oCity.m_iRevNumb = m_REV_NUMB;
+  _tcscpy(oCity.m_szCode, m_CODE);
+  _tcscpy(oCity.m_szName, m_NAME);
+  _tcscpy(oCity.m_szArea, m_AREA); 
+
+  return TRUE;  
+}
+
+BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
+{
+  CCities oNewCity = oCity;
+  oNewCity.m_szArea[0] = 0;
+  SelectByContent(oNewCity);
+  if(IsBOF() == FALSE)
+    return FALSE;
+  
+  CCities oCurrCity;
+  if(SelectWhereId(iId, oCurrCity) == FALSE)
+    return FALSE;
+  
+  if(oCurrCity.m_iRevNumb != oNewCity.m_iRevNumb)
+    return FALSE;
+
+  Move(0);  
+  Edit();
+  m_ID = oCity.m_iId;
+  m_REV_NUMB = oCurrCity.m_iRevNumb + 1;
+  m_CODE = oCity.m_szCode;
+  m_NAME = oCity.m_szName;
+  m_AREA = oCity.m_szArea; 
+
+  Update();
+
+  return TRUE;
+}
+
+BOOL CCitiesTable::Insert(const CCities &oCity)
+{
+  return TRUE;
+}
+
+BOOL CCitiesTable::DeleteWhereId(const int iId)
+{
+
+  return TRUE;
+}
+
+BOOL CCitiesTable::Sort(const int iCol, const BOOL bAsc)
+{
+  return TRUE;
+}
+
+BOOL CCitiesTable::SelectByContent(const CCities &oCity)
+{
+  return TRUE;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CCitiesTable diagnostics
 

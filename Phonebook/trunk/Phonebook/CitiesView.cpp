@@ -6,6 +6,7 @@
 
 #include "CitiesDoc.h"
 #include "CitiesView.h"
+#include ".\citiesview.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,7 +18,9 @@
 IMPLEMENT_DYNCREATE(CCitiesView, CListView)
 
 BEGIN_MESSAGE_MAP(CCitiesView, CListView)
+  ON_COMMAND(ID_ROW_FIND, OnRowFind)
 END_MESSAGE_MAP()
+
 
 // CCitiesView construction/destruction
 
@@ -29,6 +32,28 @@ CCitiesView::CCitiesView()
 
 CCitiesView::~CCitiesView()
 {
+}
+
+BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+  if (message == WM_NOTIFY)
+  {
+    switch(((LPNMHDR)lParam)->code)
+    {
+      case NM_DBLCLK:        
+        break;
+      case LVN_COLUMNCLICK:
+        //iCntr = ((LPNMLISTVIEW)lParam)->iSubItem;
+        break;
+      case LVN_ITEMCHANGED:
+        m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
+        break;
+      default:
+        break;
+    }
+  }
+
+  CListView::OnChildNotify(message, wParam, lParam, pResult);
 }
 
 BOOL CCitiesView::PreCreateWindow(CREATESTRUCT& cs)
@@ -50,6 +75,7 @@ void CCitiesView::OnInitialUpdate()
   lWndStyle |= LVS_REPORT;
   SetWindowLong(m_hWnd, GWL_STYLE, lWndStyle);  
   CListCtrl& oListCtrl = GetListCtrl();
+  oListCtrl.SetExtendedStyle( oListCtrl.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT );
 
   oListCtrl.InsertColumn(eCode, _T("Код"), LVCFMT_LEFT);
   oListCtrl.InsertColumn(eName, _T("Име"), LVCFMT_LEFT);
@@ -68,6 +94,7 @@ void CCitiesView::UpdateColumnsContent()
   if(poDoc->SelectAll(oCitiesArray) == TRUE)
   {
     CListCtrl& oListCtrl = GetListCtrl();   
+    oListCtrl.DeleteAllItems();
     for(int i = 0; i < oCitiesArray.GetCount(); i++)
     {
       int iRowIdx = oListCtrl.InsertItem(eCode, oCitiesArray[i]->m_szCode);
@@ -79,6 +106,7 @@ void CCitiesView::UpdateColumnsContent()
     oListCtrl.SetColumnWidth(eArea, LVSCW_AUTOSIZE);
   }
 }
+
 
 // CCitiesView diagnostics
 
@@ -102,3 +130,8 @@ CCitiesDoc* CCitiesView::GetDocument() const // non-debug version is inline
 
 
 // CCitiesView message handlers
+
+void CCitiesView::OnRowFind()
+{
+  // TODO: Add your command handler code here
+}

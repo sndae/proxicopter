@@ -1,5 +1,5 @@
 #pragma once
-
+#include "AfxTempl.h"
 template <class ROW_TYPE> class CRowsPtrArray: public CTypedPtrArray<CPtrArray, ROW_TYPE*>
 {
 public:
