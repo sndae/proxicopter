@@ -196,7 +196,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DbTableInterface.cpp"
+				RelativePath=".\DbTableCommonInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DbTableCommonInterface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DbTableInterface.h"
 				>
 			</File>
 			<File

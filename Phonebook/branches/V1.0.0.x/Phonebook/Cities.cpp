@@ -16,7 +16,7 @@ CCities::CCities(CDatabase* pdb, const TCHAR *pszDBPath)
 	: CDbTableCommonInterface(pszDBPath), CRecordset(pdb)
 {
 	m_id = 0;
-	m_rev_nmb = 0;
+	m_rev_numb = 0;
 	m_Code = L"";
 	m_Name = L"";
 	m_Area = L"";
@@ -56,7 +56,7 @@ void CCities::DoFieldExchange(CFieldExchange* pFX)
 // type of the member variable, not the type of the field in the database.
 // ODBC will try to automatically convert the column value to the requested type
 	RFX_Int(pFX, _T("[id]"), m_id);
-	RFX_Int(pFX, _T("[rev_nmb]"), m_rev_nmb);
+	RFX_Int(pFX, _T("[rev_numb]"), m_rev_numb);
 	RFX_Text(pFX, _T("[code]"), m_Code);
 	RFX_Text(pFX, _T("[name]"), m_Name);
 	RFX_Text(pFX, _T("[area]"), m_Area);
@@ -99,7 +99,7 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   /* has the revision number been incremented since the last read ? */
   if(m_id != pRowId->m_iId)
     return FALSE;
-  else if(m_rev_nmb != pRowId->m_iRev)
+  else if(m_rev_numb != pRowId->m_iRev)
     return FALSE;
 
   if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
@@ -108,7 +108,7 @@ BOOL CCities::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   Edit();
 
 	m_id =      pRowId->m_iId;
-	m_rev_nmb = ++pRowId->m_iRev;
+	m_rev_numb = ++pRowId->m_iRev;
 	m_Code    = a_csRowData[eColCode];
 	m_Name    = a_csRowData[eColName];
 	m_Area    = a_csRowData[eColArea];  
@@ -137,7 +137,7 @@ HANDLE   CCities::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   /* create a row identifier struct */
   CRowIdent *pcRowId = new CRowIdent();
   
-  pcRowId->m_iRev = m_rev_nmb;
+  pcRowId->m_iRev = m_rev_numb;
   pcRowId->m_iId = m_id;
   pcRowId->m_iNmb = iRowNmbr;
 
@@ -170,7 +170,7 @@ BOOL  CCities::AddRow(CArray<CString> &a_csRowData)
   
   AddNew();
 	m_id = iIndex + 1;
-	m_rev_nmb = 0;
+	m_rev_numb = 0;
 	m_Code = a_csRowData[eColCode];
 	m_Name = a_csRowData[eColName];
 	m_Area = a_csRowData[eColArea];  

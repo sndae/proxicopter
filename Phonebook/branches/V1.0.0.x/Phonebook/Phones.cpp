@@ -14,7 +14,7 @@ CPhones::CPhones(CDatabase* pdb, const TCHAR *pszDBPath)
 	: CDbTableCommonInterface(pszDBPath), CRecordset(pdb)
 {
 	m_id = 0;
-	m_rev_nmb = 0;
+	m_rev_numb = 0;
   m_Code = 0;
 	m_PhoneType = L"";	
  	m_nFields = 4;
@@ -40,9 +40,9 @@ CString CPhones::GetDefaultSQL()
   TCHAR *pszDBPath = GetDBPath();
   if(pszDBPath)
   {
-    return CString(pszDBPath) + _T(".phones");
+    return CString(pszDBPath) + _T(".phone_types");
   }
-	return _T("[Phones$]");
+	return _T("[phone_types$]");
 }
 
 void CPhones::DoFieldExchange(CFieldExchange* pFX)
@@ -52,7 +52,7 @@ void CPhones::DoFieldExchange(CFieldExchange* pFX)
 // type of the member variable, not the type of the field in the database.
 // ODBC will try to automatically convert the column value to the requested type
 	RFX_Int(pFX, _T("[id]"), m_id);
-	RFX_Int(pFX, _T("[rev_nmb]"), m_rev_nmb);
+	RFX_Int(pFX, _T("[rev_numb]"), m_rev_numb);
 	RFX_Int(pFX, _T("[code]"), m_Code);
 	RFX_Text(pFX, _T("[phone_type]"), m_PhoneType);
 
@@ -79,7 +79,7 @@ BOOL CPhones::AddRow(CArray<CString> &a_csRowData)
   
   AddNew();
 	m_id = iIndex + 1;
-	m_rev_nmb = 0;
+	m_rev_numb = 0;
 
 	m_Code = _ttoi(a_csRowData[eColCode]);
 	m_PhoneType = a_csRowData[eColPhoneType];
@@ -108,7 +108,7 @@ HANDLE CPhones::ReadRow(CArray<CString> &a_csRowData,  int iRowNmbr)
   /* create a row identifier struct */
   CRowIdent *pcRowId = new CRowIdent();
   
-  pcRowId->m_iRev = m_rev_nmb;
+  pcRowId->m_iRev = m_rev_numb;
   pcRowId->m_iId = m_id;
   pcRowId->m_iNmb = iRowNmbr;
 
@@ -134,7 +134,7 @@ BOOL CPhones::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
 
   if(m_id != pRowId->m_iId)
     return FALSE;
-  else if(m_rev_nmb != pRowId->m_iRev)
+  else if(m_rev_numb != pRowId->m_iRev)
     return FALSE;
 
   if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
@@ -143,7 +143,7 @@ BOOL CPhones::WriteRow(CArray<CString> &a_csRowData, HANDLE hRow)
   Edit();
 
 	m_id      = pRowId->m_iId;
-	m_rev_nmb = ++pRowId->m_iRev;
+	m_rev_numb = ++pRowId->m_iRev;
   m_Code    = _ttoi(a_csRowData[eColCode]);
 	m_PhoneType = a_csRowData[eColPhoneType];
 

@@ -3,7 +3,7 @@
 
 
 CDbTableCommonInterface::CDbTableCommonInterface(const TCHAR *pszDBPath):
-m_pszRevNmbFieldName(_T("rev_nmb")), m_pszIdFieldName(_T("Id"))
+m_pszRevNmbFieldName(_T("rev_numb")), m_pszIdFieldName(_T("Id"))
 {
   /* Read DB path, if set */
   if(pszDBPath)

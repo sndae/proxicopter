@@ -22,12 +22,12 @@ public:
 // to support both Unicode and these conversions).
 
 	int	m_id;
-	int	m_rev_nmb;
+	int	m_rev_numb;
 	int	m_code;
 	CStringW	m_first_name;
 	CStringW	m_second_name;
 	CStringW	m_third_name;
-	CStringW	m_ident_nmb;
+	CStringW	m_ident_numb;
 	long	m_city_id;
 	CStringW	m_city_addr;
 

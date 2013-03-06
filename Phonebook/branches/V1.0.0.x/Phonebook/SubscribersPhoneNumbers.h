@@ -22,10 +22,10 @@ public:
 // to support both Unicode and these conversions).
 
 	long	m_id;
-	long	m_rev_nmb;
+	long	m_rev_numb;
 	long	m_subscriber_id;
 	long	m_phone_id;
-	CStringW	m_phone_number;
+	CStringW	m_phone_numb;
 
 // Overrides
 	// Wizard generated virtual function overrides

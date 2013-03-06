@@ -21,7 +21,7 @@ public:
 // to support both Unicode and these conversions).
 
 	int	m_id;
-	int	m_rev_nmb;
+	int	m_rev_numb;
 	CStringW	m_Code;
 	CStringW	m_Name;
 	CStringW	m_Area;

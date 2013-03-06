@@ -17,10 +17,10 @@ CSubscribersPhoneNumbers::CSubscribersPhoneNumbers(CDatabase* pdb, const TCHAR *
 	: CDbTableCommonInterface(pszDBPath), CRecordset(pdb)
 {
 	m_id = 0;
-	m_rev_nmb = 0;
+	m_rev_numb = 0;
 	m_subscriber_id = 0;
 	m_phone_id = 0;
-	m_phone_number = L"";
+	m_phone_numb = L"";
 	m_nFields = 5;
 	m_nDefaultType = dynaset;
 
@@ -58,10 +58,10 @@ void CSubscribersPhoneNumbers::DoFieldExchange(CFieldExchange* pFX)
 // type of the member variable, not the type of the field in the database.
 // ODBC will try to automatically convert the column value to the requested type
 	RFX_Long(pFX, _T("[id]"), m_id);
-	RFX_Long(pFX, _T("[rev_nmb]"), m_rev_nmb);
+	RFX_Long(pFX, _T("[rev_numb]"), m_rev_numb);
 	RFX_Long(pFX, _T("[subscriber_id]"), m_subscriber_id);
 	RFX_Long(pFX, _T("[phone_id]"), m_phone_id);
-	RFX_Text(pFX, _T("[phone_number]"), m_phone_number);
+	RFX_Text(pFX, _T("[phone_numb]"), m_phone_numb);
 
 }
 
@@ -80,7 +80,7 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
 
   if(m_id != pRowId->m_iId)
     return FALSE;
-  else if(m_rev_nmb != pRowId->m_iRev)
+  else if(m_rev_numb != pRowId->m_iRev)
     return FALSE;
 
   if(a_csRowData.GetCount() != m_nFields - m_iUserOffset)
@@ -103,10 +103,10 @@ BOOL    CSubscribersPhoneNumbers::WriteRow(CArray<CString> &a_csRowData, HANDLE 
   Edit();
 
 	m_id = pRowId->m_iId;
-	m_rev_nmb = ++pRowId->m_iRev;
+	m_rev_numb = ++pRowId->m_iRev;
 	m_subscriber_id = iSubscriberId;
 	m_phone_id = iPhonesId;
-  m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
+  m_phone_numb = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
   return Update();
 }
@@ -154,10 +154,10 @@ BOOL    CSubscribersPhoneNumbers::AddRow(CArray<CString> &a_csRowData)
   AddNew();
 
 	m_id = iIndex + 1;
-	m_rev_nmb = 0;
+	m_rev_numb = 0;
 	m_subscriber_id = iSubscriberId;
 	m_phone_id = iPhonesId;
-  m_phone_number = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
+  m_phone_numb = a_csRowData[CSubscribersPhoneNumbers::eColPhoneNumb];
 
   if(!Update())
     return FALSE;
@@ -183,7 +183,7 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
   CDBVariant cDBVariant;
   CRowIdent *pcRowId = new CRowIdent();
   
-  pcRowId->m_iRev = m_rev_nmb;
+  pcRowId->m_iRev = m_rev_numb;
   pcRowId->m_iId = m_id;
   pcRowId->m_iNmb = iRowNmbr;
 
@@ -203,7 +203,7 @@ HANDLE  CSubscribersPhoneNumbers::ReadRow(CArray<CString> &a_csRowData,  int iRo
 
   a_csRowData.InsertAt(eColPhoneId, a_csRelTableRowData[CPhones::eColCode]);
   
-  a_csRowData.InsertAt(eColPhoneNumb, m_phone_number);
+  a_csRowData.InsertAt(eColPhoneNumb, m_phone_numb);
 
   return (HANDLE)pcRowId;
 }

@@ -21,7 +21,7 @@ public:
 // to support both Unicode and these conversions).
 
 	int	m_id;
-	int	m_rev_nmb;
+	int	m_rev_numb;
 	int	m_Code;
 	CStringW	m_PhoneType;
 
