@@ -98,7 +98,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
           case ID_OPTIONS_DELETE: ExecuteCntxMenuCmd(eCmdDelete); break;
           case ID_OPTIONS_ADD:    ExecuteCntxMenuCmd(eCmdInsert); break;        
           case ID_OPTIONS_FIND:   ExecuteCntxMenuCmd(eCmdFind);   break; 
-          default: ASSERT(0); break; 
+          default: break; 
         }
         break;
       case LVN_COLUMNCLICK:
