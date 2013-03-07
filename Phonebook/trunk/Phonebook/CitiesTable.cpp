@@ -19,13 +19,13 @@ IMPLEMENT_DYNAMIC(CCitiesTable, CRecordset)
 CCitiesTable::CCitiesTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-	m_ID = 0;
-	m_REV_NUMB = 0;
-	m_CODE = L"";
-	m_NAME = L"";
-	m_AREA = L"";
-	m_nFields = 5;
-	m_nDefaultType = dynaset;
+  m_ID = 0;
+  m_REV_NUMB = 0;
+  m_CODE = L"";
+  m_NAME = L"";
+  m_AREA = L"";
+  m_nFields = 5;
+  m_nDefaultType = dynaset;
 
   m_bSQLEn = TRUE;
 }
@@ -52,15 +52,15 @@ CString CCitiesTable::GetDefaultSQL()
 
 void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
 {
-	pFX->SetFieldType(CFieldExchange::outputColumn);
-// Macros such as RFX_Text() and RFX_Int() are dependent on the
-// type of the member variable, not the type of the field in the database.
-// ODBC will try to automatically convert the column value to the requested type
-	RFX_Long(pFX, _T("[ID]"), m_ID);
-	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
-	RFX_Text(pFX, _T("[CODE]"), m_CODE);
-	RFX_Text(pFX, _T("[NAME]"), m_NAME);
-	RFX_Text(pFX, _T("[AREA]"), m_AREA);
+  pFX->SetFieldType(CFieldExchange::outputColumn);
+  // Macros such as RFX_Text() and RFX_Int() are dependent on the
+  // type of the member variable, not the type of the field in the database.
+  // ODBC will try to automatically convert the column value to the requested type
+  RFX_Long(pFX, _T("[ID]"), m_ID);
+  RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
+  RFX_Text(pFX, _T("[CODE]"), m_CODE);
+  RFX_Text(pFX, _T("[NAME]"), m_NAME);
+  RFX_Text(pFX, _T("[AREA]"), m_AREA);
 
 }
 
@@ -281,12 +281,12 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
 #ifdef _DEBUG
 void CCitiesTable::AssertValid() const
 {
-	CRecordset::AssertValid();
+  CRecordset::AssertValid();
 }
 
 void CCitiesTable::Dump(CDumpContext& dc) const
 {
-	CRecordset::Dump(dc);
+  CRecordset::Dump(dc);
 }
 #endif //_DEBUG
 

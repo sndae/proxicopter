@@ -29,20 +29,20 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	long	m_ID;
-	long	m_REV_NUMB;
-	CStringW	m_CODE;
-	CStringW	m_NAME;
-	CStringW	m_AREA;
+  long  m_ID;
+  long  m_REV_NUMB;
+  CStringW  m_CODE;
+  CStringW  m_NAME;
+  CStringW  m_AREA;
   /* Флаг разрешаващ търсенето на DSN:SQLEXPRESS */
   BOOL m_bSQLEn;
 
 // Overrides
 	// Wizard generated virtual function overrides
-	public:
-	virtual CString GetDefaultConnect();	// Default connection string
+public:
+  virtual CString GetDefaultConnect();	// Default connection string
   virtual CString GetDefaultSQL(); 	// default SQL for Recordset
-	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
+  virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
   BOOL SelectAll(CCitiesArray &oCitiesArray);
   BOOL SelectWhereId(const int iId, CCities &oCity);
@@ -53,8 +53,8 @@ public:
   BOOL SelectByContent(const CCities &oCity);
 // Implementation
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+  virtual void AssertValid() const;
+  virtual void Dump(CDumpContext& dc) const;
 #endif
 
 };

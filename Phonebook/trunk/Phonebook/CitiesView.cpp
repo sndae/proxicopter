@@ -26,7 +26,7 @@ END_MESSAGE_MAP()
 
 CCitiesView::CCitiesView()
 {
-	// TODO: add construction code here
+  // TODO: add construction code here
 
 }
 
@@ -36,19 +36,18 @@ CCitiesView::~CCitiesView()
 
 BOOL CCitiesView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+  // TODO: Modify the Window class or styles here by modifying
+  //  the CREATESTRUCT cs
 
-	return CListView::PreCreateWindow(cs);
+  return CListView::PreCreateWindow(cs);
 }
 
 void CCitiesView::OnInitialUpdate()
 {
-	CListView::OnInitialUpdate();
+  CListView::OnInitialUpdate();
 
-
-	// TODO: You may populate your ListView with items by directly accessing
-	//  its list control through a call to GetListCtrl().
+  // TODO: You may populate your ListView with items by directly accessing
+  //  its list control through a call to GetListCtrl().
   long lWndStyle = GetWindowLong(m_hWnd, GWL_STYLE);
   lWndStyle |= LVS_REPORT;
   SetWindowLong(m_hWnd, GWL_STYLE, lWndStyle);  
@@ -195,18 +194,18 @@ void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 #ifdef _DEBUG
 void CCitiesView::AssertValid() const
 {
-	CListView::AssertValid();
+  CListView::AssertValid();
 }
 
 void CCitiesView::Dump(CDumpContext& dc) const
 {
-	CListView::Dump(dc);
+  CListView::Dump(dc);
 }
 
 CCitiesDoc* CCitiesView::GetDocument() const // non-debug version is inline
 {
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CCitiesDoc)));
-	return (CCitiesDoc*)m_pDocument;
+  ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CCitiesDoc)));
+  return (CCitiesDoc*)m_pDocument;
 }
 #endif //_DEBUG
 

@@ -8,8 +8,8 @@
 class CCitiesDoc : public CDocument
 {
 protected: // create from serialization only
-	CCitiesDoc();
-	DECLARE_DYNCREATE(CCitiesDoc)
+  CCitiesDoc();
+  DECLARE_DYNCREATE(CCitiesDoc)
 
 // Attributes
 public:
@@ -20,8 +20,8 @@ public:
 
 // Overrides
 public:
-	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);
+  virtual BOOL OnNewDocument();
+  virtual void Serialize(CArchive& ar);
 
 // Implementation
 public:
@@ -42,7 +42,7 @@ protected:
   CCitiesTable m_oCityTable;
 // Generated message map functions
 protected:
-	DECLARE_MESSAGE_MAP()
+  DECLARE_MESSAGE_MAP()
 };
 
 

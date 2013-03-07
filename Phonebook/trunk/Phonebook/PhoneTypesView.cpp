@@ -25,8 +25,7 @@ END_MESSAGE_MAP()
 
 CPhoneTypesView::CPhoneTypesView()
 {
-	// TODO: add construction code here
-
+  // TODO: add construction code here
 }
 
 CPhoneTypesView::~CPhoneTypesView()
@@ -72,11 +71,11 @@ BOOL CPhoneTypesView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CPhoneTypesView::OnInitialUpdate()
 {
-	CListView::OnInitialUpdate();
+  CListView::OnInitialUpdate();
 
 
-	// TODO: You may populate your ListView with items by directly accessing
-	//  its list control through a call to GetListCtrl().
+  // TODO: You may populate your ListView with items by directly accessing
+  //  its list control through a call to GetListCtrl().
  
   long lWndStyle = GetWindowLong(m_hWnd, GWL_STYLE);
   lWndStyle |= LVS_REPORT;
@@ -157,18 +156,18 @@ void CPhoneTypesView::ExecuteCntxMenuCmd()
 #ifdef _DEBUG
 void CPhoneTypesView::AssertValid() const
 {
-	CListView::AssertValid();
+  CListView::AssertValid();
 }
 
 void CPhoneTypesView::Dump(CDumpContext& dc) const
 {
-	CListView::Dump(dc);
+  CListView::Dump(dc);
 }
 
 CPhoneTypesDoc* CPhoneTypesView::GetDocument() const // non-debug version is inline
 {
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CPhoneTypesDoc)));
-	return (CPhoneTypesDoc*)m_pDocument;
+  ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CPhoneTypesDoc)));
+  return (CPhoneTypesDoc*)m_pDocument;
 }
 #endif //_DEBUG
 

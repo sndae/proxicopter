@@ -2,13 +2,13 @@
 
 #pragma once
 
-// code generated on 07 март 2013 г., 14:47 ч.
+// code generated on 07 март 2013 г., 20:47 ч.
 #include "PhoneTypes.h"
 class CPhoneTypesTable : public CRecordset
 {
 public:
-	CPhoneTypesTable(CDatabase* pDatabase = NULL);
-	DECLARE_DYNAMIC(CPhoneTypesTable)
+  CPhoneTypesTable(CDatabase* pDatabase = NULL);
+  DECLARE_DYNAMIC(CPhoneTypesTable)
 
 // Field/Param Data
 
@@ -20,23 +20,23 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	long	m_ID;
-	long	m_REV_NUMB;
-	long	m_CODE;
-	CStringW	m_PHONE_TYPE;
+  long	m_ID;
+  long	m_REV_NUMB;
+  long	m_CODE;
+  CStringW	m_PHONE_TYPE;
 
-// Overrides
-	// Wizard generated virtual function overrides
-	public:
-	virtual CString GetDefaultConnect();	// Default connection string
-
-	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
-	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
+  // Overrides
+  // Wizard generated virtual function overrides
+  public:
+  virtual CString GetDefaultConnect();	// Default connection string
+  
+  virtual CString GetDefaultSQL(); 	// default SQL for Recordset
+  virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
 // Implementation
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+  virtual void AssertValid() const;
+  virtual void Dump(CDumpContext& dc) const;
 #endif
 
 };

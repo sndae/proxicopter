@@ -16,9 +16,9 @@ CPhoneTypesDoc::CPhoneTypesDoc()
 
 BOOL CPhoneTypesDoc::OnNewDocument()
 {
-	if (!CDocument::OnNewDocument())
-		return FALSE;
-	return TRUE;
+  if (!CDocument::OnNewDocument())
+    return FALSE;
+  return TRUE;
 }
 
 CPhoneTypesDoc::~CPhoneTypesDoc()
@@ -35,13 +35,13 @@ END_MESSAGE_MAP()
 #ifdef _DEBUG
 void CPhoneTypesDoc::AssertValid() const
 {
-	CDocument::AssertValid();
+  CDocument::AssertValid();
 }
 
 #ifndef _WIN32_WCE
 void CPhoneTypesDoc::Dump(CDumpContext& dc) const
 {
-	CDocument::Dump(dc);
+  CDocument::Dump(dc);
 }
 #endif
 #endif //_DEBUG
@@ -51,14 +51,14 @@ void CPhoneTypesDoc::Dump(CDumpContext& dc) const
 
 void CPhoneTypesDoc::Serialize(CArchive& ar)
 {
-	if (ar.IsStoring())
-	{
-		// TODO: add storing code here
-	}
-	else
-	{
-		// TODO: add loading code here
-	}
+  if (ar.IsStoring())
+  {
+    // TODO: add storing code here
+  }
+  else
+  {
+    // TODO: add loading code here
+  }
 }
 #endif
 

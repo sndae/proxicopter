@@ -23,7 +23,7 @@ END_MESSAGE_MAP()
 
 CCitiesDoc::CCitiesDoc()
 {
-	// TODO: add one-time construction code here
+  // TODO: add one-time construction code here
 
 }
 
@@ -33,13 +33,13 @@ CCitiesDoc::~CCitiesDoc()
 
 BOOL CCitiesDoc::OnNewDocument()
 {
-	if (!CDocument::OnNewDocument())
-		return FALSE;
+  if (!CDocument::OnNewDocument())
+    return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+  // TODO: add reinitialization code here
+  // (SDI documents will reuse this document)
 
-	return TRUE;
+  return TRUE;
 }
 
 
@@ -49,14 +49,14 @@ BOOL CCitiesDoc::OnNewDocument()
 
 void CCitiesDoc::Serialize(CArchive& ar)
 {
-	if (ar.IsStoring())
-	{
-		// TODO: add storing code here
-	}
-	else
-	{
-		// TODO: add loading code here
-	}
+  if (ar.IsStoring())
+  {
+    // TODO: add storing code here
+  }
+  else
+  {
+    // TODO: add loading code here
+  }
 }
 
 BOOL CCitiesDoc::SelectAll(CCitiesArray &oCitiesArray)
@@ -127,12 +127,12 @@ BOOL CCitiesDoc::SelectByContent(const CCities &oCity)
 #ifdef _DEBUG
 void CCitiesDoc::AssertValid() const
 {
-	CDocument::AssertValid();
+  CDocument::AssertValid();
 }
 
 void CCitiesDoc::Dump(CDumpContext& dc) const
 {
-	CDocument::Dump(dc);
+  CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
