@@ -70,6 +70,23 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_CONTEXT_MENU MENU 
+BEGIN
+    POPUP "Options"
+    BEGIN
+        MENUITEM "Edit",                        ID_EDIT_DELETE
+        MENUITEM "Delete",                      ID_OPTIONS_DELETE
+        MENUITEM "Add",                         ID_OPTIONS_ADD
+        MENUITEM "Find",                        ID_OPTIONS_FIND
+    END
+END
+
 #endif    // Bulgarian resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -167,7 +184,11 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\PhoneBook.ico"
-IDR_PhoneBookTYPE       ICON                    "res\\PhoneBookDoc.ico"
+IDR_CITY_TYPE           ICON                    "res\\PhoneBookDoc.ico"
+IDD_CITIES_EDIT         ICON                    "res\\PhoneBookDoc.ico"
+IDR_PHONES_TYPE         ICON                    "res\\PhoneBookDoc.ico"
+IDR_SUBSCRIBERS_TYPE    ICON                    "res\\PhoneBookDoc.ico"
+IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE ICON                    "res\\PhoneBookDoc.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -248,7 +269,7 @@ BEGIN
     END
 END
 
-IDR_PhoneBookTYPE MENU 
+IDR_CITY_TYPE MENU 
 BEGIN
     POPUP "&File"
     BEGIN
@@ -364,8 +385,12 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDR_MAINFRAME           "PhoneBook"
-    IDR_PhoneBookTYPE       "\nPhoneBook\nPhoneBook\n\n\nPhoneBook.Document\nPhoneBook.Document"
+    IDR_MAINFRAME           "Phonebook"
+    IDR_CITY_TYPE           "\nCity\nCity\n\n\nCity.Document\nCity.Document"
+    IDR_PHONES_TYPE         "\nPhoneTypes\nPhoneTypes\n\n\nPhoneTypes.Document\nPhoneTypes.Document"
+    IDR_SUBSCRIBERS_TYPE    "\nSubscribers\nSubscribers\n\n\nSubscribers.Document\nSubscribers.Document"
+    IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE 
+                            "\nSubscriberPhoneNumbers\nSubscriberPhoneNumbers\n\n\nSubscriberPhoneNumbers.Document\nSubscriberPhoneNumbers.Document"
 END
 
 STRINGTABLE 

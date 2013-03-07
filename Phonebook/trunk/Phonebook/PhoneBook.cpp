@@ -8,6 +8,8 @@
 #include "ChildFrm.h"
 #include "CitiesDoc.h"
 #include "CitiesView.h"
+#include "PhoneTypesDoc.h"
+#include "PhoneTypesView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -73,13 +75,24 @@ BOOL CPhoneBookApp::InitInstance()
 	// Register the application's document templates.  Document templates
 	//  serve as the connection between documents, frame windows and views
 	CMultiDocTemplate* pDocTemplate;
-	pDocTemplate = new CMultiDocTemplate(IDR_PhoneBookTYPE,
+	pDocTemplate = new CMultiDocTemplate(IDR_CITY_TYPE,
 		RUNTIME_CLASS(CCitiesDoc),
 		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
 		RUNTIME_CLASS(CCitiesView));
+
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
+
+  pDocTemplate = new CMultiDocTemplate(IDR_PHONES_TYPE,
+		RUNTIME_CLASS(CPhoneTypesDoc),
+		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+		RUNTIME_CLASS(CPhoneTypesView));
+
+	if (!pDocTemplate)
+		return FALSE;
+	AddDocTemplate(pDocTemplate);
+
 
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;

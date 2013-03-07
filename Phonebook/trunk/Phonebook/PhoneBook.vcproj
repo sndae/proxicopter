@@ -239,6 +239,22 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="PhoneTypes"
+				>
+				<File
+					RelativePath=".\PhoneTypesDoc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PhoneTypesTable.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PhoneTypesView.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -294,6 +310,26 @@
 				</File>
 				<File
 					RelativePath=".\CitiesView.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PhoneTypes"
+				>
+				<File
+					RelativePath=".\PhoneTypes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PhoneTypesDoc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PhoneTypesTable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PhoneTypesView.h"
 					>
 				</File>
 			</Filter>

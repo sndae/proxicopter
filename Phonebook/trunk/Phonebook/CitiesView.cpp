@@ -37,6 +37,11 @@ CCitiesView::~CCitiesView()
 
 BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
+  CMenu oCntxMenu;
+  CMenu *pSubMenu = 0;
+  POINT tCur;
+  
+  int iMenuChoice;
   if (message == WM_NOTIFY)
   {
     int iNumb = 0;
@@ -44,6 +49,12 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
     {
       case NM_DBLCLK:  
         OnRowDbClicked();
+        break;
+      case NM_RCLICK:        
+        oCntxMenu.LoadMenuW(IDR_CONTEXT_MENU);
+        pSubMenu = oCntxMenu.GetSubMenu(0);
+        GetCursorPos(&tCur);
+        iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
         break;
       case LVN_COLUMNCLICK:
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
@@ -127,20 +138,18 @@ void CCitiesView::OnRowDbClicked()
       oCity = oEditDlg.GetCityData();
       if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
-      else
-        UpdateColumnsContent();
+      
       break;
     case CCitiesDlg::eCityInsert:
       oCity = oEditDlg.GetCityData();
       if(GetDocument()->Insert(oCity) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
-      else
-        UpdateColumnsContent();      
+     
       break;
     case CCitiesDlg::eCityDelete:
       oCity = oEditDlg.GetCityData();
       GetDocument()->DeleteWhereId(oCity.m_iId);
-      UpdateColumnsContent();
+
       break;
     case CCitiesDlg::eCityFind:
       oCity = oEditDlg.GetCityData();
@@ -150,6 +159,12 @@ void CCitiesView::OnRowDbClicked()
     }
   }
 }
+
+void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
+{
+  UpdateColumnsContent();
+}
+
 
 
 // CCitiesView diagnostics

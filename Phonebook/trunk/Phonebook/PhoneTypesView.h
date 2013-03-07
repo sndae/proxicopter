@@ -1,23 +1,23 @@
-// CitiesView.h : interface of the CCitiesView class
+// CitiesView.h : interface of the CPhoneTypesView class
 //
 
 
 #pragma once
 
 
-class CCitiesView : public CListView
+class CPhoneTypesView : public CListView
 {
 protected: // create from serialization only
-	CCitiesView();
-	DECLARE_DYNCREATE(CCitiesView)
+	CPhoneTypesView();
+	DECLARE_DYNCREATE(CPhoneTypesView)
 
 // Attributes
 public:
-	CCitiesDoc* GetDocument() const;
+	CPhoneTypesDoc* GetDocument() const;
 private:
   int   m_iCurrRowSelected;
-  BOOL  m_abAscSorting[CCitiesDoc::eCOL_NUMB];
-  CCitiesArray m_CitiesArray;
+  BOOL  m_abAscSorting[CPhoneTypesDoc::eCOL_NUMB];
+  CPhoneTypesArray m_CitiesArray;
 // Operations
 public:
 
@@ -26,10 +26,10 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
 	virtual void OnInitialUpdate(); // called first time after construct
-  virtual void OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint);
+
 // Implementation
 public:
-	virtual ~CCitiesView();
+	virtual ~CPhoneTypesView();
   void UpdateColumnsContent();
 
 #ifdef _DEBUG
@@ -50,7 +50,7 @@ public:
 };
 
 #ifndef _DEBUG  // debug version in CitiesView.cpp
-inline CCitiesDoc* CCitiesView::GetDocument() const
-   { return reinterpret_cast<CCitiesDoc*>(m_pDocument); }
+inline CPhoneTypesDoc* CPhoneTypesView::GetDocument() const
+   { return reinterpret_cast<CPhoneTypesDoc*>(m_pDocument); }
 #endif
 

@@ -70,17 +70,38 @@ BOOL CCitiesDoc::SelectWhereId(const int iId, CCities &oCity)
 }
 BOOL CCitiesDoc::UpdateWhereId(const int iId, const CCities &oCity)
 {
-  return m_oCityTable.UpdateWhereId(iId, oCity);
+  BOOL bRes = m_oCityTable.UpdateWhereId(iId, oCity);
+  if(!bRes)
+    return FALSE;
+
+  SetModifiedFlag();
+  UpdateAllViews(0);
+    
+  return bRes;
 }
 
 BOOL CCitiesDoc::Insert(const CCities &oCity)
 {
-  return m_oCityTable.Insert(oCity);
+  BOOL bRes = m_oCityTable.Insert(oCity);
+  if(!bRes)
+    return FALSE;
+
+  SetModifiedFlag();
+  UpdateAllViews(0);
+  
+  return bRes;
 }
 
 BOOL CCitiesDoc::DeleteWhereId(const int iId)
 {
-  return m_oCityTable.DeleteWhereId(iId);
+  BOOL bRes = m_oCityTable.DeleteWhereId(iId);
+  if(!bRes)
+    return FALSE;
+
+  SetModifiedFlag();
+  UpdateAllViews(0);
+  
+  return bRes;
 }
 
 BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
