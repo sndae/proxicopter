@@ -6,6 +6,7 @@
 
 #include "CitiesDoc.h"
 #include "CitiesView.h"
+#include "CitiesDlg.h"
 #include ".\citiesview.h"
 
 #ifdef _DEBUG
@@ -41,7 +42,8 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
     int iNumb = 0;
     switch(((LPNMHDR)lParam)->code)
     {
-      case NM_DBLCLK:        
+      case NM_DBLCLK:  
+        OnRowDbClicked();
         break;
       case LVN_COLUMNCLICK:
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
@@ -89,6 +91,7 @@ void CCitiesView::OnInitialUpdate()
   oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE_USEHEADER);
 
   UpdateColumnsContent();
+  m_iCurrRowSelected = 0;
   memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 }
 
@@ -99,8 +102,9 @@ void CCitiesView::UpdateColumnsContent()
   {
     CListCtrl& oListCtrl = GetListCtrl();   
     oListCtrl.DeleteAllItems();
-    for(int i = 0; i < m_CitiesArray.GetCount(); i++)
+    for(int i = m_CitiesArray.GetCount(); i != 0 ; )
     {
+      i--;
       int iRowIdx = oListCtrl.InsertItem(CCitiesDoc::eColCode, m_CitiesArray[i]->m_szCode);
       oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColName, m_CitiesArray[i]->m_szName);
       oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColArea, m_CitiesArray[i]->m_szArea);
@@ -108,6 +112,42 @@ void CCitiesView::UpdateColumnsContent()
     oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
     oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE);
     oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE);
+  }
+}
+
+void CCitiesView::OnRowDbClicked()
+{
+  CCitiesDlg oEditDlg(*m_CitiesArray[m_iCurrRowSelected]);
+  if(oEditDlg.DoModal() == IDOK)
+  {
+    CCities oCity;
+    switch(oEditDlg.GetCityCmd())
+    {
+    case CCitiesDlg::eCityUpdate:
+      oCity = oEditDlg.GetCityData();
+      if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+        MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+      else
+        UpdateColumnsContent();
+      break;
+    case CCitiesDlg::eCityInsert:
+      oCity = oEditDlg.GetCityData();
+      if(GetDocument()->Insert(oCity) == FALSE)
+        MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
+      else
+        UpdateColumnsContent();      
+      break;
+    case CCitiesDlg::eCityDelete:
+      oCity = oEditDlg.GetCityData();
+      GetDocument()->DeleteWhereId(oCity.m_iId);
+      UpdateColumnsContent();
+      break;
+    case CCitiesDlg::eCityFind:
+      oCity = oEditDlg.GetCityData();
+      GetDocument()->SelectByContent(oCity);
+      UpdateColumnsContent();
+      break;
+    }
   }
 }
 

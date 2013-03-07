@@ -46,6 +46,7 @@ protected:
 
 public:
   afx_msg void OnRowFind();
+  void OnRowDbClicked();
 };
 
 #ifndef _DEBUG  // debug version in CitiesView.cpp

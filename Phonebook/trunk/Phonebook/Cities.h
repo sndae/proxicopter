@@ -9,17 +9,14 @@ struct CCities
   TCHAR m_szCode[CITIES_TABLE_STRING_MAX_LEN];
   TCHAR m_szName[CITIES_TABLE_STRING_MAX_LEN];
   TCHAR m_szArea[CITIES_TABLE_STRING_MAX_LEN];  
-  CCities(void)
+  CCities(const int iId = 0, const int iRevNumb = 0, const TCHAR *pszCode = 0, const TCHAR *pszName = 0, const TCHAR *pszArea = 0)
   {
     ZeroMemory(this, sizeof(*this));
-  };
-  CCities(int iId, int iRevNumb, TCHAR *pszCode, TCHAR *pszName, TCHAR *pszArea)
-  {
     m_iId = iId;
     m_iRevNumb = iRevNumb;
-    _tcscpy(m_szCode, pszCode);
-    _tcscpy(m_szName, pszName);
-    _tcscpy(m_szArea, pszArea);    
+    if(pszCode)_tcscpy(m_szCode, pszCode);
+    if(pszName)_tcscpy(m_szName, pszName);
+    if(pszArea)_tcscpy(m_szArea, pszArea);    
   }
 };
 

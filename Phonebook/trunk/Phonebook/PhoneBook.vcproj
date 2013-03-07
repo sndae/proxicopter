@@ -223,6 +223,10 @@
 				Name="Cities"
 				>
 				<File
+					RelativePath=".\CitiesDlg.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\CitiesDoc.cpp"
 					>
 				</File>
@@ -277,6 +281,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CitiesDlg.h"
+					>
+				</File>
+				<File
 					RelativePath=".\CitiesDoc.h"
 					>
 				</File>
@@ -322,5 +330,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="PhoneBook.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

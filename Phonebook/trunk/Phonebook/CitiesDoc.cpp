@@ -91,7 +91,9 @@ BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 
 BOOL CCitiesDoc::SelectByContent(const CCities &oCity)
 {
-  return m_oCityTable.SelectByContent(oCity);
+  CCities oModCity = oCity;
+  oModCity.m_iId = -1;
+  return m_oCityTable.SelectByContent(oModCity);
 }
 
 // CCitiesDoc diagnostics

@@ -63,8 +63,10 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
 
 BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 {
-  if(!IsOpen())
-    Open(CRecordset::dynaset);
+  if(IsOpen())
+    Close();
+
+  Open(CRecordset::dynaset);
   
   if(!IsBOF())
   {
@@ -84,8 +86,7 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
   if(IsOpen())
     Close(); 
 
-  m_strFilter = _T("ID = ");
-  m_strFilter.Format(_T("%d"), iId);
+  m_strFilter.Format(_T("ID = %d"), iId);
   Open(CRecordset::dynaset);
 
   if(IsBOF())
@@ -103,17 +104,17 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
 
 BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
 {
-  CCities oNewCity = oCity;
-  oNewCity.m_szArea[0] = 0;
-  SelectByContent(oNewCity);
-  if(IsBOF() == FALSE)
+  if(SelectByContent(CCities(oCity.m_iId, oCity.m_iRevNumb, oCity.m_szCode)) == TRUE)
     return FALSE;
-  
+
+  if(SelectByContent(CCities(oCity.m_iId, oCity.m_iRevNumb, 0, oCity.m_szName)) == TRUE)
+    return FALSE;
+
   CCities oCurrCity;
   if(SelectWhereId(iId, oCurrCity) == FALSE)
     return FALSE;
   
-  if(oCurrCity.m_iRevNumb != oNewCity.m_iRevNumb)
+  if(oCurrCity.m_iRevNumb != oCity.m_iRevNumb)
     return FALSE;
 
   MoveFirst();  
@@ -126,11 +127,40 @@ BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
 
   Update();
 
+  m_strFilter = _T("");
+  m_strSort = _T("");
+
   return TRUE;
 }
 
 BOOL CCitiesTable::Insert(const CCities &oCity)
 {
+  if(!CanAppend())
+    return FALSE;
+
+  if(SelectByContent(CCities(-1, 0, oCity.m_szCode)) == TRUE)
+    return FALSE;
+
+  if(SelectByContent(CCities(-1, 0, 0, oCity.m_szName)) == TRUE)
+    return FALSE;
+
+  Close();
+  m_strFilter = _T("");
+  m_strSort = _T("");
+  Open(CRecordset::dynaset);
+
+  MoveLast();  
+  int iLastRowId = m_ID;
+  AddNew();
+
+  m_ID = iLastRowId + 1;
+  m_REV_NUMB = 0;
+  m_CODE = oCity.m_szCode;
+  m_NAME = oCity.m_szName;
+  m_AREA = oCity.m_szArea; 
+
+  Update();
+
   return TRUE;
 }
 
@@ -138,12 +168,16 @@ BOOL CCitiesTable::DeleteWhereId(const int iId)
 {
   CCities oCities;
   if(SelectWhereId(iId, oCities) == FALSE)
+  {
+    m_strFilter = _T("");
     return FALSE;
+  }
   
   if(!CanUpdate())
     return FALSE;
 
   Delete();
+  m_strFilter = _T("");
 
   return TRUE;
 }
@@ -180,10 +214,19 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
     Close(); 
 
   m_strSort = _T("");
+  m_strFilter = _T("");
   CString szColFilter;
-  if(_tcslen(oCity.m_szArea))
+  if(oCity.m_iId != -1)
   {
-    szColFilter.Format(_T("AREA LIKE '%%s%'"), oCity.m_szArea);
+    szColFilter.Format(_T("ID != %d"), oCity.m_iId);
+    m_strFilter += szColFilter;
+  }
+  if(_tcslen(oCity.m_szCode))
+  {
+    if(m_strFilter.GetLength())
+      m_strFilter += _T(" AND ");
+
+    szColFilter.Format(_T("CODE = '%s'"), oCity.m_szCode);
     m_strFilter += szColFilter;
   }
   if(_tcslen(oCity.m_szName))
@@ -191,7 +234,16 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
     if(m_strFilter.GetLength())
       m_strFilter += _T(" AND ");
 
-    szColFilter.Format(_T("NAME LIKE '%%s%'"), oCity.m_szName);
+    szColFilter.Format(_T("NAME = '%s'"), oCity.m_szName);
+    m_strFilter += szColFilter;
+  }
+  if(_tcslen(oCity.m_szArea))
+  {
+    if(m_strFilter.GetLength())
+      m_strFilter += _T(" AND ");
+
+    szColFilter.Format(_T("AREA = '%s'"), oCity.m_szArea);
+    m_strFilter += szColFilter;
   }
 
   Open(CRecordset::dynaset);
