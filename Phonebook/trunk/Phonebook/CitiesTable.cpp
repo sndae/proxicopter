@@ -27,7 +27,7 @@ CCitiesTable::CCitiesTable(CDatabase* pdb)
 	m_nFields = 5;
 	m_nDefaultType = dynaset;
 
-  bSQLEn = FALSE;
+  bSQLEn = TRUE;
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -63,20 +63,16 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
 
 BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 {
-  if(IsOpen())
-    Close();  
+  if(!IsOpen())
+    Open(CRecordset::dynaset);
   
-  m_strFilter = _T("");
-  m_strSort   = _T("");
-    
-  Open(CRecordset::dynaset);
-  if(IsBOF() == 0)
+  if(!IsBOF())
   {
-    int iRowCntr = 0;
-    for(int i = 0; IsEOF() == 0; Move(i++))
+    while(!IsEOF())
     {
       CCities *poCity = new CCities(int(m_ID), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer());
-      oCitiesArray.Add(poCity);
+      oCitiesArray.Add(poCity);     
+      MoveNext();
     }
   }
 
@@ -92,7 +88,10 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
   m_strFilter.Format(_T("%d"), iId);
   Open(CRecordset::dynaset);
 
-  Move(0);
+  if(IsBOF())
+    return FALSE; 
+
+  MoveFirst();
   oCity.m_iId = m_ID;
   oCity.m_iRevNumb = m_REV_NUMB;
   _tcscpy(oCity.m_szCode, m_CODE);
@@ -117,7 +116,7 @@ BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
   if(oCurrCity.m_iRevNumb != oNewCity.m_iRevNumb)
     return FALSE;
 
-  Move(0);  
+  MoveFirst();  
   Edit();
   m_ID = oCity.m_iId;
   m_REV_NUMB = oCurrCity.m_iRevNumb + 1;
@@ -137,17 +136,69 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
 
 BOOL CCitiesTable::DeleteWhereId(const int iId)
 {
+  CCities oCities;
+  if(SelectWhereId(iId, oCities) == FALSE)
+    return FALSE;
+  
+  if(!CanUpdate())
+    return FALSE;
+
+  Delete();
 
   return TRUE;
 }
 
-BOOL CCitiesTable::Sort(const int iCol, const BOOL bAsc)
+BOOL CCitiesTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
+  if(IsOpen())
+    Close(); 
+
+  m_strFilter = _T("");
+  switch(eCol)
+  {
+  case eColCode:    
+    bAsc ? m_strSort.Format(_T("%s ASC"), _T("CODE")): m_strSort.Format(_T("%s DESC"), _T("CODE"));
+    break;
+  case eColName:
+    bAsc ? m_strSort.Format(_T("%s ASC"), _T("NAME")): m_strSort.Format(_T("%s DESC"), _T("NAME"));
+    break;
+  case eColArea:
+    bAsc ? m_strSort.Format(_T("%s ASC"), _T("AREA")): m_strSort.Format(_T("%s DESC"), _T("AREA"));
+    break;
+  default:
+    return FALSE;
+  }
+
+  Open(CRecordset::dynaset);
+
   return TRUE;
 }
 
 BOOL CCitiesTable::SelectByContent(const CCities &oCity)
 {
+  if(IsOpen())
+    Close(); 
+
+  m_strSort = _T("");
+  CString szColFilter;
+  if(_tcslen(oCity.m_szArea))
+  {
+    szColFilter.Format(_T("AREA LIKE '%%s%'"), oCity.m_szArea);
+    m_strFilter += szColFilter;
+  }
+  if(_tcslen(oCity.m_szName))
+  {
+    if(m_strFilter.GetLength())
+      m_strFilter += _T(" AND ");
+
+    szColFilter.Format(_T("NAME LIKE '%%s%'"), oCity.m_szName);
+  }
+
+  Open(CRecordset::dynaset);
+
+  if(IsBOF())
+    return FALSE; 
+
   return TRUE;
 }
 

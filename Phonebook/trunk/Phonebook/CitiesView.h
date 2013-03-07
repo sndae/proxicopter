@@ -14,9 +14,10 @@ protected: // create from serialization only
 // Attributes
 public:
 	CCitiesDoc* GetDocument() const;
-protected:
-  int m_iCurrRowSelected;
-
+private:
+  int   m_iCurrRowSelected;
+  BOOL  m_abAscSorting[CCitiesDoc::eCOL_NUMB];
+  CCitiesArray m_CitiesArray;
 // Operations
 public:
 
@@ -30,8 +31,6 @@ protected:
 public:
 	virtual ~CCitiesView();
   void UpdateColumnsContent();
-private:
-  enum eColPos{eCode = 0, eName, eArea};
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -43,7 +42,7 @@ protected:
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
-  OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+  virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 public:
   afx_msg void OnRowFind();

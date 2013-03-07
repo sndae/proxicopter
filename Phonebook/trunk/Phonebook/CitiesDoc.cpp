@@ -64,6 +64,36 @@ BOOL CCitiesDoc::SelectAll(CCitiesArray &oCitiesArray)
   return m_oCityTable.SelectAll(oCitiesArray);
 }
 
+BOOL CCitiesDoc::SelectWhereId(const int iId, CCities &oCity)
+{
+  return m_oCityTable.SelectWhereId(iId, oCity);
+}
+BOOL CCitiesDoc::UpdateWhereId(const int iId, const CCities &oCity)
+{
+  return m_oCityTable.UpdateWhereId(iId, oCity);
+}
+
+BOOL CCitiesDoc::Insert(const CCities &oCity)
+{
+  return m_oCityTable.Insert(oCity);
+}
+
+BOOL CCitiesDoc::DeleteWhereId(const int iId)
+{
+  return m_oCityTable.DeleteWhereId(iId);
+}
+
+BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
+{
+  int iTableCol = (int)eCol + (int)CCitiesTable::eColCode ;
+  return m_oCityTable.SortByColumn((CCitiesTable::eColumn)iTableCol , bAsc);
+}
+
+BOOL CCitiesDoc::SelectByContent(const CCities &oCity)
+{
+  return m_oCityTable.SelectByContent(oCity);
+}
+
 // CCitiesDoc diagnostics
 
 #ifdef _DEBUG

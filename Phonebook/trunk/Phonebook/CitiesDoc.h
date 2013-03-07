@@ -13,7 +13,7 @@ protected: // create from serialization only
 
 // Attributes
 public:
-
+  enum  eColumn{eColCode, eColName, eColArea, eCOL_NUMB};
 // Operations
 public:
 
@@ -26,6 +26,12 @@ public:
 public:
 	virtual ~CCitiesDoc();
   BOOL SelectAll(CCitiesArray &oCitiesArray);
+  BOOL SelectWhereId(const int iId, CCities &oCity);
+  BOOL UpdateWhereId(const int iId, const CCities &oCity);
+  BOOL Insert(const CCities &oCity);
+  BOOL DeleteWhereId(const int iId);
+  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+  BOOL SelectByContent(const CCities &oCity);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

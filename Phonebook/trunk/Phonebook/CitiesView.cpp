@@ -38,12 +38,16 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 {
   if (message == WM_NOTIFY)
   {
+    int iNumb = 0;
     switch(((LPNMHDR)lParam)->code)
     {
       case NM_DBLCLK:        
         break;
       case LVN_COLUMNCLICK:
-        //iCntr = ((LPNMLISTVIEW)lParam)->iSubItem;
+        iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
+        m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
+        GetDocument()->SortByColumn((CCitiesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
+        UpdateColumnsContent();
         break;
       case LVN_ITEMCHANGED:
         m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
@@ -53,7 +57,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
     }
   }
 
-  CListView::OnChildNotify(message, wParam, lParam, pResult);
+  return CListView::OnChildNotify(message, wParam, lParam, pResult);
 }
 
 BOOL CCitiesView::PreCreateWindow(CREATESTRUCT& cs)
@@ -77,33 +81,33 @@ void CCitiesView::OnInitialUpdate()
   CListCtrl& oListCtrl = GetListCtrl();
   oListCtrl.SetExtendedStyle( oListCtrl.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT );
 
-  oListCtrl.InsertColumn(eCode, _T("Код"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(eName, _T("Име"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(eArea, _T("Област"), LVCFMT_LEFT);
-  oListCtrl.SetColumnWidth(eCode, LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(eName, LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(eArea, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.InsertColumn(CCitiesDoc::eColCode, _T("Код"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(CCitiesDoc::eColName, _T("Име"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(CCitiesDoc::eColArea, _T("Област"), LVCFMT_LEFT);
+  oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE_USEHEADER);
 
   UpdateColumnsContent();
+  memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 }
 
 void CCitiesView::UpdateColumnsContent()
 {
-  CCitiesDoc *poDoc = GetDocument();
-  CCitiesArray oCitiesArray;
-  if(poDoc->SelectAll(oCitiesArray) == TRUE)
+  m_CitiesArray.RemoveAndFreeAll();
+  if(GetDocument()->SelectAll(m_CitiesArray) == TRUE)
   {
     CListCtrl& oListCtrl = GetListCtrl();   
     oListCtrl.DeleteAllItems();
-    for(int i = 0; i < oCitiesArray.GetCount(); i++)
+    for(int i = 0; i < m_CitiesArray.GetCount(); i++)
     {
-      int iRowIdx = oListCtrl.InsertItem(eCode, oCitiesArray[i]->m_szCode);
-      oListCtrl.SetItemText(iRowIdx, eName, oCitiesArray[i]->m_szName);
-      oListCtrl.SetItemText(iRowIdx, eArea, oCitiesArray[i]->m_szArea);
+      int iRowIdx = oListCtrl.InsertItem(CCitiesDoc::eColCode, m_CitiesArray[i]->m_szCode);
+      oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColName, m_CitiesArray[i]->m_szName);
+      oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColArea, m_CitiesArray[i]->m_szArea);
     }
-    oListCtrl.SetColumnWidth(eCode, LVSCW_AUTOSIZE_USEHEADER);
-    oListCtrl.SetColumnWidth(eName, LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(eArea, LVSCW_AUTOSIZE);
+    oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
+    oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE);
+    oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE);
   }
 }
 

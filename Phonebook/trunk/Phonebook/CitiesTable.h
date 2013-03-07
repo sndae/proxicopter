@@ -13,6 +13,11 @@ public:
 	CCitiesTable(CDatabase* pDatabase = NULL);
 	DECLARE_DYNAMIC(CCitiesTable)
 
+  //Enumerators
+public:
+  enum  eColumn{cColIdx = 0, eColRevNumb, eColCode, eColName, eColArea, eCOL_NUMB};
+
+
 // Field/Param Data
 
 // The string types below (if present) reflect the actual data type of the
@@ -28,7 +33,6 @@ public:
 	CStringW	m_CODE;
 	CStringW	m_NAME;
 	CStringW	m_AREA;
-
   BOOL bSQLEn;
 
 // Overrides
@@ -43,7 +47,7 @@ public:
   BOOL UpdateWhereId(const int iId, const CCities &oCity);
   BOOL Insert(const CCities &oCity);
   BOOL DeleteWhereId(const int iId);
-  BOOL Sort(const int iCol, const BOOL bAsc);
+  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CCities &oCity);
 // Implementation
 #ifdef _DEBUG

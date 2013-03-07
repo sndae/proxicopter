@@ -5,6 +5,10 @@ template <class ROW_TYPE> class CRowsPtrArray: public CTypedPtrArray<CPtrArray, 
 public:
   ~CRowsPtrArray(void)
   {
+    RemoveAndFreeAll();
+  };
+  void RemoveAndFreeAll()
+  {
     for(int i = 0; i < GetCount(); i++)
     {
       delete GetAt(i);
