@@ -18,7 +18,6 @@
 IMPLEMENT_DYNCREATE(CPhoneTypesView, CListView)
 
 BEGIN_MESSAGE_MAP(CPhoneTypesView, CListView)
-  //ON_COMMAND(ID_ROW_FIND, OnRowFind)
 END_MESSAGE_MAP()
 
 
@@ -78,7 +77,7 @@ void CPhoneTypesView::OnInitialUpdate()
 
 	// TODO: You may populate your ListView with items by directly accessing
 	//  its list control through a call to GetListCtrl().
-  /*
+ 
   long lWndStyle = GetWindowLong(m_hWnd, GWL_STYLE);
   lWndStyle |= LVS_REPORT;
   SetWindowLong(m_hWnd, GWL_STYLE, lWndStyle);  
@@ -86,44 +85,38 @@ void CPhoneTypesView::OnInitialUpdate()
   oListCtrl.SetExtendedStyle( oListCtrl.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT );
 
   oListCtrl.InsertColumn(CPhoneTypesDoc::eColCode, _T("Код"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CPhoneTypesDoc::eColName, _T("Име"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CPhoneTypesDoc::eColArea, _T("Област"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(CPhoneTypesDoc::eColType, _T("Тип телефон"), LVCFMT_LEFT);
   oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColName, LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColArea, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColType, LVSCW_AUTOSIZE_USEHEADER);
 
   UpdateColumnsContent();
   m_iCurrRowSelected = 0;
   memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
-  */
+
 }
 
 void CPhoneTypesView::UpdateColumnsContent()
 {
-  /*
-  m_CitiesArray.RemoveAndFreeAll();
-  if(GetDocument()->SelectAll(m_CitiesArray) == TRUE)
+  m_PhoneTypesArray.RemoveAndFreeAll();
+  if(GetDocument()->SelectAll(m_PhoneTypesArray) == TRUE)
   {
     CListCtrl& oListCtrl = GetListCtrl();   
     oListCtrl.DeleteAllItems();
-    for(int i = m_CitiesArray.GetCount(); i != 0 ; )
+    for(int i = m_PhoneTypesArray.GetCount(); i != 0 ; )
     {
       i--;
-      int iRowIdx = oListCtrl.InsertItem(CPhoneTypesDoc::eColCode, m_CitiesArray[i]->m_szCode);
-      oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColName, m_CitiesArray[i]->m_szName);
-      oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColArea, m_CitiesArray[i]->m_szArea);
+      int iRowIdx = oListCtrl.InsertItem(CPhoneTypesDoc::eColCode, m_PhoneTypesArray[i]->m_szCode);
+      oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColType, m_PhoneTypesArray[i]->m_szType);
     }
     oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-    oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColName, LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColArea, LVSCW_AUTOSIZE);
+    oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColType, LVSCW_AUTOSIZE);
   }
-  */
 }
 
 void CPhoneTypesView::OnRowDbClicked()
 {
   /*
-  CPhoneTypesDlg oEditDlg(*m_CitiesArray[m_iCurrRowSelected]);
+  CPhoneTypesDlg oEditDlg(*m_PhoneTypesArray[m_iCurrRowSelected]);
   if(oEditDlg.DoModal() == IDOK)
   {
     CPhoneTypes oCity;
@@ -181,8 +174,3 @@ CPhoneTypesDoc* CPhoneTypesView::GetDocument() const // non-debug version is inl
 
 
 // CPhoneTypesView message handlers
-
-void CPhoneTypesView::OnRowFind()
-{
-  // TODO: Add your command handler code here
-}

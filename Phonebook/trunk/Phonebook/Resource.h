@@ -10,7 +10,6 @@
 #define IDR_PHONES_TYPE                 131
 #define IDR_SUBSCRIBERS_TYPE            132
 #define IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE 133
-#define IDR_MENU1                       134
 #define IDR_CONTEXT_MENU                134
 #define IDC_CITIES_EDIT_CODE            1000
 #define IDC_CITIES_EDIT_NAME            1001
@@ -20,9 +19,10 @@
 #define IDC_CITY_EDIT_DELETE            1005
 #define IDC_BUTTON2                     1006
 #define IDC_CITY_EDIT_FIND              1006
+#define IDC_BUTTON1                     1007
 #define ID_FIND                         32771
 #define ID_ROW_FIND                     32771
-#define ID_EDIT_DELETE                  32773
+#define ID_OPTIONS_EDIT                 32773
 #define ID_OPTIONS_DELETE               32774
 #define ID_OPTIONS_ADD                  32775
 #define ID_OPTIONS_FIND                 32776
@@ -33,7 +33,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1007
+#define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

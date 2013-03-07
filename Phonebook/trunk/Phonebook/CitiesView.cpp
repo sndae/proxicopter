@@ -19,7 +19,6 @@
 IMPLEMENT_DYNCREATE(CCitiesView, CListView)
 
 BEGIN_MESSAGE_MAP(CCitiesView, CListView)
-  ON_COMMAND(ID_ROW_FIND, OnRowFind)
 END_MESSAGE_MAP()
 
 
@@ -33,44 +32,6 @@ CCitiesView::CCitiesView()
 
 CCitiesView::~CCitiesView()
 {
-}
-
-BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
-{
-  CMenu oCntxMenu;
-  CMenu *pSubMenu = 0;
-  POINT tCur;
-  
-  int iMenuChoice;
-  if (message == WM_NOTIFY)
-  {
-    int iNumb = 0;
-    switch(((LPNMHDR)lParam)->code)
-    {
-      case NM_DBLCLK:  
-        OnRowDbClicked();
-        break;
-      case NM_RCLICK:        
-        oCntxMenu.LoadMenuW(IDR_CONTEXT_MENU);
-        pSubMenu = oCntxMenu.GetSubMenu(0);
-        GetCursorPos(&tCur);
-        iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
-        break;
-      case LVN_COLUMNCLICK:
-        iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
-        m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
-        GetDocument()->SortByColumn((CCitiesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
-        UpdateColumnsContent();
-        break;
-      case LVN_ITEMCHANGED:
-        m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
-        break;
-      default:
-        break;
-    }
-  }
-
-  return CListView::OnChildNotify(message, wParam, lParam, pResult);
 }
 
 BOOL CCitiesView::PreCreateWindow(CREATESTRUCT& cs)
@@ -106,6 +67,49 @@ void CCitiesView::OnInitialUpdate()
   memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 }
 
+BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+  CMenu oCntxMenu;
+  CMenu *pSubMenu = 0;
+  POINT tCur;
+  
+  int iMenuChoice;
+  if (message == WM_NOTIFY)
+  {
+    int iNumb = 0;
+    switch(((LPNMHDR)lParam)->code)
+    {
+      case NM_RCLICK:        
+        oCntxMenu.LoadMenuW(IDR_CONTEXT_MENU);
+        pSubMenu = oCntxMenu.GetSubMenu(0);
+        GetCursorPos(&tCur);
+        iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
+        switch(iMenuChoice)
+        {
+          case ID_OPTIONS_EDIT:   OnRowDbClicked(eCmdUpdate); break;
+          case ID_OPTIONS_DELETE: OnRowDbClicked(eCmdDelete); break;
+          case ID_OPTIONS_ADD:    OnRowDbClicked(eCmdInsert); break;        
+          case ID_OPTIONS_FIND:   OnRowDbClicked(eCmdFind);   break; 
+          default: ASSERT(0); break; 
+        }
+        break;
+      case LVN_COLUMNCLICK:
+        iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
+        m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
+        GetDocument()->SortByColumn((CCitiesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
+        UpdateColumnsContent();
+        break;
+      case LVN_ITEMCHANGED:
+        m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
+        break;
+      default:
+        break;
+    }
+  }
+
+  return CListView::OnChildNotify(message, wParam, lParam, pResult);
+}
+
 void CCitiesView::UpdateColumnsContent()
 {
   m_CitiesArray.RemoveAndFreeAll();
@@ -126,46 +130,48 @@ void CCitiesView::UpdateColumnsContent()
   }
 }
 
-void CCitiesView::OnRowDbClicked()
+void CCitiesView::OnRowDbClicked(eMenuCmd eCmd)
 {
-  CCitiesDlg oEditDlg(*m_CitiesArray[m_iCurrRowSelected]);
+  CCitiesDlg oEditDlg(*m_CitiesArray[m_iCurrRowSelected], eCmd);
   if(oEditDlg.DoModal() == IDOK)
   {
     CCities oCity;
-    switch(oEditDlg.GetCityCmd())
+    switch(eCmd)
     {
-    case CCitiesDlg::eCityUpdate:
+    case eCmdUpdate:
       oCity = oEditDlg.GetCityData();
       if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
       
       break;
-    case CCitiesDlg::eCityInsert:
+    case eCmdInsert:
       oCity = oEditDlg.GetCityData();
       if(GetDocument()->Insert(oCity) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
      
       break;
-    case CCitiesDlg::eCityDelete:
+    case eCmdDelete:
       oCity = oEditDlg.GetCityData();
       GetDocument()->DeleteWhereId(oCity.m_iId);
 
       break;
-    case CCitiesDlg::eCityFind:
+    case eCmdFind:
       oCity = oEditDlg.GetCityData();
       GetDocument()->SelectByContent(oCity);
       UpdateColumnsContent();
       break;
+    default:
+      ASSERT(0);
+      break;
     }
   }
+  
 }
 
 void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
   UpdateColumnsContent();
 }
-
-
 
 // CCitiesView diagnostics
 
@@ -189,8 +195,3 @@ CCitiesDoc* CCitiesView::GetDocument() const // non-debug version is inline
 
 
 // CCitiesView message handlers
-
-void CCitiesView::OnRowFind()
-{
-  // TODO: Add your command handler code here
-}

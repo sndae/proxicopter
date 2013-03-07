@@ -10,10 +10,11 @@
 
 IMPLEMENT_DYNAMIC(CCitiesDlg, CDialog)
 
-CCitiesDlg::CCitiesDlg(const CCities &oCities, CWnd* pParent /*=NULL*/)
+CCitiesDlg::CCitiesDlg(const CCities &oCities, CCitiesView::eMenuCmd eCmd, CWnd* pParent /*=NULL*/)
 	: CDialog(CCitiesDlg::IDD, pParent)
 {
   m_oCity = oCities;
+  m_eMenuCmd = eCmd;
 }
 
 CCitiesDlg::~CCitiesDlg()
@@ -24,9 +25,34 @@ BOOL CCitiesDlg::OnInitDialog()
 {
   if(CDialog::OnInitDialog())
   {
+    switch(m_eMenuCmd)
+    {
+      case CCitiesView::eCmdFind:   
+        SetWindowText(_T("Търси")); 
+        ZeroMemory(&m_oCity, sizeof(m_oCity)); 
+        break;
+      case CCitiesView::eCmdUpdate: 
+        SetWindowText(_T("Редактирай")); 
+        break;
+      case CCitiesView::eCmdInsert: 
+        SetWindowText(_T("Вмъкни")); 
+        ZeroMemory(&m_oCity, sizeof(m_oCity)); 
+        break;
+      case CCitiesView::eCmdDelete: 
+        SetWindowText(_T("Изтрий")); 
+        m_Name.EnableWindow(FALSE); 
+        m_Area.EnableWindow(FALSE);
+        m_Code.EnableWindow(FALSE);
+        break;
+      default: 
+        ASSERT(0);
+        break;
+    }
+
     m_Name.SetWindowTextW(m_oCity.m_szName);
     m_Area.SetWindowTextW(m_oCity.m_szArea);
     m_Code.SetWindowTextW(m_oCity.m_szCode);
+
     return TRUE;
   }
   return FALSE;
@@ -41,60 +67,18 @@ void CCitiesDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CCitiesDlg, CDialog)
-  ON_BN_CLICKED(IDC_CITY_EDIT_UPDATE, &CCitiesDlg::OnBnClickedCityEditUpdate)
-  ON_BN_CLICKED(IDC_CITY_EDIT_INSERT, &CCitiesDlg::OnBnClickedCityEdiInsert)
-  ON_BN_CLICKED(IDC_CITY_EDIT_DELETE, &CCitiesDlg::OnBnClickedCityEditDelete)
-  ON_BN_CLICKED(IDC_CITY_EDIT_FIND, &CCitiesDlg::OnBnClickedCityEditFind)
+  ON_BN_CLICKED(IDOK, &CCitiesDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
 // CCitiesDlg message handlers
 
-void CCitiesDlg::OnBnClickedCityEditUpdate()
+void CCitiesDlg::OnBnClickedOk()
 {
   // TODO: Add your control notification handler code here
-  m_eCityCmd = eCityUpdate;
-
   m_Code.GetWindowTextW(m_oCity.m_szCode, sizeof(m_oCity.m_szCode)/sizeof(m_oCity.m_szCode[0]));
   m_Name.GetWindowTextW(m_oCity.m_szName, sizeof(m_oCity.m_szName)/sizeof(m_oCity.m_szName[0]));
   m_Area.GetWindowTextW(m_oCity.m_szArea, sizeof(m_oCity.m_szArea)/sizeof(m_oCity.m_szArea[0]));
 
-  CDialog::OnOK();
-}
-
-void CCitiesDlg::OnBnClickedCityEdiInsert()
-{
-  // TODO: Add your control notification handler code here
-  m_eCityCmd = eCityInsert;
-
-  m_Code.GetWindowTextW(m_oCity.m_szCode, sizeof(m_oCity.m_szCode)/sizeof(m_oCity.m_szCode[0]));
-  m_Name.GetWindowTextW(m_oCity.m_szName, sizeof(m_oCity.m_szName)/sizeof(m_oCity.m_szName[0]));
-  m_Area.GetWindowTextW(m_oCity.m_szArea, sizeof(m_oCity.m_szArea)/sizeof(m_oCity.m_szArea[0]));
-
-  CDialog::OnOK();
-}
-
-void CCitiesDlg::OnBnClickedCityEditDelete()
-{
-  // TODO: Add your control notification handler code here
-  m_eCityCmd = eCityDelete;
-
-  m_Code.GetWindowTextW(m_oCity.m_szCode, sizeof(m_oCity.m_szCode)/sizeof(m_oCity.m_szCode[0]));
-  m_Name.GetWindowTextW(m_oCity.m_szName, sizeof(m_oCity.m_szName)/sizeof(m_oCity.m_szName[0]));
-  m_Area.GetWindowTextW(m_oCity.m_szArea, sizeof(m_oCity.m_szArea)/sizeof(m_oCity.m_szArea[0]));
-
-  CDialog::OnOK();
-}
-
-void CCitiesDlg::OnBnClickedCityEditFind()
-{
-  // TODO: Add your control notification handler code here
-  // TODO: Add your control notification handler code here
-  m_eCityCmd = eCityFind;
-
-  m_Code.GetWindowTextW(m_oCity.m_szCode, sizeof(m_oCity.m_szCode)/sizeof(m_oCity.m_szCode[0]));
-  m_Name.GetWindowTextW(m_oCity.m_szName, sizeof(m_oCity.m_szName)/sizeof(m_oCity.m_szName[0]));
-  m_Area.GetWindowTextW(m_oCity.m_szArea, sizeof(m_oCity.m_szArea)/sizeof(m_oCity.m_szArea[0]));
-
-  CDialog::OnOK();
+  OnOK();
 }

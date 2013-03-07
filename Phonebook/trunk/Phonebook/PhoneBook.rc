@@ -29,22 +29,19 @@ LANGUAGE LANG_BULGARIAN, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_CITIES_EDIT DIALOGEX 0, 0, 261, 90
+IDD_CITIES_EDIT DIALOGEX 0, 0, 206, 63
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "City"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    PUSHBUTTON      "Cancel",IDCANCEL,204,69,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,115,41,50,15
     LTEXT           "Код",IDC_STATIC,7,7,14,8
     LTEXT           "Име",IDC_STATIC,68,7,14,8
     LTEXT           "Област",IDC_STATIC,140,7,26,8
-    EDITTEXT        IDC_CITIES_EDIT_CODE,7,24,43,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_CITIES_EDIT_NAME,68,24,60,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_CITIES_EDIT_AREA,140,24,59,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "Update",IDC_CITY_EDIT_UPDATE,7,47,44,15
-    PUSHBUTTON      "Add",IDC_CITY_EDIT_INSERT,68,47,50,14
-    PUSHBUTTON      "Delete",IDC_CITY_EDIT_DELETE,140,47,50,14
-    PUSHBUTTON      "Find",IDC_CITY_EDIT_FIND,203,47,50,14
+    EDITTEXT        IDC_CITIES_EDIT_CODE,7,21,43,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CITIES_EDIT_NAME,68,21,60,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CITIES_EDIT_AREA,140,21,59,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Ok",IDOK,55,41,50,15
 END
 
 
@@ -59,13 +56,13 @@ BEGIN
     IDD_CITIES_EDIT, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 254
+        RIGHTMARGIN, 199
         VERTGUIDE, 68
         VERTGUIDE, 140
         TOPMARGIN, 7
-        BOTTOMMARGIN, 83
-        HORZGUIDE, 38
-        HORZGUIDE, 61
+        BOTTOMMARGIN, 56
+        HORZGUIDE, 35
+        HORZGUIDE, 41
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -80,10 +77,10 @@ IDR_CONTEXT_MENU MENU
 BEGIN
     POPUP "Options"
     BEGIN
-        MENUITEM "Edit",                        ID_EDIT_DELETE
-        MENUITEM "Delete",                      ID_OPTIONS_DELETE
-        MENUITEM "Add",                         ID_OPTIONS_ADD
-        MENUITEM "Find",                        ID_OPTIONS_FIND
+        MENUITEM "Редактирай",                  ID_OPTIONS_EDIT
+        MENUITEM "Изтрий",                      ID_OPTIONS_DELETE
+        MENUITEM "Вмъкни",                      ID_OPTIONS_ADD
+        MENUITEM "Търси",                       ID_OPTIONS_FIND
     END
 END
 
@@ -134,6 +131,88 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM SEPARATOR
+        MENUITEM "Lar&ge Icons",                ID_VIEW_LARGEICON
+        MENUITEM "S&mall Icons",                ID_VIEW_SMALLICON
+        MENUITEM "&List",                       ID_VIEW_LIST
+        MENUITEM "&Details",                    ID_VIEW_DETAILS
+        MENUITEM SEPARATOR
+        POPUP "Arrange &Icons"
+        BEGIN
+            MENUITEM "By &Name",                    ID_VIEW_BYNAME
+            MENUITEM SEPARATOR
+            MENUITEM "&Auto Arrange",               ID_VIEW_AUTOARRANGE
+        END
+        MENUITEM "Lin&e up Icons",              ID_VIEW_LINEUP
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About PhoneBook...",         ID_APP_ABOUT
+    END
+END
+
+IDR_CITY_TYPE MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New Window",                 ID_WINDOW_NEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About PhoneBook...",         ID_APP_ABOUT
+    END
+END
 
 
 #ifdef APSTUDIO_INVOKED
@@ -225,88 +304,6 @@ BEGIN
     BUTTON      ID_VIEW_LIST
     BUTTON      ID_VIEW_DETAILS
     BUTTON      ID_APP_ABOUT
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menu
-//
-
-IDR_MAINFRAME MENU 
-BEGIN
-    POPUP "&File"
-    BEGIN
-        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
-        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
-        MENUITEM SEPARATOR
-        MENUITEM "&Close",                      ID_FILE_CLOSE
-        MENUITEM "E&xit",                       ID_APP_EXIT
-    END
-    POPUP "&View"
-    BEGIN
-        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
-        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
-        MENUITEM SEPARATOR
-        MENUITEM "Lar&ge Icons",                ID_VIEW_LARGEICON
-        MENUITEM "S&mall Icons",                ID_VIEW_SMALLICON
-        MENUITEM "&List",                       ID_VIEW_LIST
-        MENUITEM "&Details",                    ID_VIEW_DETAILS
-        MENUITEM SEPARATOR
-        POPUP "Arrange &Icons"
-        BEGIN
-            MENUITEM "By &Name",                    ID_VIEW_BYNAME
-            MENUITEM SEPARATOR
-            MENUITEM "&Auto Arrange",               ID_VIEW_AUTOARRANGE
-        END
-        MENUITEM "Lin&e up Icons",              ID_VIEW_LINEUP
-    END
-    POPUP "&Help"
-    BEGIN
-        MENUITEM "&About PhoneBook...",         ID_APP_ABOUT
-    END
-END
-
-IDR_CITY_TYPE MENU 
-BEGIN
-    POPUP "&File"
-    BEGIN
-        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
-        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
-        MENUITEM "&Close",                      ID_FILE_CLOSE
-        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
-        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
-        MENUITEM SEPARATOR
-        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
-        MENUITEM SEPARATOR
-        MENUITEM "E&xit",                       ID_APP_EXIT
-    END
-    POPUP "&Edit"
-    BEGIN
-        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
-        MENUITEM SEPARATOR
-        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
-        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
-        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
-    END
-    POPUP "&View"
-    BEGIN
-        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
-        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
-    END
-    POPUP "&Window"
-    BEGIN
-        MENUITEM "&New Window",                 ID_WINDOW_NEW
-        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
-        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
-        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
-    END
-    POPUP "&Help"
-    BEGIN
-        MENUITEM "&About PhoneBook...",         ID_APP_ABOUT
-    END
 END
 
 

@@ -66,35 +66,35 @@ void CPhoneTypesDoc::Serialize(CArchive& ar)
 // CPhoneTypesDoc commands
 BOOL CPhoneTypesDoc::SelectAll(CPhoneTypesArray &oCitiesArray)
 {
-  return TRUE;
+  return FALSE;
 }
 
 BOOL CPhoneTypesDoc::SelectWhereId(const int iId, CPhoneTypes &oCity)
 {
-  return TRUE;
+  return FALSE;
 }
 
 BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oCity)
 {
-  return TRUE;
+  return FALSE;
 }
 
 BOOL CPhoneTypesDoc::Insert(const CPhoneTypes &oCity)
 {
-  return TRUE;
+  return FALSE;
 }
 
 BOOL CPhoneTypesDoc::DeleteWhereId(const int iId)
 {
-  return TRUE;
+  return FALSE;
 }
 
 BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
-  return TRUE;
+  return FALSE;
 }
 
 BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oCity)
 {
-  return TRUE;
+  return FALSE;
 }

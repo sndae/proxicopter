@@ -17,7 +17,7 @@ public:
 private:
   int   m_iCurrRowSelected;
   BOOL  m_abAscSorting[CPhoneTypesDoc::eCOL_NUMB];
-  CPhoneTypesArray m_CitiesArray;
+  CPhoneTypesArray m_PhoneTypesArray;
 // Operations
 public:
 
@@ -45,7 +45,6 @@ protected:
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 public:
-  afx_msg void OnRowFind();
   void OnRowDbClicked();
 };
 

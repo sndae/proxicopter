@@ -3,7 +3,7 @@
 
 
 #pragma once
-
+#include "CitiesDoc.h"
 
 class CCitiesView : public CListView
 {
@@ -14,6 +14,8 @@ protected: // create from serialization only
 // Attributes
 public:
 	CCitiesDoc* GetDocument() const;
+  enum eMenuCmd{eCmdUpdate = 0, eCmdInsert, eCmdDelete, eCmdFind};
+
 private:
   int   m_iCurrRowSelected;
   BOOL  m_abAscSorting[CCitiesDoc::eCOL_NUMB];
@@ -45,8 +47,7 @@ protected:
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 public:
-  afx_msg void OnRowFind();
-  void OnRowDbClicked();
+  void OnRowDbClicked(eMenuCmd eCmd);
 };
 
 #ifndef _DEBUG  // debug version in CitiesView.cpp
