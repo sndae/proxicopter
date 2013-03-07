@@ -14,11 +14,15 @@ protected: // create from serialization only
 // Attributes
 public:
 	CCitiesDoc* GetDocument() const;
+  /* Изброяване възможните команди, които контекстното меню подържа */
   enum eMenuCmd{eCmdUpdate = 0, eCmdInsert, eCmdDelete, eCmdFind};
 
 private:
+  /* Текущият избран ред от списъка */
   int   m_iCurrRowSelected;
+ /* Масив указващ начина на сортиране на всяка една от колоните */
   BOOL  m_abAscSorting[CCitiesDoc::eCOL_NUMB];
+  /* Масив от указатели към данни за всеки ред от листът */
   CCitiesArray m_CitiesArray;
 // Operations
 public:
@@ -47,7 +51,7 @@ protected:
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 public:
-  void OnRowDbClicked(eMenuCmd eCmd);
+  void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 };
 
 #ifndef _DEBUG  // debug version in CitiesView.cpp

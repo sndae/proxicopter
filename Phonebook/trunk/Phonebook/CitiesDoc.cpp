@@ -74,6 +74,7 @@ BOOL CCitiesDoc::UpdateWhereId(const int iId, const CCities &oCity)
   if(!bRes)
     return FALSE;
 
+  /* индициране за извършени промени по съдържанието на таблицата */
   SetModifiedFlag();
   UpdateAllViews(0);
     
@@ -86,6 +87,7 @@ BOOL CCitiesDoc::Insert(const CCities &oCity)
   if(!bRes)
     return FALSE;
 
+  /* индициране за извършени промени по съдържанието на таблицата */
   SetModifiedFlag();
   UpdateAllViews(0);
   
@@ -98,6 +100,7 @@ BOOL CCitiesDoc::DeleteWhereId(const int iId)
   if(!bRes)
     return FALSE;
 
+  /* индициране за извършени промени по съдържанието на таблицата */
   SetModifiedFlag();
   UpdateAllViews(0);
   
@@ -106,6 +109,7 @@ BOOL CCitiesDoc::DeleteWhereId(const int iId)
 
 BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
+  /* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
   int iTableCol = (int)eCol + (int)CCitiesTable::eColCode ;
   return m_oCityTable.SortByColumn((CCitiesTable::eColumn)iTableCol , bAsc);
 }
@@ -113,6 +117,7 @@ BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 BOOL CCitiesDoc::SelectByContent(const CCities &oCity)
 {
   CCities oModCity = oCity;
+  /* търсенето да включи всички записи */ 
   oModCity.m_iId = -1;
   return m_oCityTable.SelectByContent(oModCity);
 }

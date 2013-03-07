@@ -27,7 +27,7 @@ CCitiesTable::CCitiesTable(CDatabase* pdb)
 	m_nFields = 5;
 	m_nDefaultType = dynaset;
 
-  bSQLEn = TRUE;
+  m_bSQLEn = TRUE;
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -36,12 +36,15 @@ CCitiesTable::CCitiesTable(CDatabase* pdb)
 // store the password in some other form or use a different user authentication.
 CString CCitiesTable::GetDefaultConnect()
 {
-	return _T("DSN=SQLExpress;Trusted_Connection=Yes;APP=Microsoft\x00ae Visual Studio\x00ae 2008;WSID=PROXIMUS-PC;DATABASE=phonebook");
+  if(m_bSQLEn)
+  	return _T("DSN=SQLExpress;Trusted_Connection=Yes;APP=Microsoft\x00ae Visual Studio\x00ae 2008;WSID=PROXIMUS-PC;DATABASE=phonebook");
+  else
+    return _T("");
 }
 
 CString CCitiesTable::GetDefaultSQL()
 {
-  if(bSQLEn)
+  if(m_bSQLEn)
   	return _T("[dbo].[CITIES]");
   else
     return _T("[Cities$]");
@@ -65,11 +68,22 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 {
   if(IsOpen())
     Close();
-
-  Open(CRecordset::dynaset);
   
+  try
+  {
+   Open(CRecordset::dynaset);
+  }
+  catch(CDBException *)
+  {
+    /* В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
+       този път със запитване на потребителят. Очаква се че ще се окаже XLS файл */
+    m_bSQLEn = FALSE;
+    Open(CRecordset::dynaset);
+  }
+    
   if(!IsBOF())
   {
+    /* запъвлване на масива с указатели към данни на редове от таблицата */
     while(!IsEOF())
     {
       CCities *poCity = new CCities(int(m_ID), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer());
@@ -104,9 +118,11 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
 
 BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
 {
+  /* Проверка дали има друг запис със такова име на град */
   if(SelectByContent(CCities(oCity.m_iId, oCity.m_iRevNumb, oCity.m_szCode)) == TRUE)
     return FALSE;
 
+  /* Проверка дали има друг запис със такъва код на град */
   if(SelectByContent(CCities(oCity.m_iId, oCity.m_iRevNumb, 0, oCity.m_szName)) == TRUE)
     return FALSE;
 
@@ -138,9 +154,11 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
   if(!CanAppend())
     return FALSE;
 
+  /* Проверка дали има запис със такова име на град */
   if(SelectByContent(CCities(-1, 0, oCity.m_szCode)) == TRUE)
     return FALSE;
 
+  /* Проверка дали има запис със такъв код на град */
   if(SelectByContent(CCities(-1, 0, 0, oCity.m_szName)) == TRUE)
     return FALSE;
 
@@ -150,6 +168,7 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
   Open(CRecordset::dynaset);
 
   MoveLast();  
+  /* буфериране ID на последният ред от раблицата */ 
   int iLastRowId = m_ID;
   AddNew();
 
@@ -218,9 +237,11 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
   CString szColFilter;
   if(oCity.m_iId != -1)
   {
+    /* изключване на текущият запис от по-нататъшното филтриране */
     szColFilter.Format(_T("ID != %d"), oCity.m_iId);
     m_strFilter += szColFilter;
   }
+  /* формиране на низ за филтриране, на база наличните в структурата ненулеви записи */
   if(_tcslen(oCity.m_szCode))
   {
     if(m_strFilter.GetLength())

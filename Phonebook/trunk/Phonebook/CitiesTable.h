@@ -15,6 +15,7 @@ public:
 
   //Enumerators
 public:
+  /* Изброяване имената на полетата и техните номера */
   enum  eColumn{cColIdx = 0, eColRevNumb, eColCode, eColName, eColArea, eCOL_NUMB};
 
 
@@ -33,7 +34,8 @@ public:
 	CStringW	m_CODE;
 	CStringW	m_NAME;
 	CStringW	m_AREA;
-  BOOL bSQLEn;
+  /* Флаг разрешаващ търсенето на DSN:SQLEXPRESS */
+  BOOL m_bSQLEn;
 
 // Overrides
 	// Wizard generated virtual function overrides

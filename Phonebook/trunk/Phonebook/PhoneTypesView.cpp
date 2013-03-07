@@ -42,7 +42,7 @@ BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, 
     switch(((LPNMHDR)lParam)->code)
     {
       case NM_DBLCLK:  
-        OnRowDbClicked();
+        ExecuteCntxMenuCmd();
         break;
       case LVN_COLUMNCLICK:
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
@@ -113,7 +113,7 @@ void CPhoneTypesView::UpdateColumnsContent()
   }
 }
 
-void CPhoneTypesView::OnRowDbClicked()
+void CPhoneTypesView::ExecuteCntxMenuCmd()
 {
   /*
   CPhoneTypesDlg oEditDlg(*m_PhoneTypesArray[m_iCurrRowSelected]);

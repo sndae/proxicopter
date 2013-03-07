@@ -13,7 +13,8 @@ protected: // create from serialization only
 
 // Attributes
 public:
-  enum  eColumn{eColCode, eColName, eColArea, eCOL_NUMB};
+  /* »збро€ване имената на колоните и техните номера */
+  enum  eColumn{eColCode = 0, eColName, eColArea, eCOL_NUMB};
 // Operations
 public:
 

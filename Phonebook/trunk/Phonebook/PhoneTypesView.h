@@ -45,7 +45,7 @@ protected:
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 public:
-  void OnRowDbClicked();
+  void ExecuteCntxMenuCmd();
 };
 
 #ifndef _DEBUG  // debug version in CitiesView.cpp
