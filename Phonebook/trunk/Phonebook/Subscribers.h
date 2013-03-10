@@ -1,7 +1,7 @@
 #pragma once
 #include "RowsPtrArray.h"
 #define SUBSCRIBERS_TABLE_STRING_MAX_LEN   (64)
-#define SUBSCRIBERS_ID_NUMB_LEN			    (10)
+#define SUBSCRIBERS_ID_NUMB_LEN			       (11)
 
 struct CSubscribers
 {

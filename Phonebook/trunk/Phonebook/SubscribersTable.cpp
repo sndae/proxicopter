@@ -64,12 +64,12 @@ void CSubscribersTable::DoFieldExchange(CFieldExchange* pFX)
   RFX_Long(pFX, _T("[ID]"), m_ID);
   RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
   RFX_Long(pFX, _T("[CODE]"), m_CODE);
-  RFX_Text(pFX, _T("[FIRST_NAME  ]"), m_FIRST_NAME);
-  RFX_Text(pFX, _T("[SECOND_NAME ]"), m_SECOND_NAME);
-  RFX_Text(pFX, _T("[THIRD_NAME  ]"), m_THIRD_NAME);
-  RFX_Text(pFX, _T("[IDENT_NUMB	 ]"), m_IDENT_NUMB);
-  RFX_Long(pFX, _T("[CITY_ID     ]"), m_CITY_ID);
-  RFX_Text(pFX, _T("[CITY_ADDR	 ]"), m_CITY_ADDR);
+  RFX_Text(pFX, _T("[FIRST_NAME]"), m_FIRST_NAME);
+  RFX_Text(pFX, _T("[SECOND_NAME]"), m_SECOND_NAME);
+  RFX_Text(pFX, _T("[THIRD_NAME]"), m_THIRD_NAME);
+  RFX_Text(pFX, _T("[IDENT_NUMB]"), m_IDENT_NUMB);
+  RFX_Long(pFX, _T("[CITY_ID]"), m_CITY_ID);
+  RFX_Text(pFX, _T("[CITY_ADDR]"), m_CITY_ADDR);
 }
 
 BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
@@ -94,10 +94,8 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
     /* запъвлване на масива с указатели към данни на редове от таблицата */
     while(!IsEOF())
     {
-      CCities oCity;
-      m_oCitiesTable.SelectWhereId(m_CITY_ID, oCity);
-      CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), int(m_CODE), m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
-                                                     m_THIRD_NAME.GetBuffer(), m_IDENT_NUMB.GetBuffer(), oCity.m_szCode, m_CITY_ADDR.GetBuffer());
+      CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), m_CODE, GetCityCodeByCityId(m_CITY_ID), m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
+                                                     m_THIRD_NAME.GetBuffer(), m_IDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
       oSubscribersArray.Add(poSubscribers);     
       MoveNext();
     }
@@ -261,13 +259,13 @@ BOOL CSubscribersTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
   return TRUE;
 }
 
-TCHAR* CSubscribersTable::GetCityCodeByCityId(const int iCityId)
+CString CSubscribersTable::GetCityCodeByCityId(const int iCityId)
 {
   CCities oCity;
   if(!m_oCitiesTable.SelectWhereId(iCityId, oCity))
-    return 0;
+    return FALSE;
 
-  return oCity.m_szCode;
+  return CString(oCity.m_szCode);
 }
 
 int CSubscribersTable::GetCityIdByCityCode(const TCHAR *pszCityCode)

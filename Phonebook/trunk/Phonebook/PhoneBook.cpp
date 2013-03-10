@@ -10,6 +10,8 @@
 #include "CitiesView.h"
 #include "PhoneTypesDoc.h"
 #include "PhoneTypesView.h"
+#include "SubscribersDoc.h"
+#include "SubscribersView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -88,6 +90,15 @@ BOOL CPhoneBookApp::InitInstance()
 		RUNTIME_CLASS(CPhoneTypesDoc),
 		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
 		RUNTIME_CLASS(CPhoneTypesView));
+
+	if (!pDocTemplate)
+		return FALSE;
+	AddDocTemplate(pDocTemplate);
+
+  pDocTemplate = new CMultiDocTemplate(IDR_SUBSCRIBERS_TYPE,
+		RUNTIME_CLASS(CSubscribersDoc),
+		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+		RUNTIME_CLASS(CSubscribersView));
 
 	if (!pDocTemplate)
 		return FALSE;

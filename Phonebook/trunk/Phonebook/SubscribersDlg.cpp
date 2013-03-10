@@ -75,13 +75,13 @@ BOOL CSubscribersDlg::OnInitDialog()
 void CSubscribersDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_CODE       , m_Code);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_CITY_CODE  , m_FirstName);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_ADDRESS    , m_SecondName);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_FIRST_NAME , m_ThirdName);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_SECOND_NAME, m_IDNumber);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_IDNUMBER   , m_CityCode);
-  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_THIRD_NAME , m_Address);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_CODE, m_Code);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_FIRST_NAME, m_FirstName);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_SECOND_NAME, m_SecondName);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_THIRD_NAME, m_ThirdName);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_IDNUMBER, m_IDNumber);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_CITY_CODE, m_CityCode);
+  DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_ADDRESS, m_Address);
 }
 
 

@@ -59,7 +59,7 @@ public:
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CSubscribers &oCity);
   /* Функции за достъп до таблица "Градове */
-  TCHAR* GetCityCodeByCityId(const int iCityId);
+  CString GetCityCodeByCityId(const int iCityId);
   int    GetCityIdByCityCode(const TCHAR *pszCityCode);
 // Implementation
 #ifdef _DEBUG
