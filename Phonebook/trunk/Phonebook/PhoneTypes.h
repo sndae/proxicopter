@@ -6,15 +6,15 @@ struct CPhoneTypes
 {
   int   m_iId;
   int   m_iRevNumb;
+  int   m_iCode;
   TCHAR m_szType[PHONETYPES_TABLE_STRING_MAX_LEN];
-  TCHAR m_szCode[PHONETYPES_TABLE_STRING_MAX_LEN];  
   
-  CPhoneTypes(const int iId = 0, const int iRevNumb = 0, const TCHAR *pszCode = 0, const TCHAR *pszType = 0)
+  CPhoneTypes(const int iId = 0, const int iRevNumb = 0, const int iCode = -1, const TCHAR *pszType = 0)
   {
     ZeroMemory(this, sizeof(*this));
     m_iId = iId;
     m_iRevNumb = iRevNumb;
-    if(pszCode)_tcscpy(m_szCode, pszCode);
+    m_iCode = iCode;
     if(pszType)_tcscpy(m_szType, pszType);  
   }
 };

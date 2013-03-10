@@ -1,16 +1,33 @@
-// PhoneTypesDoc.cpp : implementation file
+// PhoneTypesDoc.cpp : implementation of the CPhoneTypesDoc class
 //
 
 #include "stdafx.h"
 #include "PhoneBook.h"
+
 #include "PhoneTypesDoc.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
 
 
 // CPhoneTypesDoc
 
 IMPLEMENT_DYNCREATE(CPhoneTypesDoc, CDocument)
 
+BEGIN_MESSAGE_MAP(CPhoneTypesDoc, CDocument)
+END_MESSAGE_MAP()
+
+
+// CPhoneTypesDoc construction/destruction
+
 CPhoneTypesDoc::CPhoneTypesDoc()
+{
+  // TODO: add one-time construction code here
+
+}
+
+CPhoneTypesDoc::~CPhoneTypesDoc()
 {
 }
 
@@ -18,35 +35,16 @@ BOOL CPhoneTypesDoc::OnNewDocument()
 {
   if (!CDocument::OnNewDocument())
     return FALSE;
+
+  // TODO: add reinitialization code here
+  // (SDI documents will reuse this document)
+
   return TRUE;
 }
 
-CPhoneTypesDoc::~CPhoneTypesDoc()
-{
-}
 
 
-BEGIN_MESSAGE_MAP(CPhoneTypesDoc, CDocument)
-END_MESSAGE_MAP()
 
-
-// CPhoneTypesDoc diagnostics
-
-#ifdef _DEBUG
-void CPhoneTypesDoc::AssertValid() const
-{
-  CDocument::AssertValid();
-}
-
-#ifndef _WIN32_WCE
-void CPhoneTypesDoc::Dump(CDumpContext& dc) const
-{
-  CDocument::Dump(dc);
-}
-#endif
-#endif //_DEBUG
-
-#ifndef _WIN32_WCE
 // CPhoneTypesDoc serialization
 
 void CPhoneTypesDoc::Serialize(CArchive& ar)
@@ -60,41 +58,83 @@ void CPhoneTypesDoc::Serialize(CArchive& ar)
     // TODO: add loading code here
   }
 }
-#endif
 
-
-// CPhoneTypesDoc commands
-BOOL CPhoneTypesDoc::SelectAll(CPhoneTypesArray &oCitiesArray)
+BOOL CPhoneTypesDoc::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 {
-  return FALSE;
+  return m_oPhoneTypesTable.SelectAll(oPhoneTypesArray);
 }
 
 BOOL CPhoneTypesDoc::SelectWhereId(const int iId, CPhoneTypes &oCity)
 {
-  return FALSE;
+  return m_oPhoneTypesTable.SelectWhereId(iId, oCity);
 }
-
 BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oCity)
 {
-  return FALSE;
+  BOOL bRes = m_oPhoneTypesTable.UpdateWhereId(iId, oCity);
+  if(!bRes)
+    return FALSE;
+
+  /* индициране за извършени промени по съдържанието на таблицата */
+  SetModifiedFlag();
+  UpdateAllViews(0);
+    
+  return bRes;
 }
 
 BOOL CPhoneTypesDoc::Insert(const CPhoneTypes &oCity)
 {
-  return FALSE;
+  BOOL bRes = m_oPhoneTypesTable.Insert(oCity);
+  if(!bRes)
+    return FALSE;
+
+  /* индициране за извършени промени по съдържанието на таблицата */
+  SetModifiedFlag();
+  UpdateAllViews(0);
+  
+  return bRes;
 }
 
 BOOL CPhoneTypesDoc::DeleteWhereId(const int iId)
 {
-  return FALSE;
+  BOOL bRes = m_oPhoneTypesTable.DeleteWhereId(iId);
+  if(!bRes)
+    return FALSE;
+
+  /* индициране за извършени промени по съдържанието на таблицата */
+  SetModifiedFlag();
+  UpdateAllViews(0);
+  
+  return bRes;
 }
 
 BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
-  return FALSE;
+  /* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
+  int iTableCol = (int)eCol + (int)CPhoneTypesTable::eColCode ;
+  return m_oPhoneTypesTable.SortByColumn((CPhoneTypesTable::eColumn)iTableCol , bAsc);
 }
 
 BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oCity)
 {
-  return FALSE;
+  CPhoneTypes oModCity = oCity;
+  /* търсенето да включи всички записи */ 
+  oModCity.m_iId = -1;
+  return m_oPhoneTypesTable.SelectByContent(oModCity);
 }
+
+// CPhoneTypesDoc diagnostics
+
+#ifdef _DEBUG
+void CPhoneTypesDoc::AssertValid() const
+{
+  CDocument::AssertValid();
+}
+
+void CPhoneTypesDoc::Dump(CDumpContext& dc) const
+{
+  CDocument::Dump(dc);
+}
+#endif //_DEBUG
+
+
+// CPhoneTypesDoc commands

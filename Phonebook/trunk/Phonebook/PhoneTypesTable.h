@@ -1,14 +1,23 @@
-// PhoneTypesTable.h : Declaration of the CPhoneTypesTable
+// PhoneTypesTable.h: interface of the CPhoneTypesTable class
+//
+
 
 #pragma once
 
-// code generated on 07 март 2013 г., 20:47 ч.
+// code generated on 05 март 2013 г., 19:08 ч.
 #include "PhoneTypes.h"
-class CPhoneTypesTable : public CRecordset
+
+class CPhoneTypesTable : private CRecordset
 {
 public:
-  CPhoneTypesTable(CDatabase* pDatabase = NULL);
-  DECLARE_DYNAMIC(CPhoneTypesTable)
+	CPhoneTypesTable(CDatabase* pDatabase = NULL);
+	DECLARE_DYNAMIC(CPhoneTypesTable)
+
+  //Enumerators
+public:
+  /* Изброяване имената на полетата и техните номера */
+  enum  eColumn{cColIdx = 0, eColRevNumb, eColCode, eColType, eCOL_NUMB};
+
 
 // Field/Param Data
 
@@ -24,15 +33,23 @@ public:
   long	m_REV_NUMB;
   long	m_CODE;
   CStringW	m_PHONE_TYPE;
+  /* Флаг разрешаващ търсенето на DSN:SQLEXPRESS */
+  BOOL m_bSQLEn;
 
-  // Overrides
-  // Wizard generated virtual function overrides
-  public:
+// Overrides
+	// Wizard generated virtual function overrides
+public:
   virtual CString GetDefaultConnect();	// Default connection string
-  
   virtual CString GetDefaultSQL(); 	// default SQL for Recordset
   virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
+  BOOL SelectAll(CPhoneTypesArray &oPhoneTypesArray);
+  BOOL SelectWhereId(const int iId, CPhoneTypes &oCity);
+  BOOL UpdateWhereId(const int iId, const CPhoneTypes &oCity);
+  BOOL Insert(const CPhoneTypes &oCity);
+  BOOL DeleteWhereId(const int iId);
+  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+  BOOL SelectByContent(const CPhoneTypes &oCity);
 // Implementation
 #ifdef _DEBUG
   virtual void AssertValid() const;
@@ -40,5 +57,4 @@ public:
 #endif
 
 };
-
 

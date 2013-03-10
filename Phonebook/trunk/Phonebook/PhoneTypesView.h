@@ -1,55 +1,62 @@
-// CitiesView.h : interface of the CPhoneTypesView class
+// PhoneTypesView.h : interface of the CPhoneTypesView class
 //
 
 
 #pragma once
-
+#include "PhoneTypesDoc.h"
 
 class CPhoneTypesView : public CListView
 {
 protected: // create from serialization only
-  CPhoneTypesView();
-  DECLARE_DYNCREATE(CPhoneTypesView)
+	CPhoneTypesView();
+	DECLARE_DYNCREATE(CPhoneTypesView)
 
 // Attributes
 public:
-  CPhoneTypesDoc* GetDocument() const;
+	CPhoneTypesDoc* GetDocument() const;
+  /* Изброяване възможните команди, които контекстното меню подържа */
+  enum eMenuCmd{eCmdUpdate = 0, eCmdInsert, eCmdDelete, eCmdFind};
+
 private:
+  /* Текущият избран ред от списъка */
   int   m_iCurrRowSelected;
+ /* Масив указващ начина на сортиране на всяка една от колоните */
   BOOL  m_abAscSorting[CPhoneTypesDoc::eCOL_NUMB];
+  /* Масив от указатели към данни за всеки ред от листът. Необходим е, тъй като ID и rev_numb на всеки 
+     ред, не се визуализират. Т.е. те трябва да се съхваняват, с цел използване в случай на редакция */
   CPhoneTypesArray m_PhoneTypesArray;
 // Operations
 public:
 
 // Overrides
 public:
-  virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
-  virtual void OnInitialUpdate(); // called first time after construct
-
+	virtual void OnInitialUpdate(); // called first time after construct
+  virtual void OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint);
 // Implementation
 public:
-  virtual ~CPhoneTypesView();
+	virtual ~CPhoneTypesView();
   void UpdateColumnsContent();
 
 #ifdef _DEBUG
-  virtual void AssertValid() const;
-  virtual void Dump(CDumpContext& dc) const;
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:
 
 // Generated message map functions
 protected:
-  DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 public:
-  void ExecuteCntxMenuCmd();
+  void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 };
 
-#ifndef _DEBUG  // debug version in CitiesView.cpp
+#ifndef _DEBUG  // debug version in PhoneTypesView.cpp
 inline CPhoneTypesDoc* CPhoneTypesView::GetDocument() const
-  { return reinterpret_cast<CPhoneTypesDoc*>(m_pDocument); }
+   { return reinterpret_cast<CPhoneTypesDoc*>(m_pDocument); }
 #endif
 

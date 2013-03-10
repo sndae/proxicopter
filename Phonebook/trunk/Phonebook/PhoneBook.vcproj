@@ -243,6 +243,10 @@
 				Name="PhoneTypes"
 				>
 				<File
+					RelativePath=".\PhoneTypesDlg.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\PhoneTypesDoc.cpp"
 					>
 				</File>
@@ -318,6 +322,10 @@
 				>
 				<File
 					RelativePath=".\PhoneTypes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PhoneTypesDlg.h"
 					>
 				</File>
 				<File
