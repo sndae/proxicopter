@@ -27,12 +27,12 @@ public:
 public:
 	virtual ~CPhoneTypesDoc();
   BOOL SelectAll(CPhoneTypesArray &oPhoneTypesArray);
-  BOOL SelectWhereId(const int iId, CPhoneTypes &oCity);
-  BOOL UpdateWhereId(const int iId, const CPhoneTypes &oCity);
-  BOOL Insert(const CPhoneTypes &oCity);
+  BOOL SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes);
+  BOOL UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTypes);
+  BOOL Insert(const CPhoneTypes &oPhoneTypes);
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
-  BOOL SelectByContent(const CPhoneTypes &oCity);
+  BOOL SelectByContent(const CPhoneTypes &oPhoneTypes);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

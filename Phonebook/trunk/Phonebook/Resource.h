@@ -12,6 +12,7 @@
 #define IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE 133
 #define IDR_CONTEXT_MENU                134
 #define IDD_PHONETYPES_EDIT             135
+#define IDD_SUBSCRIBERS_EDIT            136
 #define IDC_CITIES_EDIT_CODE            1000
 #define IDC_CITIES_EDIT_NAME            1001
 #define IDC_CITIES_EDIT_AREA            1002
@@ -22,8 +23,15 @@
 #define IDC_CITY_EDIT_FIND              1006
 #define IDC_BUTTON1                     1007
 #define IDC_PHONETYPES_EDIT_CODE        1008
-#define IDC_EDIT2                       1009
 #define IDC_PHONETYPES_EDIT_TYPES       1009
+#define IDC_SUBSCRIBERS_EDIT_CODE       1010
+#define IDC_SUBSCRIBERS_EDIT_CITY_CODE  1011
+#define IDC_EDIT3                       1012
+#define IDC_SUBSCRIBERS_EDIT_ADDRESS    1012
+#define IDC_SUBSCRIBERS_EDIT_FIRST_NAME 1013
+#define IDC_SUBSCRIBERS_EDIT_SECOND_NAME 1014
+#define IDC_SUBSCRIBERS_EDIT_IDNUMBER   1015
+#define IDC_SUBSCRIBERS_EDIT_THIRD_NAME 1016
 #define ID_FIND                         32771
 #define ID_ROW_FIND                     32771
 #define ID_OPTIONS_EDIT                 32773
@@ -35,9 +43,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1010
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
