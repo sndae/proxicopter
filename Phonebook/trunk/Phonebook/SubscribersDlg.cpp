@@ -10,11 +10,12 @@
 
 IMPLEMENT_DYNAMIC(CSubscribersDlg, CDialog)
 
-CSubscribersDlg::CSubscribersDlg(const CSubscribers &oSubscribers, CSubscribersView::eMenuCmd eCmd, CWnd* pParent /*=NULL*/)
+CSubscribersDlg::CSubscribersDlg(const CSubscribers &oSubscribers, CSubscribersView::eMenuCmd eCmd, CCitiesArray *pCitiesArray, CWnd* pParent /*=NULL*/)
 	: CDialog(CSubscribersDlg::IDD, pParent)
 {
   m_oSubscribers = oSubscribers;
   m_eMenuCmd = eCmd;
+  m_pCitiesArray = pCitiesArray;
 }
 
 CSubscribersDlg::~CSubscribersDlg()
@@ -58,6 +59,11 @@ BOOL CSubscribersDlg::OnInitDialog()
     m_SecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
     m_ThirdName.SetWindowTextW(m_oSubscribers.m_szThirdName);
     m_IDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
+    if(m_pCitiesArray)
+    {
+      for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
+        m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
+    }
     m_CityCode.SetWindowTextW(m_oSubscribers.m_szCityCode);
     m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
 

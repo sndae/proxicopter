@@ -58,6 +58,7 @@ public:
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CSubscribers &oCity);
+  BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
   /* Функции за достъп до таблица "Градове */
   CString GetCityCodeByCityId(const int iCityId);
   int    GetCityIdByCityCode(const TCHAR *pszCityCode);

@@ -21,7 +21,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\Phonebook"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_SQL_DE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -143,6 +143,9 @@
 				Name="Cities"
 				Filter="">
 				<File
+					RelativePath=".\Phonebook\CitiesDlg.cpp">
+				</File>
+				<File
 					RelativePath=".\Phonebook\CitiesDoc.cpp">
 				</File>
 				<File
@@ -150,6 +153,38 @@
 				</File>
 				<File
 					RelativePath=".\Phonebook\CitiesView.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="PhoneTypes"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\PhoneTypesDlg.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesDoc.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesTable.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesView.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="Subscribers"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\SubscribersDlg.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersDoc.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersTable.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersView.cpp">
 				</File>
 			</Filter>
 		</Filter>
@@ -185,6 +220,9 @@
 					RelativePath=".\Phonebook\Cities.h">
 				</File>
 				<File
+					RelativePath=".\Phonebook\CitiesDlg.h">
+				</File>
+				<File
 					RelativePath=".\Phonebook\CitiesDoc.h">
 				</File>
 				<File
@@ -192,6 +230,44 @@
 				</File>
 				<File
 					RelativePath=".\Phonebook\CitiesView.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="PhoneTypes"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\PhoneTypes.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesDlg.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesDoc.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesTable.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\PhoneTypesView.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="Subscribers"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\Subscribers.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersDlg.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersDoc.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersTable.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscribersView.h">
 				</File>
 			</Filter>
 		</Filter>

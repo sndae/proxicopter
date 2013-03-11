@@ -32,7 +32,11 @@ CSubscribersTable::CSubscribersTable(CDatabase* pdb)
   m_nFields = 9;
   m_nDefaultType = dynaset;
 
+#if (_SQL_DE)
+  m_bSQLEn = FALSE;
+#else
   m_bSQLEn = TRUE;
+#endif
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -77,19 +81,20 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
   if(IsOpen())
     Close();
   
+  BOOL bRes = FALSE;
   try
   {
-   Open(CRecordset::dynaset);
+   bRes= Open(CRecordset::dynaset);
   }
   catch(CDBException *)
   {
     /* В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
        този път със запитване на потребителят. Очаква се че ще се окаже XLS файл */
     m_bSQLEn = FALSE;
-    Open(CRecordset::dynaset);
+    bRes = Open(CRecordset::dynaset);
   }
     
-  if(!IsBOF())
+  if(bRes && !IsBOF())
   {
     /* запъвлване на масива с указатели към данни на редове от таблицата */
     while(!IsEOF())
@@ -362,6 +367,16 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
   return TRUE;
 }
 
+BOOL CSubscribersTable::SelectAllCityCodes(CCitiesArray &oCitiesArray)
+{
+  if(!m_oCitiesTable.SelectByContent(CCities(-1)))
+    return FALSE;
+
+  if(!m_oCitiesTable.SelectAll(oCitiesArray))
+    return FALSE;
+
+  return TRUE;
+}
 /////////////////////////////////////////////////////////////////////////////
 // CSubscribersTable diagnostics
 

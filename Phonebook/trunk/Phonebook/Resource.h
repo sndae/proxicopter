@@ -26,6 +26,7 @@
 #define IDC_PHONETYPES_EDIT_TYPES       1009
 #define IDC_SUBSCRIBERS_EDIT_CODE       1010
 #define IDC_SUBSCRIBERS_EDIT_CITY_CODE  1011
+#define IDC_COMBO1                      1011
 #define IDC_EDIT3                       1012
 #define IDC_SUBSCRIBERS_EDIT_ADDRESS    1012
 #define IDC_SUBSCRIBERS_EDIT_FIRST_NAME 1013
@@ -45,7 +46,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1011
+#define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

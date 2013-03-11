@@ -168,7 +168,9 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   if(m_SubscribersArray.GetCount())
     oSubscribers = *m_SubscribersArray[m_iCurrRowSelected];
 
-  CSubscribersDlg oEditDlg(oSubscribers, eCmd);
+  CCitiesArray oCitiesArray;
+  GetDocument()->SelectAllCityCodes(oCitiesArray);
+  CSubscribersDlg oEditDlg(oSubscribers, eCmd, &oCitiesArray);
   if(oEditDlg.DoModal() == IDOK)
   {
     CSubscribers oCity;

@@ -1,7 +1,7 @@
 #pragma once
 #include "RowsPtrArray.h"
 #define SUBSCRIBERS_TABLE_STRING_MAX_LEN   (64)
-#define SUBSCRIBERS_ID_NUMB_LEN			       (11)
+#define SUBSCRIBERS_ID_NUMB_LEN			       (16)
 
 struct CSubscribers
 {
@@ -15,7 +15,7 @@ struct CSubscribers
   TCHAR m_szCityCode[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
   TCHAR m_szAddress[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
   
-  CSubscribers(const int iId = 0, const int iRevNumb = 0, const int iCode = -1, const TCHAR *pszCityCode = 0, const TCHAR *pszFirstName = 0, 
+  CSubscribers(const int iId = -1, const int iRevNumb = 0, const int iCode = -1, const TCHAR *pszCityCode = 0, const TCHAR *pszFirstName = 0, 
 			   const TCHAR *pszSecondName = 0, const TCHAR *pszThirdName = 0, const TCHAR *pszIDNumb = 0, const TCHAR *pszAddress = 0)
   {
     ZeroMemory(this, sizeof(*this));

@@ -26,7 +26,11 @@ CPhoneTypesTable::CPhoneTypesTable(CDatabase* pdb)
   m_nFields = 4;
   m_nDefaultType = dynaset;
 
+#if (_SQL_DE)
+  m_bSQLEn = FALSE;
+#else
   m_bSQLEn = TRUE;
+#endif
 }
 //#error Security Issue: The connection string may contain a password
 // The connection string below may contain plain text passwords and/or
@@ -66,19 +70,20 @@ BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
   if(IsOpen())
     Close();
   
+  BOOL bRes = FALSE;
   try
   {
-   Open(CRecordset::dynaset);
+   bRes = Open(CRecordset::dynaset);
   }
   catch(CDBException *)
   {
     /* В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
        този път със запитване на потребителят. Очаква се че ще се окаже XLS файл */
     m_bSQLEn = FALSE;
-    Open(CRecordset::dynaset);
+    bRes = Open(CRecordset::dynaset);
   }
     
-  if(!IsBOF())
+  if(bRes && !IsBOF())
   {
     /* запъвлване на масива с указатели към данни на редове от таблицата */
     while(!IsEOF())

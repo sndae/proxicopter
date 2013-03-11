@@ -33,6 +33,7 @@ public:
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CSubscribers &oCity);
+  BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

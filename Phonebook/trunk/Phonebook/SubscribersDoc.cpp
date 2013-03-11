@@ -122,6 +122,11 @@ BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oCity)
   return m_oSubscribersTable.SelectByContent(oModCity);
 }
 
+BOOL CSubscribersDoc::SelectAllCityCodes(CCitiesArray &oCitiesArray)
+{
+  return m_oSubscribersTable.SelectAllCityCodes(oCitiesArray);
+}
+
 // CSubscribersDoc diagnostics
 
 #ifdef _DEBUG
