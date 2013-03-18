@@ -51,6 +51,9 @@ public:
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CCities &oCity);
+private:
+  void DoExchangeFromDatabaseData(CCities &oCity);
+  void DoExchange“ÓDatabaseData(const CCities &oCity);
 // Implementation
 #ifdef _DEBUG
   virtual void AssertValid() const;

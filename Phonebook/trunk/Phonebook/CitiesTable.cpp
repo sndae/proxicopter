@@ -112,11 +112,8 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
     return FALSE; 
 
   MoveFirst();
-  oCity.m_iId = m_ID;
-  oCity.m_iRevNumb = m_REV_NUMB;
-  _tcscpy(oCity.m_szCode, m_CODE);
-  _tcscpy(oCity.m_szName, m_NAME);
-  _tcscpy(oCity.m_szArea, m_AREA); 
+
+  DoExchangeFromDatabaseData(oCity);
 
   return TRUE;  
 }
@@ -140,11 +137,8 @@ BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
 
   MoveFirst();  
   Edit();
-  m_ID = oCity.m_iId;
-  m_REV_NUMB = oCurrCity.m_iRevNumb + 1;
-  m_CODE = oCity.m_szCode;
-  m_NAME = oCity.m_szName;
-  m_AREA = oCity.m_szArea; 
+
+  DoExchange“ÓDatabaseData(CCities(oCity.m_iId, oCurrCity.m_iRevNumb + 1, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
 
   Update();
 
@@ -177,11 +171,7 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
   int iLastRowId = m_ID;
   AddNew();
 
-  m_ID = iLastRowId + 1;
-  m_REV_NUMB = 0;
-  m_CODE = oCity.m_szCode;
-  m_NAME = oCity.m_szName;
-  m_AREA = oCity.m_szArea; 
+  DoExchange“ÓDatabaseData(CCities(iLastRowId + 1, 0, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
 
   Update();
 
@@ -280,6 +270,24 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
   return TRUE;
 }
 
+void CCitiesTable::DoExchange“ÓDatabaseData(const CCities &oCity)
+{
+  m_ID = oCity.m_iId;
+  m_REV_NUMB = oCity.m_iRevNumb;
+  m_CODE = oCity.m_szCode;
+  m_NAME = oCity.m_szName;
+  m_AREA = oCity.m_szArea; 
+}
+
+void CCitiesTable::DoExchangeFromDatabaseData(CCities &oCity)
+{
+  oCity.m_iId = m_ID;
+  oCity.m_iRevNumb = m_REV_NUMB;
+  _tcscpy(oCity.m_szCode, m_CODE);
+  _tcscpy(oCity.m_szName, m_NAME);
+  _tcscpy(oCity.m_szArea, m_AREA); 
+
+}
 /////////////////////////////////////////////////////////////////////////////
 // CCitiesTable diagnostics
 

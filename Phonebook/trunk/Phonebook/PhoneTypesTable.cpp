@@ -109,10 +109,8 @@ BOOL CPhoneTypesTable::SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes)
     return FALSE; 
 
   MoveFirst();
-  oPhoneTypes.m_iId = m_ID;
-  oPhoneTypes.m_iRevNumb = m_REV_NUMB;
-  oPhoneTypes.m_iCode =  m_CODE;
-  _tcscpy(oPhoneTypes.m_szType, m_PHONE_TYPE);
+
+  DoExchangeFromDatabaseData(oPhoneTypes);
 
   return TRUE;  
 }
@@ -136,10 +134,8 @@ BOOL CPhoneTypesTable::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTyp
 
   MoveFirst();  
   Edit();
-  m_ID = oPhoneTypes.m_iId;
-  m_REV_NUMB = oCurrPhoneType.m_iRevNumb + 1;
-  m_PHONE_TYPE = oPhoneTypes.m_szType;
-  m_CODE = oPhoneTypes.m_iCode;
+
+  DoExchange“ÓDatabaseData(CPhoneTypes(oPhoneTypes.m_iId, oCurrPhoneType.m_iRevNumb + 1, oPhoneTypes.m_iCode, oPhoneTypes.m_szType));
 
   Update();
 
@@ -172,10 +168,7 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
   int iLastRowId = m_ID;
   AddNew();
 
-  m_ID = iLastRowId + 1;
-  m_REV_NUMB = 0;
-  m_CODE = oPhoneTypes.m_iCode;
-  m_PHONE_TYPE = oPhoneTypes.m_szType;
+  DoExchange“ÓDatabaseData(CPhoneTypes(iLastRowId + 1, 0, oPhoneTypes.m_iCode, oPhoneTypes.m_szType));
 
   Update();
 
@@ -261,6 +254,22 @@ BOOL CPhoneTypesTable::SelectByContent(const CPhoneTypes &oPhoneTypes)
     return FALSE; 
 
   return TRUE;
+}
+
+void CPhoneTypesTable::DoExchange“ÓDatabaseData(const CPhoneTypes &oPhoneType)
+{
+  m_ID = oPhoneType.m_iId;
+  m_REV_NUMB = 0;
+  m_CODE = oPhoneType.m_iCode;
+  m_PHONE_TYPE = oPhoneType.m_szType;
+}
+
+void CPhoneTypesTable::DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType)
+{
+  oPhoneType.m_iId = m_ID;
+  oPhoneType.m_iRevNumb = m_REV_NUMB;
+  oPhoneType.m_iCode =  m_CODE;
+  _tcscpy(oPhoneType.m_szType, m_PHONE_TYPE);
 }
 
 /////////////////////////////////////////////////////////////////////////////

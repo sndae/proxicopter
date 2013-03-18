@@ -121,16 +121,9 @@ BOOL CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
     return FALSE; 
 
   MoveFirst();
-  oSubscribers.m_iId = m_ID;
-  oSubscribers.m_iRevNumb = m_REV_NUMB;
-  oSubscribers.m_iCode =  m_CODE;
-  _tcscpy(oSubscribers.m_szFirstName,  m_FIRST_NAME);
-  _tcscpy(oSubscribers.m_szSecondName, m_SECOND_NAME);
-  _tcscpy(oSubscribers.m_szThirdName,  m_THIRD_NAME);
-  _tcscpy(oSubscribers.m_szIDNumb,     m_IDENT_NUMB);
-  _tcscpy(oSubscribers.m_szCityCode, GetCityCodeByCityId(m_ID));
-  _tcscpy(oSubscribers.m_szAddress, m_CITY_ADDR);
 
+  DoExchangeFromDatabaseData(oSubscribers);
+  
   return TRUE;  
 }
 
@@ -144,24 +137,20 @@ BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscr
 //  if(SelectByContent(CSubscribers(oSubscribers.m_iId, oSubscribers.m_iRevNumb, -1, -1, 0, 0, 0, oSubscribers.m_szIDNumb, 0)) == TRUE)
  //   return FALSE;
 
-  CSubscribers oCurrPhoneType;
-  if(SelectWhereId(iId, oCurrPhoneType) == FALSE)
+  CSubscribers oCurrSubscriber;
+  if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
     return FALSE;
   
-  if(oCurrPhoneType.m_iRevNumb != oSubscribers.m_iRevNumb)
+  if(oCurrSubscriber.m_iRevNumb != oSubscribers.m_iRevNumb)
     return FALSE;
 
   MoveFirst();  
   Edit();
-  m_ID = oSubscribers.m_iId;
-  m_REV_NUMB = oCurrPhoneType.m_iRevNumb + 1;
-  m_CODE = oSubscribers.m_iCode;
-  m_FIRST_NAME = oSubscribers.m_szFirstName;  
-  m_SECOND_NAME = oSubscribers.m_szSecondName; 
-  m_THIRD_NAME = oSubscribers.m_szThirdName;  
-  m_IDENT_NUMB = oSubscribers.m_szIDNumb;	 
-  m_CITY_ID = GetCityIdByCityCode(oSubscribers.m_szCityCode);   
-  m_CITY_ADDR	= oSubscribers.m_szAddress; 
+
+  CSubscribers oSubscrCopy = oSubscribers;
+  oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
+  
+  DoExchange“ÓDatabaseData(oSubscrCopy);
 
   Update();
 
@@ -194,15 +183,11 @@ BOOL CSubscribersTable::Insert(const CSubscribers &oSubscribers)
   int iLastRowId = m_ID;
   AddNew();
 
-  m_ID = iLastRowId + 1;
-  m_REV_NUMB = 0;
-  m_CODE = oSubscribers.m_iCode;
-  m_FIRST_NAME = oSubscribers.m_szFirstName;  
-  m_SECOND_NAME = oSubscribers.m_szSecondName; 
-  m_THIRD_NAME = oSubscribers.m_szThirdName;  
-  m_IDENT_NUMB = oSubscribers.m_szIDNumb;	 
-  m_CITY_ID = GetCityIdByCityCode(oSubscribers.m_szCityCode);     
-  m_CITY_ADDR	= oSubscribers.m_szAddress; 
+  CSubscribers oSubscrCopy = oSubscribers;
+  oSubscrCopy.m_iId = iLastRowId + 1;
+  oSubscrCopy.m_iRevNumb = 0;
+
+  DoExchange“ÓDatabaseData(oSubscrCopy);
 
   Update();
 
@@ -377,6 +362,35 @@ BOOL CSubscribersTable::SelectAllCityCodes(CCitiesArray &oCitiesArray)
 
   return TRUE;
 }
+
+void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
+{
+  oSubscriber.m_iId = m_ID;
+  oSubscriber.m_iRevNumb = m_REV_NUMB;
+  oSubscriber.m_iCode =  m_CODE;
+  _tcscpy(oSubscriber.m_szFirstName,  m_FIRST_NAME);
+  _tcscpy(oSubscriber.m_szSecondName, m_SECOND_NAME);
+  _tcscpy(oSubscriber.m_szThirdName,  m_THIRD_NAME);
+  _tcscpy(oSubscriber.m_szIDNumb,     m_IDENT_NUMB);
+  _tcscpy(oSubscriber.m_szCityCode, GetCityCodeByCityId(m_ID));
+  _tcscpy(oSubscriber.m_szAddress, m_CITY_ADDR);
+
+}
+
+void CSubscribersTable::DoExchange“ÓDatabaseData(const CSubscribers &oSubscriber)
+{
+  m_ID = oSubscriber.m_iId;
+  m_REV_NUMB = oSubscriber.m_iRevNumb;
+  m_CODE = oSubscriber.m_iCode;
+  m_FIRST_NAME = oSubscriber.m_szFirstName;  
+  m_SECOND_NAME = oSubscriber.m_szSecondName; 
+  m_THIRD_NAME = oSubscriber.m_szThirdName;  
+  m_IDENT_NUMB = oSubscriber.m_szIDNumb;	 
+  m_CITY_ID = GetCityIdByCityCode(oSubscriber.m_szCityCode);     
+  m_CITY_ADDR	= oSubscriber.m_szAddress; 
+
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CSubscribersTable diagnostics
 
