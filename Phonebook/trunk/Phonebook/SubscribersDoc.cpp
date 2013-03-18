@@ -76,7 +76,7 @@ BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oSubscrib
 
   /* индициране за извършени промени по съдържанието на таблицата */
   SetModifiedFlag();
-  UpdateAllViews(0);
+  UpdateAllViews(0, (LPARAM)&oSubscriber);
     
   return bRes;
 }

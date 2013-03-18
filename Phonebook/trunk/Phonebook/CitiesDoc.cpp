@@ -68,6 +68,7 @@ BOOL CCitiesDoc::SelectWhereId(const int iId, CCities &oCity)
 {
   return m_oCityTable.SelectWhereId(iId, oCity);
 }
+
 BOOL CCitiesDoc::UpdateWhereId(const int iId, const CCities &oCity)
 {
   BOOL bRes = m_oCityTable.UpdateWhereId(iId, oCity);
@@ -76,7 +77,7 @@ BOOL CCitiesDoc::UpdateWhereId(const int iId, const CCities &oCity)
 
   /* индициране за извършени промени по съдържанието на таблицата */
   SetModifiedFlag();
-  UpdateAllViews(0);
+  UpdateAllViews(0, (LPARAM)&oCity);
     
   return bRes;
 }

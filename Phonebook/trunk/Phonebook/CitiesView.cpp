@@ -132,14 +132,8 @@ void CCitiesView::UpdateColumnsContent()
     {
       i--;
       int iRowIdx = oListCtrl.InsertItem(CCitiesDoc::eColCode, m_CitiesArray[i]->m_szCode);
-      oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColName, m_CitiesArray[i]->m_szName);
-      oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColArea, m_CitiesArray[i]->m_szArea);
+      SetRowData(iRowIdx, *m_CitiesArray[i]);
     }
-    /* Оразмеряване на колоната спрямо дължината на името й */
-    oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-    /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
-    oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE);
   }
 }
 
@@ -186,9 +180,50 @@ void CCitiesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
-  UpdateColumnsContent();
+  if(lHint == 0)
+  {
+    UpdateColumnsContent();
+  }
+  else
+  {
+    UpdateSingleRow(((CCities*)lHint)->m_iId);
+  }
 }
 
+void CCitiesView::UpdateSingleRow(int iRecId)
+{
+  for(int i = 0; i < m_CitiesArray.GetCount(); i++)
+  {
+    /* Проверка дали ред с такова ID в момента е показан на потребителят */
+    if(m_CitiesArray[i]->m_iId == iRecId)
+    {      
+      CCities *poUpdatedCity = new CCities;
+      if(!GetDocument()->SelectWhereId(iRecId, *poUpdatedCity))
+        return;
+
+      delete m_CitiesArray[i];
+      m_CitiesArray[i] = poUpdatedCity;
+      SetRowData(i, *poUpdatedCity);
+
+      break;
+    }
+  }
+}
+
+void CCitiesView::SetRowData(int iRowIdx, CCities &oCity)
+{
+  CListCtrl& oListCtrl = GetListCtrl();
+
+  oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColCode, oCity.m_szCode);
+  oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColName, oCity.m_szName);
+  oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColArea, oCity.m_szArea);
+
+  /* Оразмеряване на колоната спрямо дължината на името й */
+  oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
+  /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+  oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE);
+}
 // CCitiesView diagnostics
 
 #ifdef _DEBUG

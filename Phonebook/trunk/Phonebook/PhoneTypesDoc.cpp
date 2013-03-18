@@ -76,7 +76,7 @@ BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneType)
 
   /* индициране за извършени промени по съдържанието на таблицата */
   SetModifiedFlag();
-  UpdateAllViews(0);
+  UpdateAllViews(0, (LPARAM)&oPhoneType);
     
   return bRes;
 }

@@ -38,7 +38,8 @@ protected:
 public:
 	virtual ~CCitiesView();
   void UpdateColumnsContent();
-
+  void UpdateSingleRow(int iRecId);
+  void SetRowData(int iRowIdx, CCities &oCity);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

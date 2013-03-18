@@ -143,22 +143,8 @@ void CSubscribersView::UpdateColumnsContent()
       CString csTempBuff;
       csTempBuff.Format(_T("%d"),  m_SubscribersArray[i]->m_iCode);
       int iRowIdx = oListCtrl.InsertItem(CSubscribersDoc::eColCode, csTempBuff);
-      oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColFirstName, m_SubscribersArray[i]->m_szFirstName);
-      oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColSecondName, m_SubscribersArray[i]->m_szSecondName);
-      oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColThirdName, m_SubscribersArray[i]->m_szThirdName);
-      oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColIDNumb, m_SubscribersArray[i]->m_szIDNumb);
-      oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCityCode, m_SubscribersArray[i]->m_szCityCode);
-      oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColAddress, m_SubscribersArray[i]->m_szAddress);
+      SetRowData(iRowIdx, *m_SubscribersArray[i]);
     }
-    /* Оразмеряване на колоната спрямо дължината на името й */
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-    /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName,  LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName, LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName,  LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColIDNumb,     LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColCityCode,   LVSCW_AUTOSIZE);
-    oListCtrl.SetColumnWidth(CSubscribersDoc::eColAddress,    LVSCW_AUTOSIZE);
   }
 }
 
@@ -207,7 +193,58 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 void CSubscribersView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
-  UpdateColumnsContent();
+  if(lHint == 0)
+  {
+    UpdateColumnsContent();
+  }
+  else
+  {
+    UpdateSingleRow(((CSubscribers*)lHint)->m_iId);
+  }
+}
+
+void CSubscribersView::UpdateSingleRow(int iRecId)
+{
+  for(int i = 0; i < m_SubscribersArray.GetCount(); i++)
+  {
+    /* Проверка дали ред с такова ID в момента е показан на потребителят */
+    if(m_SubscribersArray[i]->m_iId == iRecId)
+    {      
+      CSubscribers *poUpdatedSubscriber = new CSubscribers;
+      if(!GetDocument()->SelectWhereId(iRecId, *poUpdatedSubscriber))
+        return;
+
+      delete m_SubscribersArray[i];
+      m_SubscribersArray[i] = poUpdatedSubscriber;
+      SetRowData(i, *poUpdatedSubscriber);
+
+      break;
+    }
+  }
+}
+
+void CSubscribersView::SetRowData(int iRowIdx, CSubscribers &oSubscriber)
+{
+  CListCtrl& oListCtrl = GetListCtrl();
+  CString csTempBuff;
+  csTempBuff.Format(_T("%d"),  oSubscriber.m_iCode);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCode, csTempBuff);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColFirstName, oSubscriber.m_szFirstName);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColSecondName,oSubscriber.m_szSecondName);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColThirdName, oSubscriber.m_szThirdName);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColIDNumb,    oSubscriber.m_szIDNumb);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCityCode,  oSubscriber.m_szCityCode);
+  oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColAddress,   oSubscriber.m_szAddress);  
+
+  /* Оразмеряване на колоната спрямо дължината на името й */
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
+  /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName,  LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName, LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName,  LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColIDNumb,     LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColCityCode,   LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CSubscribersDoc::eColAddress,    LVSCW_AUTOSIZE);
 }
 
 // CSubscribersView diagnostics

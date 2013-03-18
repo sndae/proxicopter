@@ -132,12 +132,8 @@ void CPhoneTypesView::UpdateColumnsContent()
       CString csTempBuff;
       csTempBuff.Format(_T("%d"),  m_PhoneTypesArray[i]->m_iCode);
       int iRowIdx = oListCtrl.InsertItem(CPhoneTypesDoc::eColCode, csTempBuff);
-      oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColType, m_PhoneTypesArray[i]->m_szType);
+      SetRowData(iRowIdx, *m_PhoneTypesArray[i]);
     }
-    /* Оразмеряване на колоната спрямо дължината на името й */
-    oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-    /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
-    oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColType, LVSCW_AUTOSIZE);
   }
 }
 
@@ -184,7 +180,48 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 void CPhoneTypesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
-  UpdateColumnsContent();
+  if(lHint == 0)
+  {
+    UpdateColumnsContent();
+  }
+  else
+  {
+    UpdateSingleRow(((CPhoneTypes*)lHint)->m_iId);
+  }
+}
+
+void CPhoneTypesView::UpdateSingleRow(int iRecId)
+{
+  for(int i = 0; i < m_PhoneTypesArray.GetCount(); i++)
+  {
+    /* Проверка дали ред с такова ID в момента е показан на потребителят */
+    if(m_PhoneTypesArray[i]->m_iId == iRecId)
+    {      
+      CPhoneTypes *poUpdatedPhoneType = new CPhoneTypes;
+      if(!GetDocument()->SelectWhereId(iRecId, *poUpdatedPhoneType))
+        return;
+
+      delete m_PhoneTypesArray[i];
+      m_PhoneTypesArray[i] = poUpdatedPhoneType;
+      SetRowData(i, *poUpdatedPhoneType);
+
+      break;
+    }
+  }
+}
+
+void CPhoneTypesView::SetRowData(int iRowIdx, CPhoneTypes &oPhoneType)
+{
+  CListCtrl& oListCtrl = GetListCtrl();
+  CString csTempBuff;
+  csTempBuff.Format(_T("%d"),  oPhoneType.m_iCode);
+  oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColCode, csTempBuff);
+  oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColType, oPhoneType.m_szType);
+
+  /* Оразмеряване на колоната спрямо дължината на името й */
+  oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
+  /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+  oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColType, LVSCW_AUTOSIZE);
 }
 
 // CPhoneTypesView diagnostics

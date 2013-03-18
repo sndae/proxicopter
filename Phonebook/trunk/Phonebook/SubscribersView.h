@@ -38,7 +38,8 @@ protected:
 public:
 	virtual ~CSubscribersView();
   void UpdateColumnsContent();
-
+  void UpdateSingleRow(int iRecId);
+  void SetRowData(int iRowIdx, CSubscribers &oSubscriber);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

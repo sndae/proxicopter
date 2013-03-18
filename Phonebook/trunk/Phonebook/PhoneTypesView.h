@@ -38,7 +38,8 @@ protected:
 public:
 	virtual ~CPhoneTypesView();
   void UpdateColumnsContent();
-
+  void UpdateSingleRow(int iRecId);
+  void SetRowData(int iRowIdx, CPhoneTypes &oPhoneType);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
