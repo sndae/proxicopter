@@ -64,13 +64,13 @@ BOOL CSubscribersDoc::SelectAll(CSubscribersArray &oSubscribersArray)
   return m_oSubscribersTable.SelectAll(oSubscribersArray);
 }
 
-BOOL CSubscribersDoc::SelectWhereId(const int iId, CSubscribers &oCity)
+BOOL CSubscribersDoc::SelectWhereId(const int iId, CSubscribers &oSubscriber)
 {
-  return m_oSubscribersTable.SelectWhereId(iId, oCity);
+  return m_oSubscribersTable.SelectWhereId(iId, oSubscriber);
 }
-BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oCity)
+BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oSubscriber)
 {
-  BOOL bRes = m_oSubscribersTable.UpdateWhereId(iId, oCity);
+  BOOL bRes = m_oSubscribersTable.UpdateWhereId(iId, oSubscriber);
   if(!bRes)
     return FALSE;
 
@@ -81,9 +81,9 @@ BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oCity)
   return bRes;
 }
 
-BOOL CSubscribersDoc::Insert(const CSubscribers &oCity)
+BOOL CSubscribersDoc::Insert(const CSubscribers &oSubscriber)
 {
-  BOOL bRes = m_oSubscribersTable.Insert(oCity);
+  BOOL bRes = m_oSubscribersTable.Insert(oSubscriber);
   if(!bRes)
     return FALSE;
 
@@ -114,9 +114,9 @@ BOOL CSubscribersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
   return m_oSubscribersTable.SortByColumn((CSubscribersTable::eColumn)iTableCol , bAsc);
 }
 
-BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oCity)
+BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oSubscriber)
 {
-  CSubscribers oModCity = oCity;
+  CSubscribers oModCity = oSubscriber;
   /* търсенето да включи всички записи */ 
   oModCity.m_iId = -1;
   return m_oSubscribersTable.SelectByContent(oModCity);

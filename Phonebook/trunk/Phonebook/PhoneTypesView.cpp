@@ -150,28 +150,28 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   CPhoneTypesDlg oEditDlg(oPhoneTypes, eCmd);
   if(oEditDlg.DoModal() == IDOK)
   {
-    CPhoneTypes oCity;
+    CPhoneTypes oPhoneType;
     switch(eCmd)
     {
     case eCmdUpdate:
-      oCity = oEditDlg.GetCityData();
-      if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+      oPhoneType = oEditDlg.GetCityData();
+      if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
       
       break;
     case eCmdInsert:
-      oCity = oEditDlg.GetCityData();
-      if(GetDocument()->Insert(oCity) == FALSE)
+      oPhoneType = oEditDlg.GetCityData();
+      if(GetDocument()->Insert(oPhoneType) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
       break;
     case eCmdDelete:
-      oCity = oEditDlg.GetCityData();
-      GetDocument()->DeleteWhereId(oCity.m_iId);
+      oPhoneType = oEditDlg.GetCityData();
+      GetDocument()->DeleteWhereId(oPhoneType.m_iId);
 
       break;
     case eCmdFind:
-      oCity = oEditDlg.GetCityData();
-      GetDocument()->SelectByContent(oCity);
+      oPhoneType = oEditDlg.GetCityData();
+      GetDocument()->SelectByContent(oPhoneType);
       UpdateColumnsContent();
       break;
     default:

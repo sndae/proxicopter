@@ -29,10 +29,10 @@ public:
   BOOL SelectAll(CSubscribersArray &oSubscribersArray);
   BOOL SelectWhereId(const int iId, CSubscribers &oSubscriber);
   BOOL UpdateWhereId(const int iId, const CSubscribers &oSubscriber);
-  BOOL Insert(const CSubscribers &oCity);
+  BOOL Insert(const CSubscribers &oSubscriber);
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
-  BOOL SelectByContent(const CSubscribers &oCity);
+  BOOL SelectByContent(const CSubscribers &oSubscriber);
   BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
 #ifdef _DEBUG
 	virtual void AssertValid() const;

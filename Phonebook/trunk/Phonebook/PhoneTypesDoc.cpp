@@ -64,13 +64,13 @@ BOOL CPhoneTypesDoc::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
   return m_oPhoneTypesTable.SelectAll(oPhoneTypesArray);
 }
 
-BOOL CPhoneTypesDoc::SelectWhereId(const int iId, CPhoneTypes &oCity)
+BOOL CPhoneTypesDoc::SelectWhereId(const int iId, CPhoneTypes &oPhoneType)
 {
-  return m_oPhoneTypesTable.SelectWhereId(iId, oCity);
+  return m_oPhoneTypesTable.SelectWhereId(iId, oPhoneType);
 }
-BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oCity)
+BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneType)
 {
-  BOOL bRes = m_oPhoneTypesTable.UpdateWhereId(iId, oCity);
+  BOOL bRes = m_oPhoneTypesTable.UpdateWhereId(iId, oPhoneType);
   if(!bRes)
     return FALSE;
 
@@ -81,9 +81,9 @@ BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oCity)
   return bRes;
 }
 
-BOOL CPhoneTypesDoc::Insert(const CPhoneTypes &oCity)
+BOOL CPhoneTypesDoc::Insert(const CPhoneTypes &oPhoneType)
 {
-  BOOL bRes = m_oPhoneTypesTable.Insert(oCity);
+  BOOL bRes = m_oPhoneTypesTable.Insert(oPhoneType);
   if(!bRes)
     return FALSE;
 
@@ -114,9 +114,9 @@ BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
   return m_oPhoneTypesTable.SortByColumn((CPhoneTypesTable::eColumn)iTableCol , bAsc);
 }
 
-BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oCity)
+BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oPhoneType)
 {
-  CPhoneTypes oModCity = oCity;
+  CPhoneTypes oModCity = oPhoneType;
   /* търсенето да включи всички записи */ 
   oModCity.m_iId = -1;
   return m_oPhoneTypesTable.SelectByContent(oModCity);
