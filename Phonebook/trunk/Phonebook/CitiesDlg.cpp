@@ -10,7 +10,7 @@
 
 IMPLEMENT_DYNAMIC(CCitiesDlg, CDialog)
 
-CCitiesDlg::CCitiesDlg(const CCities &oCities, CCitiesView::eMenuCmd eCmd, CWnd* pParent /*=NULL*/)
+CCitiesDlg::CCitiesDlg(const CCities &oCities, eMenuCmd eCmd, CWnd* pParent /*=NULL*/)
 	: CDialog(CCitiesDlg::IDD, pParent)
 {
   m_oCity = oCities;
@@ -27,18 +27,18 @@ BOOL CCitiesDlg::OnInitDialog()
   {
     switch(m_eMenuCmd)
     {
-      case CCitiesView::eCmdFind:   
+      case eCmdFind:   
         SetWindowText(_T("Търси")); 
         ZeroMemory(&m_oCity, sizeof(m_oCity)); 
         break;
-      case CCitiesView::eCmdUpdate: 
+      case eCmdUpdate: 
         SetWindowText(_T("Редактирай")); 
         break;
-      case CCitiesView::eCmdInsert: 
+      case eCmdInsert: 
         SetWindowText(_T("Вмъкни")); 
         ZeroMemory(&m_oCity, sizeof(m_oCity)); 
         break;
-      case CCitiesView::eCmdDelete: 
+      case eCmdDelete: 
         SetWindowText(_T("Изтрий")); 
         m_Name.EnableWindow(FALSE); 
         m_Area.EnableWindow(FALSE);

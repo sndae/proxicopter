@@ -9,7 +9,7 @@ class CCitiesDlg : public CDialog
   DECLARE_DYNAMIC(CCitiesDlg)
 
 public:
-  CCitiesDlg(const CCities &oCities, CCitiesView::eMenuCmd eCmd, CWnd* pParent = NULL);   // standard constructor
+  CCitiesDlg(const CCities &oCities, eMenuCmd eCmd, CWnd* pParent = NULL);   // standard constructor
   virtual ~CCitiesDlg();
 
   // Dialog Data
@@ -19,7 +19,7 @@ protected:
 
   DECLARE_MESSAGE_MAP()
 private:
-  CCitiesView::eMenuCmd m_eMenuCmd;
+  eMenuCmd m_eMenuCmd;
   CCities m_oCity;
   CEdit m_Name;
   CEdit m_Area;

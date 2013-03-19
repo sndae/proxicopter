@@ -14,8 +14,6 @@ protected: // create from serialization only
 // Attributes
 public:
 	CCitiesDoc* GetDocument() const;
-  /* Изброяване възможните команди, които контекстното меню подържа */
-  enum eMenuCmd{eCmdUpdate = 0, eCmdInsert, eCmdDelete, eCmdFind};
 
 private:
   /* Текущият избран ред от списъка */

@@ -10,7 +10,7 @@
 
 IMPLEMENT_DYNAMIC(CPhoneTypesDlg, CDialog)
 
-CPhoneTypesDlg::CPhoneTypesDlg(const CPhoneTypes &oPhoneTypes, CPhoneTypesView::eMenuCmd eCmd, CWnd* pParent /*=NULL*/)
+CPhoneTypesDlg::CPhoneTypesDlg(const CPhoneTypes &oPhoneTypes, eMenuCmd eCmd, CWnd* pParent /*=NULL*/)
 	: CDialog(CPhoneTypesDlg::IDD, pParent)
 {
   m_oPhoneTypes = oPhoneTypes;
@@ -27,19 +27,19 @@ BOOL CPhoneTypesDlg::OnInitDialog()
   {
     switch(m_eMenuCmd)
     {
-      case CPhoneTypesView::eCmdFind:   
+      case eCmdFind:   
         SetWindowText(_T("Търси")); 
         ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
         m_oPhoneTypes.m_iCode = -1;
         break;
-      case CPhoneTypesView::eCmdUpdate: 
+      case eCmdUpdate: 
         SetWindowText(_T("Редактирай")); 
         break;
-      case CPhoneTypesView::eCmdInsert: 
+      case eCmdInsert: 
         SetWindowText(_T("Вмъкни")); 
         ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
         break;
-      case CPhoneTypesView::eCmdDelete: 
+      case eCmdDelete: 
         SetWindowText(_T("Изтрий")); 
         m_Code.EnableWindow(FALSE); 
         m_PhoneType.EnableWindow(FALSE);

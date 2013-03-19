@@ -4,6 +4,7 @@
 
 #pragma once
 
+
 // code generated on 05 март 2013 г., 19:08 ч.
 #include "Subscribers.h"
 #include "CitiesTable.h"

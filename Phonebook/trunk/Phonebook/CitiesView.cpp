@@ -175,8 +175,7 @@ void CCitiesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
     default:
       ASSERT(0);
       break;
-    }
-  
+    }  
   }
 }
 

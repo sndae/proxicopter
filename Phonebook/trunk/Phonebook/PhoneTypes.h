@@ -1,5 +1,6 @@
 #pragma once
-#include "RowsPtrArray.h"
+
+#include "CommonDefinitions.h"
 #define PHONETYPES_TABLE_STRING_MAX_LEN   (64)
 
 struct CPhoneTypes

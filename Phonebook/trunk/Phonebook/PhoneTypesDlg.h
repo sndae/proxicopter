@@ -9,7 +9,7 @@ class CPhoneTypesDlg : public CDialog
   DECLARE_DYNAMIC(CPhoneTypesDlg)
 
 public:
-  CPhoneTypesDlg(const CPhoneTypes &oPhoneTypes, CPhoneTypesView::eMenuCmd eCmd, CWnd* pParent = NULL);   // standard constructor
+  CPhoneTypesDlg(const CPhoneTypes &oPhoneTypes, eMenuCmd eCmd, CWnd* pParent = NULL);   // standard constructor
   virtual ~CPhoneTypesDlg();
 
   // Dialog Data
@@ -19,7 +19,7 @@ protected:
 
   DECLARE_MESSAGE_MAP()
 private:
-  CPhoneTypesView::eMenuCmd m_eMenuCmd;
+  eMenuCmd m_eMenuCmd;
   CPhoneTypes m_oPhoneTypes;
   CEdit m_Code;
   CEdit m_PhoneType;

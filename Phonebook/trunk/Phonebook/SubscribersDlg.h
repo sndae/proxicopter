@@ -9,7 +9,7 @@ class CSubscribersDlg : public CDialog
   DECLARE_DYNAMIC(CSubscribersDlg)
 
 public:
-  CSubscribersDlg(const CSubscribers &oSubscribers, CSubscribersView::eMenuCmd eCmd, CCitiesArray *pCitiesArray = 0, CWnd* pParent = NULL);   // standard constructor
+  CSubscribersDlg(const CSubscribers &oSubscribers, eMenuCmd eCmd, CCitiesArray *pCitiesArray = 0, CWnd* pParent = NULL);   // standard constructor
   virtual ~CSubscribersDlg();
 
   // Dialog Data
@@ -19,7 +19,7 @@ protected:
 
   DECLARE_MESSAGE_MAP()
 private:
-  CSubscribersView::eMenuCmd m_eMenuCmd;
+  eMenuCmd m_eMenuCmd;
   CSubscribers m_oSubscribers;
   CEdit m_Code;
   CEdit m_FirstName;

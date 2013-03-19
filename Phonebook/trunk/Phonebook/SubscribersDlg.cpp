@@ -10,7 +10,7 @@
 
 IMPLEMENT_DYNAMIC(CSubscribersDlg, CDialog)
 
-CSubscribersDlg::CSubscribersDlg(const CSubscribers &oSubscribers, CSubscribersView::eMenuCmd eCmd, CCitiesArray *pCitiesArray, CWnd* pParent /*=NULL*/)
+CSubscribersDlg::CSubscribersDlg(const CSubscribers &oSubscribers, eMenuCmd eCmd, CCitiesArray *pCitiesArray, CWnd* pParent /*=NULL*/)
 	: CDialog(CSubscribersDlg::IDD, pParent)
 {
   m_oSubscribers = oSubscribers;
@@ -28,19 +28,19 @@ BOOL CSubscribersDlg::OnInitDialog()
   {
     switch(m_eMenuCmd)
     {
-      case CSubscribersView::eCmdFind:   
+      case eCmdFind:   
         SetWindowText(_T("Търси")); 
         ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
         m_oSubscribers.m_iCode = -1;
         break;
-      case CSubscribersView::eCmdUpdate: 
+      case eCmdUpdate: 
         SetWindowText(_T("Редактирай")); 
         break;
-      case CSubscribersView::eCmdInsert: 
+      case eCmdInsert: 
         SetWindowText(_T("Вмъкни")); 
         ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
         break;
-      case CSubscribersView::eCmdDelete: 
+      case eCmdDelete: 
         SetWindowText(_T("Изтрий")); 
         m_Code.EnableWindow(FALSE); 
         m_FirstName.EnableWindow(FALSE);
