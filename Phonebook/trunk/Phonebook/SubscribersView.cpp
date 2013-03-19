@@ -154,41 +154,42 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   if(m_SubscribersArray.GetCount())
     oSubscribers = *m_SubscribersArray[m_iCurrRowSelected];
 
-  CCitiesArray oCitiesArray;
-  GetDocument()->SelectAllCityCodes(oCitiesArray);
-  CSubscribersDlg oEditDlg(oSubscribers, eCmd, &oCitiesArray);
-  if(oEditDlg.DoModal() == IDOK)
+  if(eCmd == eCmdDelete)
   {
-    CSubscribers oCity;
-    switch(eCmd)
+    GetDocument()->DeleteWhereId(oSubscribers.m_iId);
+  }
+  else
+  {
+    CCitiesArray oCitiesArray;
+    GetDocument()->SelectAllCityCodes(oCitiesArray);
+    CSubscribersDlg oEditDlg(oSubscribers, eCmd, &oCitiesArray);
+    if(oEditDlg.DoModal() == IDOK)
     {
-    case eCmdUpdate:
-      oCity = oEditDlg.GetCityData();
-      if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
-        MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
-      
-      break;
-    case eCmdInsert:
-      oCity = oEditDlg.GetCityData();
-      if(GetDocument()->Insert(oCity) == FALSE)
-        MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
-      break;
-    case eCmdDelete:
-      oCity = oEditDlg.GetCityData();
-      GetDocument()->DeleteWhereId(oCity.m_iId);
-
-      break;
-    case eCmdFind:
-      oCity = oEditDlg.GetCityData();
-      GetDocument()->SelectByContent(oCity);
-      UpdateColumnsContent();
-      break;
-    default:
-      ASSERT(0);
-      break;
+      CSubscribers oCity;
+      switch(eCmd)
+      {
+      case eCmdUpdate:
+        oCity = oEditDlg.GetCityData();
+        if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+          MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+        
+        break;
+      case eCmdInsert:
+        oCity = oEditDlg.GetCityData();
+        if(GetDocument()->Insert(oCity) == FALSE)
+          MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+        break;
+      case eCmdFind:
+        oCity = oEditDlg.GetCityData();
+        GetDocument()->SelectByContent(oCity);
+        UpdateColumnsContent();
+        break;
+      default:
+        ASSERT(0);
+        break;
+      }
     }
   }
-  
 }
 
 void CSubscribersView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)

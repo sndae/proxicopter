@@ -143,39 +143,40 @@ void CCitiesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   if(m_CitiesArray.GetCount())
     oCities = *m_CitiesArray[m_iCurrRowSelected];
 
-  CCitiesDlg oEditDlg(oCities, eCmd);
-  if(oEditDlg.DoModal() == IDOK)
+  if(eCmd == eCmdDelete)
   {
-    CCities oCity;
-    switch(eCmd)
+    GetDocument()->DeleteWhereId(oCities.m_iId);
+  }
+  else
+  {
+    CCitiesDlg oEditDlg(oCities, eCmd);
+    if(oEditDlg.DoModal() == IDOK)
     {
-    case eCmdUpdate:
-      oCity = oEditDlg.GetCityData();
-      if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
-        MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
-      
-      break;
-    case eCmdInsert:
-      oCity = oEditDlg.GetCityData();
-      if(GetDocument()->Insert(oCity) == FALSE)
-        MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
-      break;
-    case eCmdDelete:
-      oCity = oEditDlg.GetCityData();
-      GetDocument()->DeleteWhereId(oCity.m_iId);
-
-      break;
-    case eCmdFind:
-      oCity = oEditDlg.GetCityData();
-      GetDocument()->SelectByContent(oCity);
-      UpdateColumnsContent();
-      break;
-    default:
-      ASSERT(0);
-      break;
+      CCities oCity;
+      switch(eCmd)
+      {
+      case eCmdUpdate:
+        oCity = oEditDlg.GetCityData();
+        if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+          MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+        
+        break;
+      case eCmdInsert:
+        oCity = oEditDlg.GetCityData();
+        if(GetDocument()->Insert(oCity) == FALSE)
+          MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+        break;
+      case eCmdFind:
+        oCity = oEditDlg.GetCityData();
+        GetDocument()->SelectByContent(oCity);
+        UpdateColumnsContent();
+        break;
+      default:
+        ASSERT(0);
+        break;
+      }
     }
   }
-  
 }
 
 void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)

@@ -143,39 +143,40 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   if(m_PhoneTypesArray.GetCount())
     oPhoneTypes = *m_PhoneTypesArray[m_iCurrRowSelected];
 
-  CPhoneTypesDlg oEditDlg(oPhoneTypes, eCmd);
-  if(oEditDlg.DoModal() == IDOK)
+  if(eCmd == eCmdDelete)
   {
-    CPhoneTypes oPhoneType;
-    switch(eCmd)
-    {
-    case eCmdUpdate:
-      oPhoneType = oEditDlg.GetCityData();
-      if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
-        MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
-      
-      break;
-    case eCmdInsert:
-      oPhoneType = oEditDlg.GetCityData();
-      if(GetDocument()->Insert(oPhoneType) == FALSE)
-        MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
-      break;
-    case eCmdDelete:
-      oPhoneType = oEditDlg.GetCityData();
-      GetDocument()->DeleteWhereId(oPhoneType.m_iId);
-
-      break;
-    case eCmdFind:
-      oPhoneType = oEditDlg.GetCityData();
-      GetDocument()->SelectByContent(oPhoneType);
-      UpdateColumnsContent();
-      break;
-    default:
-      ASSERT(0);
-      break;
-    }
+    GetDocument()->DeleteWhereId(oPhoneTypes.m_iId);
   }
-  
+  else
+  {
+    CPhoneTypesDlg oEditDlg(oPhoneTypes, eCmd);
+    if(oEditDlg.DoModal() == IDOK)
+    {
+      CPhoneTypes oPhoneType;
+      switch(eCmd)
+      {
+      case eCmdUpdate:
+        oPhoneType = oEditDlg.GetCityData();
+        if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
+          MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+        
+        break;
+      case eCmdInsert:
+        oPhoneType = oEditDlg.GetCityData();
+        if(GetDocument()->Insert(oPhoneType) == FALSE)
+          MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+        break;
+      case eCmdFind:
+        oPhoneType = oEditDlg.GetCityData();
+        GetDocument()->SelectByContent(oPhoneType);
+        UpdateColumnsContent();
+        break;
+      default:
+        ASSERT(0);
+        break;
+      }
+    }
+  }  
 }
 
 void CPhoneTypesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
