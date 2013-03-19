@@ -150,32 +150,32 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   else
   {
     CPhoneTypesDlg oEditDlg(oPhoneTypes, eCmd);
-    if(oEditDlg.DoModal() == IDOK)
+    if(oEditDlg.DoModal() != IDOK)
+      return;
+
+    CPhoneTypes oPhoneType;
+    switch(eCmd)
     {
-      CPhoneTypes oPhoneType;
-      switch(eCmd)
-      {
-      case eCmdUpdate:
-        oPhoneType = oEditDlg.GetCityData();
-        if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
-          MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
-        
-        break;
-      case eCmdInsert:
-        oPhoneType = oEditDlg.GetCityData();
-        if(GetDocument()->Insert(oPhoneType) == FALSE)
-          MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
-        break;
-      case eCmdFind:
-        oPhoneType = oEditDlg.GetCityData();
-        GetDocument()->SelectByContent(oPhoneType);
-        UpdateColumnsContent();
-        break;
-      default:
-        ASSERT(0);
-        break;
-      }
-    }
+    case eCmdUpdate:
+      oPhoneType = oEditDlg.GetCityData();
+      if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
+        MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+      
+      break;
+    case eCmdInsert:
+      oPhoneType = oEditDlg.GetCityData();
+      if(GetDocument()->Insert(oPhoneType) == FALSE)
+        MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+      break;
+    case eCmdFind:
+      oPhoneType = oEditDlg.GetCityData();
+      GetDocument()->SelectByContent(oPhoneType);
+      UpdateColumnsContent();
+      break;
+    default:
+      ASSERT(0);
+      break;
+    }  
   }  
 }
 

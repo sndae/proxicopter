@@ -163,31 +163,32 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
     CCitiesArray oCitiesArray;
     GetDocument()->SelectAllCityCodes(oCitiesArray);
     CSubscribersDlg oEditDlg(oSubscribers, eCmd, &oCitiesArray);
-    if(oEditDlg.DoModal() == IDOK)
+    
+    if(oEditDlg.DoModal() != IDOK)
+      return;
+
+    CSubscribers oCity;
+    switch(eCmd)
     {
-      CSubscribers oCity;
-      switch(eCmd)
-      {
-      case eCmdUpdate:
-        oCity = oEditDlg.GetCityData();
-        if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
-          MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
-        
-        break;
-      case eCmdInsert:
-        oCity = oEditDlg.GetCityData();
-        if(GetDocument()->Insert(oCity) == FALSE)
-          MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
-        break;
-      case eCmdFind:
-        oCity = oEditDlg.GetCityData();
-        GetDocument()->SelectByContent(oCity);
-        UpdateColumnsContent();
-        break;
-      default:
-        ASSERT(0);
-        break;
-      }
+    case eCmdUpdate:
+      oCity = oEditDlg.GetCityData();
+      if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+        MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+      
+      break;
+    case eCmdInsert:
+      oCity = oEditDlg.GetCityData();
+      if(GetDocument()->Insert(oCity) == FALSE)
+        MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+      break;
+    case eCmdFind:
+      oCity = oEditDlg.GetCityData();
+      GetDocument()->SelectByContent(oCity);
+      UpdateColumnsContent();
+      break;
+    default:
+      ASSERT(0);
+      break;  
     }
   }
 }
