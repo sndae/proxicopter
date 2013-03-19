@@ -196,6 +196,9 @@
 				RelativePath=".\Phonebook\ChildFrm.h">
 			</File>
 			<File
+				RelativePath=".\Phonebook\CommonDefinitions.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\MainFrm.h">
 			</File>
 			<File
