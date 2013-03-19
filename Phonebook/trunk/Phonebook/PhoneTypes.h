@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+
 #define PHONETYPES_TABLE_STRING_MAX_LEN   (64)
 
 struct CPhoneTypes
 {
-  int   m_iId;
-  int   m_iRevNumb;
+  TABLE_HEADER;
   int   m_iCode;
   TCHAR m_szType[PHONETYPES_TABLE_STRING_MAX_LEN];
   

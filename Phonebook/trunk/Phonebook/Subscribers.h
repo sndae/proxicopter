@@ -1,13 +1,13 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+
 #define SUBSCRIBERS_TABLE_STRING_MAX_LEN   (64)
 #define SUBSCRIBERS_ID_NUMB_LEN			       (16)
 
 struct CSubscribers
 {
-  int   m_iId;
-  int   m_iRevNumb;
+  TABLE_HEADER;
   int   m_iCode;
   TCHAR m_szFirstName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
   TCHAR m_szSecondName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];

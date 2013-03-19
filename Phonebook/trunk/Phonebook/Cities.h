@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+
 #define CITIES_TABLE_STRING_MAX_LEN   (64)
 
 struct CCities
 {
-  int   m_iId;
-  int   m_iRevNumb;
+  TABLE_HEADER;
   TCHAR m_szCode[CITIES_TABLE_STRING_MAX_LEN];
   TCHAR m_szName[CITIES_TABLE_STRING_MAX_LEN];
   TCHAR m_szArea[CITIES_TABLE_STRING_MAX_LEN];  
