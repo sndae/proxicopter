@@ -29,19 +29,19 @@ BOOL CSubscribersDlg::OnInitDialog()
     switch(m_eMenuCmd)
     {
       case eCmdFind:   
-        SetWindowText(_T("Търси")); 
+        SetWindowText(MENU_CMD_FIND); 
         ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
-        m_oSubscribers.m_iCode = -1;
+        m_oSubscribers.m_iCode = DNC;
         break;
       case eCmdUpdate: 
-        SetWindowText(_T("Редактирай")); 
+        SetWindowText(MENU_CMD_UPDATE); 
         break;
       case eCmdInsert: 
-        SetWindowText(_T("Вмъкни")); 
+        SetWindowText(MENU_CMD_INSERT); 
         ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
         break;
       case eCmdDelete: 
-        SetWindowText(_T("Изтрий")); 
+        SetWindowText(MENU_CMD_DELETE); 
         m_Code.EnableWindow(FALSE); 
         m_FirstName.EnableWindow(FALSE);
         m_SecondName.EnableWindow(FALSE);
@@ -67,7 +67,7 @@ BOOL CSubscribersDlg::OnInitDialog()
     m_CityCode.SetWindowTextW(m_oSubscribers.m_szCityCode);
     m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
 
-    if(m_oSubscribers.m_iCode != -1)
+    if(m_oSubscribers.m_iCode != DNC)
     {
       CString csTempBuff;
       csTempBuff.Format(_T("%d"), m_oSubscribers.m_iCode);
@@ -106,7 +106,7 @@ void CSubscribersDlg::OnBnClickedOk()
   if(cTempBuff.GetLength())
     m_oSubscribers.m_iCode = _ttoi(cTempBuff);
   else
-    m_oSubscribers.m_iCode = -1;
+    m_oSubscribers.m_iCode = DNC;
 
   m_FirstName.GetWindowTextW(m_oSubscribers.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
   m_SecondName.GetWindowTextW(m_oSubscribers.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);

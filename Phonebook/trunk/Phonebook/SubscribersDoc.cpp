@@ -118,7 +118,7 @@ BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oSubscriber)
 {
   CSubscribers oModCity = oSubscriber;
   /* търсенето да включи всички записи */ 
-  oModCity.m_iId = -1;
+  oModCity.m_iId = DNC;
   return m_oSubscribersTable.SelectByContent(oModCity);
 }
 

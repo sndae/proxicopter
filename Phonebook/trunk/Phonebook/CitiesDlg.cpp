@@ -28,18 +28,18 @@ BOOL CCitiesDlg::OnInitDialog()
     switch(m_eMenuCmd)
     {
       case eCmdFind:   
-        SetWindowText(_T("Търси")); 
+        SetWindowText(MENU_CMD_FIND); 
         ZeroMemory(&m_oCity, sizeof(m_oCity)); 
         break;
       case eCmdUpdate: 
-        SetWindowText(_T("Редактирай")); 
+        SetWindowText(MENU_CMD_UPDATE); 
         break;
       case eCmdInsert: 
-        SetWindowText(_T("Вмъкни")); 
+        SetWindowText(MENU_CMD_INSERT); 
         ZeroMemory(&m_oCity, sizeof(m_oCity)); 
         break;
       case eCmdDelete: 
-        SetWindowText(_T("Изтрий")); 
+        SetWindowText(MENU_CMD_DELETE); 
         m_Name.EnableWindow(FALSE); 
         m_Area.EnableWindow(FALSE);
         m_Code.EnableWindow(FALSE);

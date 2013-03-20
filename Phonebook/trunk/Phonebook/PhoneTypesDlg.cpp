@@ -28,19 +28,19 @@ BOOL CPhoneTypesDlg::OnInitDialog()
     switch(m_eMenuCmd)
     {
       case eCmdFind:   
-        SetWindowText(_T("Търси")); 
+        SetWindowText(MENU_CMD_FIND); 
         ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
-        m_oPhoneTypes.m_iCode = -1;
+        m_oPhoneTypes.m_iCode = DNC;
         break;
       case eCmdUpdate: 
-        SetWindowText(_T("Редактирай")); 
+        SetWindowText(MENU_CMD_UPDATE); 
         break;
       case eCmdInsert: 
-        SetWindowText(_T("Вмъкни")); 
+        SetWindowText(MENU_CMD_INSERT); 
         ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
         break;
       case eCmdDelete: 
-        SetWindowText(_T("Изтрий")); 
+        SetWindowText(MENU_CMD_DELETE); 
         m_Code.EnableWindow(FALSE); 
         m_PhoneType.EnableWindow(FALSE);
         break;
@@ -50,7 +50,7 @@ BOOL CPhoneTypesDlg::OnInitDialog()
     }
 
     m_PhoneType.SetWindowTextW(m_oPhoneTypes.m_szType);
-    if(m_oPhoneTypes.m_iCode != -1)
+    if(m_oPhoneTypes.m_iCode != DNC)
     {
       CString csTempBuff;
       csTempBuff.Format(_T("%d"), m_oPhoneTypes.m_iCode);
@@ -84,7 +84,7 @@ void CPhoneTypesDlg::OnBnClickedOk()
   if(cTempBuff.GetLength())
     m_oPhoneTypes.m_iCode = _ttoi(cTempBuff);
   else
-    m_oPhoneTypes.m_iCode = -1;
+    m_oPhoneTypes.m_iCode = DNC;
 
   m_PhoneType.GetWindowTextW(m_oPhoneTypes.m_szType, sizeof(m_oPhoneTypes.m_szType)/sizeof(m_oPhoneTypes.m_szType[0]));
 

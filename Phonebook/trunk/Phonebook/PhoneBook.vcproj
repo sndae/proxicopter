@@ -279,6 +279,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="SubscriberPhoneNumbers"
+				>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersDoc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersTable.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersView.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -382,6 +402,30 @@
 				</File>
 				<File
 					RelativePath=".\SubscribersView.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="SubscriberPhoneNumbers"
+				>
+				<File
+					RelativePath=".\SubscriberPhoneNumbers.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersDlg.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersDoc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersTable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubscriberPhoneNumbersView.h"
 					>
 				</File>
 			</Filter>

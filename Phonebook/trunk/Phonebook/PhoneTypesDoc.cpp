@@ -118,7 +118,7 @@ BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oPhoneType)
 {
   CPhoneTypes oModCity = oPhoneType;
   /* търсенето да включи всички записи */ 
-  oModCity.m_iId = -1;
+  oModCity.m_iId = DNC;
   return m_oPhoneTypesTable.SelectByContent(oModCity);
 }
 

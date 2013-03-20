@@ -16,7 +16,7 @@ struct CSubscribers
   TCHAR m_szCityCode[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
   TCHAR m_szAddress[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
   
-  CSubscribers(const int iId = -1, const int iRevNumb = 0, const int iCode = -1, const TCHAR *pszCityCode = 0, const TCHAR *pszFirstName = 0, 
+  CSubscribers(const int iId = DNC, const int iRevNumb = 0, const int iCode = DNC, const TCHAR *pszCityCode = 0, const TCHAR *pszFirstName = 0, 
 			   const TCHAR *pszSecondName = 0, const TCHAR *pszThirdName = 0, const TCHAR *pszIDNumb = 0, const TCHAR *pszAddress = 0)
   {
     ZeroMemory(this, sizeof(*this));

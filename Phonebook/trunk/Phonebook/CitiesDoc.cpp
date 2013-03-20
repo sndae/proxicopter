@@ -119,7 +119,7 @@ BOOL CCitiesDoc::SelectByContent(const CCities &oCity)
 {
   CCities oModCity = oCity;
   /* търсенето да включи всички записи */ 
-  oModCity.m_iId = -1;
+  oModCity.m_iId = DNC;
   return m_oCityTable.SelectByContent(oModCity);
 }
 

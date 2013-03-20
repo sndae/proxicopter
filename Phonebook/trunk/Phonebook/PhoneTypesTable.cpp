@@ -122,7 +122,7 @@ BOOL CPhoneTypesTable::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTyp
     return FALSE;
 
   /* Проверка дали има друг запис със такъв тип */
-  if(SelectByContent(CPhoneTypes(oPhoneTypes.m_iId, oPhoneTypes.m_iRevNumb, -1, oPhoneTypes.m_szType)) == TRUE)
+  if(SelectByContent(CPhoneTypes(oPhoneTypes.m_iId, oPhoneTypes.m_iRevNumb, DNC, oPhoneTypes.m_szType)) == TRUE)
     return FALSE;
 
   CPhoneTypes oCurrPhoneType;
@@ -151,11 +151,11 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
     return FALSE;
 
   /* Проверка дали има запис с такъв код на  */
-  if(SelectByContent(CPhoneTypes(-1, 0, oPhoneTypes.m_iCode)) == TRUE)
+  if(SelectByContent(CPhoneTypes(DNC, 0, oPhoneTypes.m_iCode)) == TRUE)
     return FALSE;
 
   /* Проверка дали има запис със такъв тип телефон*/
-  if(SelectByContent(CPhoneTypes(-1, 0, -1, oPhoneTypes.m_szType)) == TRUE)
+  if(SelectByContent(CPhoneTypes(DNC, 0, DNC, oPhoneTypes.m_szType)) == TRUE)
     return FALSE;
 
   Close();
@@ -224,14 +224,14 @@ BOOL CPhoneTypesTable::SelectByContent(const CPhoneTypes &oPhoneTypes)
   m_strSort = _T("");
   m_strFilter = _T("");
   CString szColFilter;
-  if(oPhoneTypes.m_iId != -1)
+  if(oPhoneTypes.m_iId != DNC)
   {
     /* изключване на текущият запис от по-нататъшното филтриране */
     szColFilter.Format(_T("ID != %d"), oPhoneTypes.m_iId);
     m_strFilter += szColFilter;
   }
   /* формиране на низ за филтриране, на база наличните в структурата ненулеви записи */
-  if(oPhoneTypes.m_iCode != -1)
+  if(oPhoneTypes.m_iCode != DNC)
   {
     if(m_strFilter.GetLength())
       m_strFilter += _T(" AND ");

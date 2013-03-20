@@ -154,11 +154,11 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
     return FALSE;
 
   /* Проверка дали има запис със такова име на град */
-  if(SelectByContent(CCities(-1, 0, oCity.m_szCode)) == TRUE)
+  if(SelectByContent(CCities(DNC, 0, oCity.m_szCode)) == TRUE)
     return FALSE;
 
   /* Проверка дали има запис със такъв код на град */
-  if(SelectByContent(CCities(-1, 0, 0, oCity.m_szName)) == TRUE)
+  if(SelectByContent(CCities(DNC, 0, 0, oCity.m_szName)) == TRUE)
     return FALSE;
 
   Close();
@@ -230,7 +230,7 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
   m_strSort = _T("");
   m_strFilter = _T("");
   CString szColFilter;
-  if(oCity.m_iId != -1)
+  if(oCity.m_iId != DNC)
   {
     /* изключване на текущият запис от по-нататъшното филтриране */
     szColFilter.Format(_T("ID != %d"), oCity.m_iId);
