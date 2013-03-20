@@ -50,12 +50,6 @@ BOOL CPhoneTypesDlg::OnInitDialog()
     }
 
     m_PhoneType.SetWindowTextW(m_oPhoneTypes.m_szType);
-    if(m_oPhoneTypes.m_iCode != DNC)
-    {
-      CString csTempBuff;
-      csTempBuff.Format(_T("%d"), m_oPhoneTypes.m_iCode);
-      m_Code.SetWindowTextW(csTempBuff);
-    }
 
     return TRUE;
   }

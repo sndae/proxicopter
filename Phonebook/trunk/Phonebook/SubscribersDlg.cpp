@@ -39,21 +39,20 @@ BOOL CSubscribersDlg::OnInitDialog()
       case eCmdInsert: 
         SetWindowText(MENU_CMD_INSERT); 
         ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
-        break;
-      case eCmdDelete: 
-        SetWindowText(MENU_CMD_DELETE); 
-        m_Code.EnableWindow(FALSE); 
-        m_FirstName.EnableWindow(FALSE);
-        m_SecondName.EnableWindow(FALSE);
-        m_ThirdName.EnableWindow(FALSE);
-        m_IDNumber.EnableWindow(FALSE);
-        m_CityCode.EnableWindow(FALSE);
-        m_Address.EnableWindow(FALSE);
+        m_oSubscribers.m_iCode = DNC;
         break;
       default: 
         ASSERT(0);
         break;
     }
+    CString csTembBuff;
+    if(m_oSubscribers.m_iCode != DNC)
+    {
+      csTembBuff.Format(_T("%d"), m_oSubscribers.m_iCode);
+      m_Code.SetWindowTextW(csTembBuff);
+    }
+    else
+      m_Code.SetWindowTextW(_T(""));
 
     m_FirstName.SetWindowTextW(m_oSubscribers.m_szFirstName);
     m_SecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
@@ -66,13 +65,6 @@ BOOL CSubscribersDlg::OnInitDialog()
     }
     m_CityCode.SetWindowTextW(m_oSubscribers.m_szCityCode);
     m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
-
-    if(m_oSubscribers.m_iCode != DNC)
-    {
-      CString csTempBuff;
-      csTempBuff.Format(_T("%d"), m_oSubscribers.m_iCode);
-      m_Code.SetWindowTextW(csTempBuff);
-    }
 
     return TRUE;
   }

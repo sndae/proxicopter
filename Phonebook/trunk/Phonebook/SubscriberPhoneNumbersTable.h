@@ -7,7 +7,9 @@
 
 // code generated on 05 март 2013 г., 19:08 ч.
 #include "SubscriberPhoneNumbers.h"
-#include "CitiesTable.h"
+#include "SubscribersTable.h"
+#include "PhoneTypesTable.h"
+
 class CSubscriberPhoneNumbersTable : private CRecordset
 {
 public:
@@ -17,7 +19,7 @@ public:
   //Enumerators
 public:
   /* Изброяване имената на полетата и техните номера */
-  enum  eColumn{cColIdx = 0, eColRevNumb, eColCode, eColFirstName, eColSecondName, eColThirdName, eColIDNumb, eColCityCode, eColAddress, eCOL_NUMB};
+  enum  eColumn{cColIdx = 0, eColRevNumb, eColSubscrCode, eColPhoneCode, eColPhoneNumber, eCOL_NUMB};
 
 
 // Field/Param Data
@@ -32,18 +34,15 @@ public:
 
   long	m_ID;
   long	m_REV_NUMB;
-  long	m_CODE;
-  CStringW m_FIRST_NAME ;
-  CStringW m_SECOND_NAME;
-  CStringW m_THIRD_NAME; 
-  CStringW m_IDENT_NUMB; 
-  long m_CITY_ID;
-  CStringW m_CITY_ADDR;
+  long	m_SUBSCRIBER_ID;
+  long	m_PHONE_ID;
+  CStringW m_PHONE_NUMB ;
 
   /* Флаг разрешаващ търсенето на DSN:SQLEXPRESS */
   BOOL m_bSQLEn;
     
-  CCitiesTable m_oCitiesTable;
+  CSubscribersTable m_oSubscribersTable;
+  CPhoneTypesTable  m_oPhoneTypesTable;
 
 // Overrides
 	// Wizard generated virtual function overrides
@@ -59,10 +58,15 @@ public:
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
-  BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
+  BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
+  BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
+
   /* Функции за достъп до таблица "Градове */
-  CString GetCityCodeByCityId(const int iCityId);
-  int    GetCityIdByCityCode(const TCHAR *pszCityCode);
+  int  GetSubscrCodeBySubscrId(const int iId);
+  int  GetSubscrIdBySubscrCode(const int iSubscrCode);
+  int  GetPhoneCodeByPhoneId(const int iId);
+  int  GetPhoneIdByPhoneCode(const int iPhoneCode);
+
 private:
   void DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscriber);
   void DoExchangeТоDatabaseData(const CSubscriberPhoneNumbers &oSubscriber);

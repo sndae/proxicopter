@@ -10,7 +10,7 @@ struct CPhoneTypes
   int   m_iCode;
   TCHAR m_szType[PHONETYPES_TABLE_STRING_MAX_LEN];
   
-  CPhoneTypes(const int iId = -2, const int iRevNumb = 0, const int iCode = DNC, const TCHAR *pszType = 0)
+  CPhoneTypes(const int iId = DNC, const int iRevNumb = 0, const int iCode = DNC, const TCHAR *pszType = 0)
   {
     ZeroMemory(this, sizeof(*this));
     m_iId = iId;

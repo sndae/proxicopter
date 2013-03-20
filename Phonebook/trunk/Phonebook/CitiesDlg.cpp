@@ -38,12 +38,6 @@ BOOL CCitiesDlg::OnInitDialog()
         SetWindowText(MENU_CMD_INSERT); 
         ZeroMemory(&m_oCity, sizeof(m_oCity)); 
         break;
-      case eCmdDelete: 
-        SetWindowText(MENU_CMD_DELETE); 
-        m_Name.EnableWindow(FALSE); 
-        m_Area.EnableWindow(FALSE);
-        m_Code.EnableWindow(FALSE);
-        break;
       default: 
         ASSERT(0);
         break;

@@ -10,12 +10,14 @@
 
 IMPLEMENT_DYNAMIC(CSubscriberPhoneNumbersDlg, CDialog)
 
-CSubscriberPhoneNumbersDlg::CSubscriberPhoneNumbersDlg(const CSubscriberPhoneNumbers &oSubscriberPhoneNumbers, eMenuCmd eCmd, CCitiesArray *pCitiesArray, CWnd* pParent /*=NULL*/)
+CSubscriberPhoneNumbersDlg::CSubscriberPhoneNumbersDlg(const CSubscriberPhoneNumbers &oSubscriberPhoneNumbers, eMenuCmd eCmd, CSubscribersArray *poSubscrArray,
+                             CPhoneTypesArray *poPhoneTypesArray, CWnd* pParent)
 	: CDialog(CSubscriberPhoneNumbersDlg::IDD, pParent)
 {
   m_oSubscriberPhoneNumbers = oSubscriberPhoneNumbers;
   m_eMenuCmd = eCmd;
-  m_pCitiesArray = pCitiesArray;
+  m_poSubscrArray = poSubscrArray;
+  m_poPhoneTypesArray = poPhoneTypesArray;
 }
 
 CSubscriberPhoneNumbersDlg::~CSubscriberPhoneNumbersDlg()
@@ -31,7 +33,8 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
       case eCmdFind:   
         SetWindowText(MENU_CMD_FIND); 
         ZeroMemory(&m_oSubscriberPhoneNumbers, sizeof(m_oSubscriberPhoneNumbers)); 
-        m_oSubscriberPhoneNumbers.m_iCode = DNC;
+        m_oSubscriberPhoneNumbers.m_iSubscrCode = DNC;
+        m_oSubscriberPhoneNumbers.m_iPhoneCode  = DNC;
         break;
       case eCmdUpdate: 
         SetWindowText(MENU_CMD_UPDATE); 
@@ -39,41 +42,45 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
       case eCmdInsert: 
         SetWindowText(MENU_CMD_INSERT); 
         ZeroMemory(&m_oSubscriberPhoneNumbers, sizeof(m_oSubscriberPhoneNumbers)); 
-        break;
-      case eCmdDelete: 
-        SetWindowText(MENU_CMD_DELETE); 
-        m_Code.EnableWindow(FALSE); 
-        m_FirstName.EnableWindow(FALSE);
-        m_SecondName.EnableWindow(FALSE);
-        m_ThirdName.EnableWindow(FALSE);
-        m_IDNumber.EnableWindow(FALSE);
-        m_CityCode.EnableWindow(FALSE);
-        m_Address.EnableWindow(FALSE);
+        m_oSubscriberPhoneNumbers.m_iSubscrCode = DNC;
+        m_oSubscriberPhoneNumbers.m_iPhoneCode  = DNC;
         break;
       default: 
         ASSERT(0);
         break;
     }
 
-    m_FirstName.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szFirstName);
-    m_SecondName.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szSecondName);
-    m_ThirdName.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szThirdName);
-    m_IDNumber.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szIDNumb);
-    if(m_pCitiesArray)
+    CString csTempBuff;
+    m_PhoneNumber.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szPhoneNumber);
+    if(m_poSubscrArray)
     {
-      for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
-        m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
-    }
-    m_CityCode.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szCityCode);
-    m_Address.SetWindowTextW(m_oSubscriberPhoneNumbers.m_szAddress);
-
-    if(m_oSubscriberPhoneNumbers.m_iCode != DNC)
-    {
-      CString csTempBuff;
-      csTempBuff.Format(_T("%d"), m_oSubscriberPhoneNumbers.m_iCode);
-      m_Code.SetWindowTextW(csTempBuff);
+      for(int i = 0; i < m_poSubscrArray->GetSize(); i++)
+      {
+        csTempBuff.Format(_T("%d"), (m_poSubscrArray->GetAt(i))->m_iCode);
+        m_SubscriberCode.InsertString(i, csTempBuff);
+      }
+      m_SubscriberCode.SetCurSel(m_oSubscriberPhoneNumbers.m_iSubscrCode);
     }
 
+    if(m_poPhoneTypesArray)
+    {
+      for(int i = 0; i < m_poPhoneTypesArray->GetSize(); i++)
+      {
+        csTempBuff.Format(_T("%d"), (m_poPhoneTypesArray->GetAt(i))->m_iCode);
+        m_PhoneTypeCode.InsertString(i, csTempBuff);
+      }
+    }
+    if(m_oSubscriberPhoneNumbers.m_iPhoneCode != DNC)
+    {
+      csTempBuff.Format(_T("%d"), m_oSubscriberPhoneNumbers.m_iPhoneCode);
+      m_PhoneTypeCode.SetWindowTextW(csTempBuff);
+    }
+
+    if(m_oSubscriberPhoneNumbers.m_iSubscrCode != DNC)
+    {
+      csTempBuff.Format(_T("%d"), m_oSubscriberPhoneNumbers.m_iSubscrCode);
+      m_SubscriberCode.SetWindowTextW(csTempBuff);
+    }
     return TRUE;
   }
   return FALSE;
@@ -81,9 +88,9 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 void CSubscriberPhoneNumbersDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
-  DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_SUBSCRIBER, m_Code);
-  DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE, m_FirstName);
-  DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_PHONE_NUMBER, m_SecondName);
+  DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_SUBSCRIBER, m_SubscriberCode);
+  DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE,      m_PhoneTypeCode);
+  DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_PHONE_NUMBER,    m_PhoneNumber);
 }
 
 
@@ -98,17 +105,19 @@ void CSubscriberPhoneNumbersDlg::OnBnClickedOk()
 {
   // TODO: Add your control notification handler code here
   CString cTempBuff;
-  m_Code.GetWindowTextW(cTempBuff);
+  m_SubscriberCode.GetWindowTextW(cTempBuff);
   if(cTempBuff.GetLength())
-    m_oSubscriberPhoneNumbers.m_iCode = _ttoi(cTempBuff);
+    m_oSubscriberPhoneNumbers.m_iSubscrCode = _ttoi(cTempBuff);
   else
-    m_oSubscriberPhoneNumbers.m_iCode = DNC;
+    m_oSubscriberPhoneNumbers.m_iSubscrCode = DNC;
 
-  m_FirstName.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szFirstName, SubscriberPhoneNumbers_TABLE_STRING_MAX_LEN);
-  m_SecondName.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szSecondName, SubscriberPhoneNumbers_TABLE_STRING_MAX_LEN);
-  m_ThirdName.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szThirdName, SubscriberPhoneNumbers_TABLE_STRING_MAX_LEN);
-  m_IDNumber.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szIDNumb, SubscriberPhoneNumbers_ID_NUMB_LEN);
-  m_Address.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szAddress, SubscriberPhoneNumbers_TABLE_STRING_MAX_LEN);
-  m_CityCode.GetWindowText(m_oSubscriberPhoneNumbers.m_szCityCode, SubscriberPhoneNumbers_TABLE_STRING_MAX_LEN);
+  m_PhoneTypeCode.GetWindowTextW(cTempBuff);
+  if(cTempBuff.GetLength())
+    m_oSubscriberPhoneNumbers.m_iPhoneCode = _ttoi(cTempBuff);
+  else
+    m_oSubscriberPhoneNumbers.m_iPhoneCode = DNC;  
+
+  m_PhoneNumber.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
+  
   OnOK();
 }

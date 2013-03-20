@@ -54,22 +54,14 @@ void CSubscriberPhoneNumbersView::OnInitialUpdate()
   CListCtrl& oListCtrl = GetListCtrl();
   oListCtrl.SetExtendedStyle( oListCtrl.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT );
 
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColCode,       _T("Код на абонат"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColFirstName,  _T("Име"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColSecondName, _T("Презиме"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColThirdName,  _T("Фамилия"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColIDNumb,     _T("ЕГН"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColCityCode,   _T("Код на град"), LVCFMT_LEFT);
-  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColAddress,    _T("Адрес"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColSubscrCode,  _T("Код на абонат"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColPhoneCode,   _T("Код на тип телефон"), LVCFMT_LEFT);
+  oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColPhoneNumber, _T("Телефон"), LVCFMT_LEFT);
 
   /* Оразмеряване на колонита спрямо дължината на имената им */
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColCode,       LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColFirstName,  LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSecondName, LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColThirdName,  LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColIDNumb,     LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColCityCode,   LVSCW_AUTOSIZE_USEHEADER);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColAddress,    LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode,  LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneCode,   LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneNumber, LVSCW_AUTOSIZE_USEHEADER);
 
   memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
@@ -141,8 +133,8 @@ void CSubscriberPhoneNumbersView::UpdateColumnsContent()
     {
       i--;
       CString csTempBuff;
-      csTempBuff.Format(_T("%d"),  m_SubscriberPhoneNumbersArray[i]->m_iCode);
-      int iRowIdx = oListCtrl.InsertItem(CSubscriberPhoneNumbersDoc::eColCode, csTempBuff);
+      csTempBuff.Format(_T("%d"),  m_SubscriberPhoneNumbersArray[i]->m_iSubscrCode);
+      int iRowIdx = oListCtrl.InsertItem(CSubscriberPhoneNumbersDoc::eColSubscrCode, csTempBuff);
       SetRowData(iRowIdx, *m_SubscriberPhoneNumbersArray[i]);
     }
   }
@@ -160,9 +152,12 @@ void CSubscriberPhoneNumbersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
   }
   else
   {
-    CCitiesArray oCitiesArray;
-    GetDocument()->SelectAllCityCodes(oCitiesArray);
-    CSubscriberPhoneNumbersDlg oEditDlg(oSubscriberPhoneNumbers, eCmd, &oCitiesArray);
+    CSubscribersArray oSubscrArray;
+    GetDocument()->SelectAllSubscribersCodes(oSubscrArray);
+    CPhoneTypesArray oPhoneTypesArray;
+    GetDocument()->SelectAllPhoneTypesCodes(oPhoneTypesArray);
+
+    CSubscriberPhoneNumbersDlg oEditDlg(oSubscriberPhoneNumbers, eCmd, &oSubscrArray, &oPhoneTypesArray);
     
     if(oEditDlg.DoModal() != IDOK)
       return;
@@ -229,24 +224,17 @@ void CSubscriberPhoneNumbersView::SetRowData(int iRowIdx, CSubscriberPhoneNumber
 {
   CListCtrl& oListCtrl = GetListCtrl();
   CString csTempBuff;
-  csTempBuff.Format(_T("%d"),  oSubscriber.m_iCode);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColCode, csTempBuff);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColFirstName, oSubscriber.m_szFirstName);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColSecondName,oSubscriber.m_szSecondName);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColThirdName, oSubscriber.m_szThirdName);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColIDNumb,    oSubscriber.m_szIDNumb);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColCityCode,  oSubscriber.m_szCityCode);
-  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColAddress,   oSubscriber.m_szAddress);  
+  csTempBuff.Format(_T("%d"),  oSubscriber.m_iSubscrCode);
+  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColSubscrCode,  csTempBuff);
+  csTempBuff.Format(_T("%d"),  oSubscriber.m_iPhoneCode);
+  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneCode,   csTempBuff);
+  oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneNumber, oSubscriber.m_szPhoneNumber); 
 
   /* Оразмеряване на колоната спрямо дължината на името й */
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode, LVSCW_AUTOSIZE_USEHEADER);
   /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColFirstName,  LVSCW_AUTOSIZE);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSecondName, LVSCW_AUTOSIZE);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColThirdName,  LVSCW_AUTOSIZE);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColIDNumb,     LVSCW_AUTOSIZE);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColCityCode,   LVSCW_AUTOSIZE);
-  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColAddress,    LVSCW_AUTOSIZE);
+  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneCode,   LVSCW_AUTOSIZE_USEHEADER);
+  oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneNumber, LVSCW_AUTOSIZE);
 }
 
 // CSubscriberPhoneNumbersView diagnostics

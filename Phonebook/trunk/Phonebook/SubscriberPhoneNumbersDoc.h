@@ -14,7 +14,7 @@ protected: // create from serialization only
 // Attributes
 public:
   /* »збро€ване имената на колоните и техните номера */
-  enum  eColumn{eColCode = 0, eColFirstName, eColSecondName, eColThirdName, eColIDNumb, eColCityCode, eColAddress, eCOL_NUMB};
+  enum  eColumn{eColSubscrCode, eColPhoneCode, eColPhoneNumber, eCOL_NUMB};
 // Operations
 public:
 
@@ -33,7 +33,9 @@ public:
   BOOL DeleteWhereId(const int iId);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
   BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
-  BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
+  BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
+  BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

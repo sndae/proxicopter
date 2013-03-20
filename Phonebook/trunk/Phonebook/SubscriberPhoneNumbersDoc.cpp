@@ -110,7 +110,7 @@ BOOL CSubscriberPhoneNumbersDoc::DeleteWhereId(const int iId)
 BOOL CSubscriberPhoneNumbersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
   /* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
-  int iTableCol = (int)eCol + (int)CSubscriberPhoneNumbersTable::eColCode ;
+  int iTableCol = (int)eCol + (int)CSubscriberPhoneNumbersTable::eColSubscrCode ;
   return m_oSubscriberPhoneNumbersTable.SortByColumn((CSubscriberPhoneNumbersTable::eColumn)iTableCol , bAsc);
 }
 
@@ -122,9 +122,14 @@ BOOL CSubscriberPhoneNumbersDoc::SelectByContent(const CSubscriberPhoneNumbers &
   return m_oSubscriberPhoneNumbersTable.SelectByContent(oModCity);
 }
 
-BOOL CSubscriberPhoneNumbersDoc::SelectAllCityCodes(CCitiesArray &oCitiesArray)
+BOOL CSubscriberPhoneNumbersDoc::SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray)
 {
-  return m_oSubscriberPhoneNumbersTable.SelectAllCityCodes(oCitiesArray);
+  return m_oSubscriberPhoneNumbersTable.SelectAllSubscribersCodes(oSubscribersArray);
+}
+
+BOOL CSubscriberPhoneNumbersDoc::SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray)
+{
+  return m_oSubscriberPhoneNumbersTable.SelectAllPhoneTypesCodes(oPhoneTypesArray);
 }
 
 // CSubscriberPhoneNumbersDoc diagnostics
