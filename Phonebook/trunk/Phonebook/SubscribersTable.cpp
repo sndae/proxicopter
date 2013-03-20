@@ -130,12 +130,12 @@ BOOL CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
 BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscribers)
 {
   /* Проверка дали има друг абонат със такъв код */
-  if(SelectByContent(CSubscribers(oSubscribers.m_iId, oSubscribers.m_iRevNumb, oSubscribers.m_iCode)) == TRUE)
+  if(SelectByContent(CSubscribers(oSubscribers.m_iId, 0, oSubscribers.m_iCode)) == TRUE)
     return FALSE;
 
-  /* Проверка дали има друг абонат със такова ЕГН */
-//  if(SelectByContent(CSubscribers(oSubscribers.m_iId, oSubscribers.m_iRevNumb, -1, -1, 0, 0, 0, oSubscribers.m_szIDNumb, 0)) == TRUE)
- //   return FALSE;
+  /* Проверка дали има запис със такова ЕГН на абонат */
+  if(SelectByContent(CSubscribers(oSubscribers.m_iId, 0, -1, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
+    return FALSE;
 
   CSubscribers oCurrSubscriber;
   if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
@@ -165,13 +165,13 @@ BOOL CSubscribersTable::Insert(const CSubscribers &oSubscribers)
   if(!CanAppend())
     return FALSE;
 
-  /* Проверка дали има запис с такъв код на  */
+  /* Проверка дали има запис с такъв код на абонат */
   if(SelectByContent(CSubscribers(-1, 0, oSubscribers.m_iCode)) == TRUE)
     return FALSE;
 
-  /* Проверка дали има запис със такъв тип телефон*/
-  //if(SelectByContent(CSubscribers(-1, 0, -1, oSubscribers.m_szType)) == TRUE)
-  //  return FALSE;
+  /* Проверка дали има запис със такова ЕГН на абонат */
+  if(SelectByContent(CSubscribers(-1, 0, -1, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
+    return FALSE;
 
   Close();
   m_strFilter = _T("");
@@ -372,7 +372,7 @@ void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
   _tcscpy(oSubscriber.m_szSecondName, m_SECOND_NAME);
   _tcscpy(oSubscriber.m_szThirdName,  m_THIRD_NAME);
   _tcscpy(oSubscriber.m_szIDNumb,     m_IDENT_NUMB);
-  _tcscpy(oSubscriber.m_szCityCode, GetCityCodeByCityId(m_ID));
+  _tcscpy(oSubscriber.m_szCityCode, GetCityCodeByCityId(m_CITY_ID));
   _tcscpy(oSubscriber.m_szAddress, m_CITY_ADDR);
 
 }

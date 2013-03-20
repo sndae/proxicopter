@@ -290,6 +290,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CommonDefinitions.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MainFrm.h"
 				>
 			</File>
@@ -299,10 +303,6 @@
 			</File>
 			<File
 				RelativePath=".\Resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RowsPtrArray.h"
 				>
 			</File>
 			<File
