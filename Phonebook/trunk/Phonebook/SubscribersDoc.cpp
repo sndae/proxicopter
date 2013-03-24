@@ -75,7 +75,7 @@ BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oSubscrib
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0, (LPARAM)&oSubscriber);
     
   return bRes;
@@ -88,7 +88,7 @@ BOOL CSubscribersDoc::Insert(const CSubscribers &oSubscriber)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;
@@ -101,7 +101,7 @@ BOOL CSubscribersDoc::DeleteWhereId(const int iId)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;

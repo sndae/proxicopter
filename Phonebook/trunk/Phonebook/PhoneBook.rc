@@ -95,6 +95,16 @@ BEGIN
     LTEXT           "Телефонен номер",IDC_STATIC,161,7,60,8
 END
 
+IDD_NEWDOCDLG DIALOGEX 0, 0, 261, 170
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,141,149,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,204,149,50,14
+    CONTROL         "",IDC_LIST2,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,247,140
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -141,6 +151,14 @@ BEGIN
         BOTTOMMARGIN, 56
         HORZGUIDE, 34
     END
+
+    IDD_NEWDOCDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 254
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 163
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -161,6 +179,14 @@ BEGIN
     END
 END
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_IMAGES_SMALL        BITMAP                  "res\\bmp00001.bmp"
+IDB_IMAGES_NORMAL       BITMAP                  "res\\images_n.bmp"
 #endif    // Bulgarian resources
 /////////////////////////////////////////////////////////////////////////////
 

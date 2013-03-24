@@ -29,6 +29,7 @@ CPhoneTypesDoc::CPhoneTypesDoc()
 
 CPhoneTypesDoc::~CPhoneTypesDoc()
 {
+  m_bAutoDelete = FALSE;
 }
 
 BOOL CPhoneTypesDoc::OnNewDocument()
@@ -75,7 +76,7 @@ BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneType)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0, (LPARAM)&oPhoneType);
     
   return bRes;
@@ -88,7 +89,7 @@ BOOL CPhoneTypesDoc::Insert(const CPhoneTypes &oPhoneType)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;
@@ -101,7 +102,7 @@ BOOL CPhoneTypesDoc::DeleteWhereId(const int iId)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;

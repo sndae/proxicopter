@@ -7,8 +7,9 @@
 
 class CCitiesDoc : public CDocument
 {
-protected: // create from serialization only
+public:
   CCitiesDoc();
+protected: // create from serialization only
   DECLARE_DYNCREATE(CCitiesDoc)
 
 // Attributes

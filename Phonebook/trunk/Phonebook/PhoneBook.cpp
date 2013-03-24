@@ -6,15 +6,7 @@
 #include "MainFrm.h"
 
 #include "ChildFrm.h"
-#include "CitiesDoc.h"
-#include "CitiesView.h"
-#include "PhoneTypesDoc.h"
-#include "PhoneTypesView.h"
-#include "SubscribersDoc.h"
-#include "SubscribersView.h"
-#include "SubscriberPhoneNumbersDoc.h"
-#include "SubscriberPhoneNumbersView.h"
-
+#include "NewDocDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,7 +18,7 @@
 BEGIN_MESSAGE_MAP(CPhoneBookApp, CWinApp)
 	ON_COMMAND(ID_APP_ABOUT, &CPhoneBookApp::OnAppAbout)
 	// Standard file based document commands
-	ON_COMMAND(ID_FILE_NEW, &CWinApp::OnFileNew)
+	ON_COMMAND(ID_FILE_NEW, OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CWinApp::OnFileOpen)
 END_MESSAGE_MAP()
 
@@ -116,7 +108,24 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
 
+  CMainFrame* pMainFrame = new CMainFrame;
 
+  m_poCitiesDoc = new CCitiesDoc;
+
+  m_poCitiesDoc->SetTitle(L"Just a demo");
+  CCreateContext context;
+  context.m_pCurrentDoc = m_poCitiesDoc;
+  context.m_pNewViewClass = NULL;
+  context.m_pNewDocTemplate = NULL;
+  context.m_pLastView = NULL;
+  context.m_pCurrentFrame = NULL;
+  if (!pMainFrame->LoadFrame(IDR_MAINFRAME,WS_OVERLAPPEDWINDOW |
+  FWS_ADDTOTITLE,NULL, &context ))
+    return FALSE;
+  
+  m_pMainWnd = pMainFrame;
+
+#if 0
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
@@ -125,6 +134,7 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 	}
 	m_pMainWnd = pMainFrame;
+
 	// call DragAcceptFiles only if there's a suffix
 	//  In an MDI app, this should occur immediately after setting m_pMainWnd
 
@@ -133,11 +143,11 @@ BOOL CPhoneBookApp::InitInstance()
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-
 	// Dispatch commands specified on the command line.  Will return FALSE if
 	// app was launched with /RegServer, /Register, /Unregserver or /Unregister.
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
+#endif
 	// The main window has been initialized, so show and update it
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
@@ -182,6 +192,42 @@ void CPhoneBookApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
+}
+
+
+void CPhoneBookApp::OnFileNew()
+{
+  CPtrList oTemplateList;
+  
+  CDocManager *poAppDocManager = AfxGetApp()->m_pDocManager;
+  
+  POSITION pDocTemplPos = poAppDocManager->GetFirstDocTemplatePosition();
+  
+  while(pDocTemplPos){
+    CDocTemplate *poDocTemplate  = poAppDocManager->GetNextDocTemplate(pDocTemplPos);
+    oTemplateList.AddHead(poDocTemplate);
+  }
+
+	if (oTemplateList.GetCount() > 1)
+	{
+//#include "NewDocDlg.h"
+    CNewDocDlg dlg(&oTemplateList);
+    dlg.DoModal();
+		// more than one document template to choose from
+		// bring up dialog prompting user
+
+    //CNewTypeDlg dlg(&oTemplateList);
+		//INT_PTR nID = dlg.DoModal();
+		//if (nID == IDOK)
+	//		poDocTemplate = dlg.m_pSelectedTemplate;
+	//	else
+	//		return;     // none - cancel operation
+	}
+
+	//ASSERT(poDocTemplate != NULL);
+	//ASSERT_KINDOF(CDocTemplate, poDocTemplate);
+
+	//poDocTemplate->OpenDocumentFile(NULL);
 }
 
 

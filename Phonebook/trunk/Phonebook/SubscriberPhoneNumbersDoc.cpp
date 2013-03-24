@@ -75,7 +75,7 @@ BOOL CSubscriberPhoneNumbersDoc::UpdateWhereId(const int iId, const CSubscriberP
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0, (LPARAM)&oSubscriber);
     
   return bRes;
@@ -88,7 +88,7 @@ BOOL CSubscriberPhoneNumbersDoc::Insert(const CSubscriberPhoneNumbers &oSubscrib
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;
@@ -101,7 +101,7 @@ BOOL CSubscriberPhoneNumbersDoc::DeleteWhereId(const int iId)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;

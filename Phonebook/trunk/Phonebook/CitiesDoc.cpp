@@ -24,7 +24,7 @@ END_MESSAGE_MAP()
 CCitiesDoc::CCitiesDoc()
 {
   // TODO: add one-time construction code here
-
+  m_bAutoDelete = FALSE;
 }
 
 CCitiesDoc::~CCitiesDoc()
@@ -76,7 +76,7 @@ BOOL CCitiesDoc::UpdateWhereId(const int iId, const CCities &oCity)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0, (LPARAM)&oCity);
     
   return bRes;
@@ -89,7 +89,7 @@ BOOL CCitiesDoc::Insert(const CCities &oCity)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;
@@ -102,7 +102,7 @@ BOOL CCitiesDoc::DeleteWhereId(const int iId)
     return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
-  SetModifiedFlag();
+  
   UpdateAllViews(0);
   
   return bRes;
