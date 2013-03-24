@@ -7,8 +7,9 @@
 
 class CSubscriberPhoneNumbersDoc : public CDocument
 {
-protected: // create from serialization only
+public:
   CSubscriberPhoneNumbersDoc();
+protected: // create from serialization only
   DECLARE_DYNCREATE(CSubscriberPhoneNumbersDoc)
 
 // Attributes

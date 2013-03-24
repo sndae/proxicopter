@@ -19,7 +19,7 @@ BEGIN_MESSAGE_MAP(CPhoneBookApp, CWinApp)
 	ON_COMMAND(ID_APP_ABOUT, &CPhoneBookApp::OnAppAbout)
 	// Standard file based document commands
 	ON_COMMAND(ID_FILE_NEW, OnFileNew)
-	ON_COMMAND(ID_FILE_OPEN, &CWinApp::OnFileOpen)
+	ON_COMMAND(ID_FILE_OPEN,OnFileNew)
 END_MESSAGE_MAP()
 
 
@@ -79,7 +79,26 @@ BOOL CPhoneBookApp::InitInstance()
 
 	if (!pDocTemplate)
 		return FALSE;
-	AddDocTemplate(pDocTemplate);
+
+  /* Създаване на инстанции на наличните типове докоменти */
+  m_poCitiesDoc = new CCitiesDoc;
+  m_poCPhnTypesDoc = new CPhoneTypesDoc;
+  m_poSubscribersDoc = new CSubscribersDoc;
+  m_poSubscrPhnNmbDoc = new CSubscriberPhoneNumbersDoc;
+
+  m_poCitiesDoc->SetTitle(L"Градове");
+  m_poCPhnTypesDoc->SetTitle(L"Типове телефони");
+  m_poSubscribersDoc->SetTitle(L"Абонати"); 
+  m_poSubscrPhnNmbDoc->SetTitle(L"Телефонни номера на абонати");
+
+  m_poCitiesDoc->OnNewDocument();
+  m_poCPhnTypesDoc->OnNewDocument();
+  m_poSubscribersDoc->OnNewDocument(); 
+  m_poSubscrPhnNmbDoc->OnNewDocument();
+
+  /* Добавяне новосъздадената инстанция на CitiesDoc към темплейта */
+  pDocTemplate->AddDocument(m_poCitiesDoc);
+  AddDocTemplate(pDocTemplate);
 
   pDocTemplate = new CMultiDocTemplate(IDR_PHONES_TYPE,
 		RUNTIME_CLASS(CPhoneTypesDoc),
@@ -88,6 +107,9 @@ BOOL CPhoneBookApp::InitInstance()
 
 	if (!pDocTemplate)
 		return FALSE;
+
+  /* Добавяне новосъздадената инстанция на CPhoneTypesDoc към темплейта */
+  pDocTemplate->AddDocument(m_poCPhnTypesDoc);
 	AddDocTemplate(pDocTemplate);
 
   pDocTemplate = new CMultiDocTemplate(IDR_SUBSCRIBERS_TYPE,
@@ -97,6 +119,9 @@ BOOL CPhoneBookApp::InitInstance()
 
 	if (!pDocTemplate)
 		return FALSE;
+
+  /* Добавяне новосъздадената инстанция на CSubscribersDoc към темплейта */
+  pDocTemplate->AddDocument(m_poSubscribersDoc);
 	AddDocTemplate(pDocTemplate);
 
   pDocTemplate = new CMultiDocTemplate(IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE,
@@ -106,26 +131,11 @@ BOOL CPhoneBookApp::InitInstance()
 
 	if (!pDocTemplate)
 		return FALSE;
+
+  /* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
+  pDocTemplate->AddDocument(m_poSubscrPhnNmbDoc);
 	AddDocTemplate(pDocTemplate);
 
-  CMainFrame* pMainFrame = new CMainFrame;
-
-  m_poCitiesDoc = new CCitiesDoc;
-
-  m_poCitiesDoc->SetTitle(L"Just a demo");
-  CCreateContext context;
-  context.m_pCurrentDoc = m_poCitiesDoc;
-  context.m_pNewViewClass = NULL;
-  context.m_pNewDocTemplate = NULL;
-  context.m_pLastView = NULL;
-  context.m_pCurrentFrame = NULL;
-  if (!pMainFrame->LoadFrame(IDR_MAINFRAME,WS_OVERLAPPEDWINDOW |
-  FWS_ADDTOTITLE,NULL, &context ))
-    return FALSE;
-  
-  m_pMainWnd = pMainFrame;
-
-#if 0
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
@@ -135,19 +145,6 @@ BOOL CPhoneBookApp::InitInstance()
 	}
 	m_pMainWnd = pMainFrame;
 
-	// call DragAcceptFiles only if there's a suffix
-	//  In an MDI app, this should occur immediately after setting m_pMainWnd
-
-
-	// Parse command line for standard shell commands, DDE, file open
-	CCommandLineInfo cmdInfo;
-	ParseCommandLine(cmdInfo);
-
-	// Dispatch commands specified on the command line.  Will return FALSE if
-	// app was launched with /RegServer, /Register, /Unregserver or /Unregister.
-	if (!ProcessShellCommand(cmdInfo))
-		return FALSE;
-#endif
 	// The main window has been initialized, so show and update it
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
@@ -155,7 +152,10 @@ BOOL CPhoneBookApp::InitInstance()
 	return TRUE;
 }
 
-
+int CPhoneBookApp::ExitInstance()
+{  
+  return CWinApp::ExitInstance();
+}
 
 // CAboutDlg dialog used for App About
 
@@ -197,38 +197,35 @@ void CPhoneBookApp::OnAppAbout()
 
 void CPhoneBookApp::OnFileNew()
 {
+  /* Създаване на свързан списък от указатели към съществуващите CDocTemplate обекти */
   CPtrList oTemplateList;
   
-  CDocManager *poAppDocManager = AfxGetApp()->m_pDocManager;
-  
-  POSITION pDocTemplPos = poAppDocManager->GetFirstDocTemplatePosition();
+  POSITION pDocTemplPos = AfxGetApp()->m_pDocManager->GetFirstDocTemplatePosition();
   
   while(pDocTemplPos){
-    CDocTemplate *poDocTemplate  = poAppDocManager->GetNextDocTemplate(pDocTemplPos);
+    CDocTemplate *poDocTemplate  = AfxGetApp()->m_pDocManager->GetNextDocTemplate(pDocTemplPos);
     oTemplateList.AddHead(poDocTemplate);
   }
+      
+  CNewDocDlg dlg(&oTemplateList);
+  if(IDOK != dlg.DoModal())
+    return;
 
-	if (oTemplateList.GetCount() > 1)
-	{
-//#include "NewDocDlg.h"
-    CNewDocDlg dlg(&oTemplateList);
-    dlg.DoModal();
-		// more than one document template to choose from
-		// bring up dialog prompting user
+  /* Взимане на CDocTemplate-a, който трябва да се ползва за създаване на желаният от потребиителят документ */
+  CDocTemplate *pSelectedDocTemplate = dlg.GetSelectedDoc();
+  if(!pSelectedDocTemplate)
+    return;
 
-    //CNewTypeDlg dlg(&oTemplateList);
-		//INT_PTR nID = dlg.DoModal();
-		//if (nID == IDOK)
-	//		poDocTemplate = dlg.m_pSelectedTemplate;
-	//	else
-	//		return;     // none - cancel operation
-	}
+  /* Във всеки CDocTemplate трябва да се съдържа само една единствена инстанция на 
+     CDocument - тази която е създадена и добавена във InitInstance */
+  POSITION oDocPos = pSelectedDocTemplate->GetFirstDocPosition();
+  CDocument* poSelectedDoc =  pSelectedDocTemplate->GetNextDoc(oDocPos);
 
-	//ASSERT(poDocTemplate != NULL);
-	//ASSERT_KINDOF(CDocTemplate, poDocTemplate);
-
-	//poDocTemplate->OpenDocumentFile(NULL);
+  /* Създаване на рамка за новото CView и създаването му */
+  CFrameWnd* pFrame = pSelectedDocTemplate->CreateNewFrame(poSelectedDoc, NULL);
+  pSelectedDocTemplate->InitialUpdateFrame(pFrame, poSelectedDoc);
 }
+
 
 
 // CPhoneBookApp message handlers

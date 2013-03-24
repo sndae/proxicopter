@@ -24,7 +24,6 @@ END_MESSAGE_MAP()
 CCitiesDoc::CCitiesDoc()
 {
   // TODO: add one-time construction code here
-  m_bAutoDelete = FALSE;
 }
 
 CCitiesDoc::~CCitiesDoc()

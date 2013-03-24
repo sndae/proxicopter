@@ -27,7 +27,6 @@ END_MESSAGE_MAP()
 CCitiesView::CCitiesView()
 {
   // TODO: add construction code here
-
 }
 
 CCitiesView::~CCitiesView()

@@ -11,6 +11,7 @@ class CNewDocDlg : public CDialog
 public:
 	CNewDocDlg(CPtrList *poTemplateList = 0,CWnd* pParent = NULL);   // standard constructor
 	virtual ~CNewDocDlg();
+  CDocTemplate *GetSelectedDoc();
 
 // Dialog Data
 	enum { IDD = IDD_NEWDOCDLG };
@@ -18,13 +19,17 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  virtual void OnOK();
   void InitItems();
   void InitIcons();
 
-  CPtrList *m_poTemplateList;
-  CImageList	m_cImageListNormal, m_cImageListSmall;
-
 	DECLARE_MESSAGE_MAP()
+private:
+  CPtrList      *m_poTemplateList;
+  CImageList	  m_cImageListNormal;
+  CListCtrl     m_cListCtrl;
+  CDocTemplate *m_poSelectedTempl;
 public:
-  CListCtrl m_cListCtrl;
+  afx_msg void OnNMClickNewdoclistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
+  afx_msg void OnNMDblclkListCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 };

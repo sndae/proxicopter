@@ -24,7 +24,6 @@ END_MESSAGE_MAP()
 CSubscribersDoc::CSubscribersDoc()
 {
   // TODO: add one-time construction code here
-
 }
 
 CSubscribersDoc::~CSubscribersDoc()

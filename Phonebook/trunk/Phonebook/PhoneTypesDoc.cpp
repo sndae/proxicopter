@@ -29,7 +29,7 @@ CPhoneTypesDoc::CPhoneTypesDoc()
 
 CPhoneTypesDoc::~CPhoneTypesDoc()
 {
-  m_bAutoDelete = FALSE;
+
 }
 
 BOOL CPhoneTypesDoc::OnNewDocument()
