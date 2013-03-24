@@ -102,7 +102,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,141,149,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,204,149,50,14
-    CONTROL         "",IDC_LIST2,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,247,140
+    CONTROL         "",IDC_NEWDOCLIST_CTRL,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,247,140
 END
 
 
@@ -318,6 +318,13 @@ BEGIN
 END
 
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -371,13 +378,6 @@ IDD_CITIES_EDIT         ICON                    "res\\PhoneBookDoc.ico"
 IDR_PHONES_TYPE         ICON                    "res\\PhoneBookDoc.ico"
 IDR_SUBSCRIBERS_TYPE    ICON                    "res\\PhoneBookDoc.ico"
 IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE ICON                    "res\\PhoneBookDoc.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

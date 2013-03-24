@@ -43,6 +43,7 @@
 #define IDC_SUBSCRIBERS_EDIT_IDNUMBER   1015
 #define IDC_SUBSCRIBERS_EDIT_THIRD_NAME 1016
 #define IDC_LIST2                       1017
+#define IDC_NEWDOCLIST_CTRL             1018
 #define ID_FIND                         32771
 #define ID_ROW_FIND                     32771
 #define ID_OPTIONS_EDIT                 32773
@@ -54,9 +55,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        141
+#define _APS_NEXT_RESOURCE_VALUE        142
 #define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1018
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
