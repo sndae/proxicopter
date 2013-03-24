@@ -32,10 +32,6 @@ public:
   virtual int ExitInstance();
   virtual void OnFileNew();
 // Implementation
-	CCitiesDoc                 *m_poCitiesDoc;
-  CPhoneTypesDoc             *m_poCPhnTypesDoc;
-  CSubscribersDoc            *m_poSubscribersDoc;
-  CSubscriberPhoneNumbersDoc *m_poSubscrPhnNmbDoc;
   afx_msg void OnAppAbout();
 
 	DECLARE_MESSAGE_MAP()
