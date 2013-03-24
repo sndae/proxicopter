@@ -221,7 +221,7 @@ void CPhoneBookApp::OnFileNew()
   POSITION oDocPos = pSelectedDocTemplate->GetFirstDocPosition();
   CDocument* poSelectedDoc =  pSelectedDocTemplate->GetNextDoc(oDocPos);
 
-  /* Създаване на рамка за новото CView и създаването му */
+  /* Създаване на рамка за новото CView и инициализирането му */
   CFrameWnd* pFrame = pSelectedDocTemplate->CreateNewFrame(poSelectedDoc, NULL);
   pSelectedDocTemplate->InitialUpdateFrame(pFrame, poSelectedDoc);
 }

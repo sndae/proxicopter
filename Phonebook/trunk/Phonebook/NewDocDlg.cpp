@@ -60,7 +60,7 @@ void CNewDocDlg::InitItems()
 		lvi.iItem = iCntr;
 		lvi.iSubItem = 0;
     lvi.pszText = (LPTSTR)(LPCTSTR)(csClassName.GetBuffer());
-		lvi.iImage = iCntr%8;		// There are 8 images in the image list
+		lvi.iImage = iCntr%8;		// Налични са 8 изображения в листа с иконите
 		m_cListCtrl.InsertItem(&lvi);
 #if 0
 		// Вмъкване на подобкет 1
