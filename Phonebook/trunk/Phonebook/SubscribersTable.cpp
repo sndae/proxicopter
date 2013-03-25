@@ -374,7 +374,6 @@ void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 	_tcscpy(oSubscriber.m_szIDNumb,		 m_IDENT_NUMB);
 	_tcscpy(oSubscriber.m_szCityCode, GetCityCodeByCityId(m_CITY_ID));
 	_tcscpy(oSubscriber.m_szAddress, m_CITY_ADDR);
-
 }
 
 void CSubscribersTable::DoExchange“ÓDatabaseData(const CSubscribers &oSubscriber)

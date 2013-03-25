@@ -134,6 +134,9 @@
 				RelativePath=".\Phonebook\MainFrm.cpp">
 			</File>
 			<File
+				RelativePath=".\Phonebook\NewDocDlg.cpp">
+			</File>
+			<File
 				RelativePath=".\Phonebook\PhoneBook.cpp">
 			</File>
 			<File
@@ -187,6 +190,22 @@
 					RelativePath=".\Phonebook\SubscribersView.cpp">
 				</File>
 			</Filter>
+			<Filter
+				Name="SubscriberPhoneNumbers"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersDlg.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersDoc.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersTable.cpp">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersView.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -202,13 +221,13 @@
 				RelativePath=".\Phonebook\MainFrm.h">
 			</File>
 			<File
+				RelativePath=".\Phonebook\NewDocDlg.h">
+			</File>
+			<File
 				RelativePath=".\Phonebook\PhoneBook.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\Resource.h">
-			</File>
-			<File
-				RelativePath=".\Phonebook\RowsPtrArray.h">
 			</File>
 			<File
 				RelativePath=".\Phonebook\stdafx.h">
@@ -271,6 +290,25 @@
 				</File>
 				<File
 					RelativePath=".\Phonebook\SubscribersView.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="SubscriberPhoneNumbers"
+				Filter="">
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbers.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersDlg.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersDoc.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersTable.h">
+				</File>
+				<File
+					RelativePath=".\Phonebook\SubscriberPhoneNumbersView.h">
 				</File>
 			</Filter>
 		</Filter>
