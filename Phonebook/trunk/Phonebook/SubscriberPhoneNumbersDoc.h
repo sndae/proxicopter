@@ -8,34 +8,34 @@
 class CSubscriberPhoneNumbersDoc : public CDocument
 {
 public:
-  CSubscriberPhoneNumbersDoc();
+	CSubscriberPhoneNumbersDoc();
 protected: // create from serialization only
-  DECLARE_DYNCREATE(CSubscriberPhoneNumbersDoc)
+	DECLARE_DYNCREATE(CSubscriberPhoneNumbersDoc)
 
 // Attributes
 public:
-  /* »збро€ване имената на колоните и техните номера */
-  enum  eColumn{eColSubscrCode, eColPhoneCode, eColPhoneNumber, eCOL_NUMB};
+	/* »збро€ване имената на колоните и техните номера */
+	enum	eColumn{eColSubscrCode, eColPhoneCode, eColPhoneNumber, eCOL_NUMB};
 // Operations
 public:
 
 // Overrides
 public:
-  virtual BOOL OnNewDocument();
-  virtual void Serialize(CArchive& ar);
+	virtual BOOL OnNewDocument();
+	virtual void Serialize(CArchive& ar);
 
 // Implementation
 public:
 	virtual ~CSubscriberPhoneNumbersDoc();
-  BOOL SelectAll(CSubscriberPhoneNumbersArray &oSubscriberPhoneNumbersArray);
-  BOOL SelectWhereId(const int iId, CSubscriberPhoneNumbers &oSubscriber);
-  BOOL UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oSubscriber);
-  BOOL Insert(const CSubscriberPhoneNumbers &oSubscriber);
-  BOOL DeleteWhereId(const int iId);
-  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
-  BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
-  BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
-  BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
+	BOOL SelectAll(CSubscriberPhoneNumbersArray &oSubscriberPhoneNumbersArray);
+	BOOL SelectWhereId(const int iId, CSubscriberPhoneNumbers &oSubscriber);
+	BOOL UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oSubscriber);
+	BOOL Insert(const CSubscriberPhoneNumbers &oSubscriber);
+	BOOL DeleteWhereId(const int iId);
+	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+	BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
+	BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
+	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -43,11 +43,11 @@ public:
 #endif
 
 protected:
-  CSubscriberPhoneNumbersTable m_oSubscriberPhoneNumbersTable;
+	CSubscriberPhoneNumbersTable m_oSubscriberPhoneNumbersTable;
 
 // Generated message map functions
 protected:
-  DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 };
 
 

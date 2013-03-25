@@ -6,7 +6,7 @@
 	#error "include 'stdafx.h' before including this file for PCH"
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"			 // main symbols
 #include "CitiesDoc.h"
 #include "CitiesView.h"
 #include "PhoneTypesDoc.h"
@@ -29,10 +29,10 @@ public:
 // Overrides
 public:
 	virtual BOOL InitInstance();
-  virtual int ExitInstance();
-  virtual void OnFileNew();
+	virtual int ExitInstance();
+	virtual void OnFileNew();
 // Implementation
-  afx_msg void OnAppAbout();
+	afx_msg void OnAppAbout();
 
 	DECLARE_MESSAGE_MAP()
 

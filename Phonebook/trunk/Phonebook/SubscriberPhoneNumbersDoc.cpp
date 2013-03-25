@@ -23,7 +23,7 @@ END_MESSAGE_MAP()
 
 CSubscriberPhoneNumbersDoc::CSubscriberPhoneNumbersDoc()
 {
-  // TODO: add one-time construction code here
+	// TODO: add one-time construction code here
 
 }
 
@@ -33,13 +33,13 @@ CSubscriberPhoneNumbersDoc::~CSubscriberPhoneNumbersDoc()
 
 BOOL CSubscriberPhoneNumbersDoc::OnNewDocument()
 {
-  if (!CDocument::OnNewDocument())
-    return FALSE;
+	if (!CDocument::OnNewDocument())
+		return FALSE;
 
-  // TODO: add reinitialization code here
-  // (SDI documents will reuse this document)
+	// TODO: add reinitialization code here
+	// (SDI documents will reuse this document)
 
-  return TRUE;
+	return TRUE;
 }
 
 
@@ -49,87 +49,87 @@ BOOL CSubscriberPhoneNumbersDoc::OnNewDocument()
 
 void CSubscriberPhoneNumbersDoc::Serialize(CArchive& ar)
 {
-  if (ar.IsStoring())
-  {
-    // TODO: add storing code here
-  }
-  else
-  {
-    // TODO: add loading code here
-  }
+	if (ar.IsStoring())
+	{
+		// TODO: add storing code here
+	}
+	else
+	{
+		// TODO: add loading code here
+	}
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectAll(CSubscriberPhoneNumbersArray &oSubscriberPhoneNumbersArray)
 {
-  return m_oSubscriberPhoneNumbersTable.SelectAll(oSubscriberPhoneNumbersArray);
+	return m_oSubscriberPhoneNumbersTable.SelectAll(oSubscriberPhoneNumbersArray);
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectWhereId(const int iId, CSubscriberPhoneNumbers &oSubscriber)
 {
-  return m_oSubscriberPhoneNumbersTable.SelectWhereId(iId, oSubscriber);
+	return m_oSubscriberPhoneNumbersTable.SelectWhereId(iId, oSubscriber);
 }
 BOOL CSubscriberPhoneNumbersDoc::UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oSubscriber)
 {
-  BOOL bRes = m_oSubscriberPhoneNumbersTable.UpdateWhereId(iId, oSubscriber);
-  if(!bRes)
-    return FALSE;
+	BOOL bRes = m_oSubscriberPhoneNumbersTable.UpdateWhereId(iId, oSubscriber);
+	if(!bRes)
+		return FALSE;
 
-  /* индициране за извършени промени по съдържанието на таблицата */
-  
-  UpdateAllViews(0, (LPARAM)&oSubscriber);
-    
-  return bRes;
+	/* индициране за извършени промени по съдържанието на таблицата */
+	
+	UpdateAllViews(0, (LPARAM)&oSubscriber);
+		
+	return bRes;
 }
 
 BOOL CSubscriberPhoneNumbersDoc::Insert(const CSubscriberPhoneNumbers &oSubscriber)
 {
-  BOOL bRes = m_oSubscriberPhoneNumbersTable.Insert(oSubscriber);
-  if(!bRes)
-    return FALSE;
+	BOOL bRes = m_oSubscriberPhoneNumbersTable.Insert(oSubscriber);
+	if(!bRes)
+		return FALSE;
 
-  /* индициране за извършени промени по съдържанието на таблицата */
-  
-  UpdateAllViews(0);
-  
-  return bRes;
+	/* индициране за извършени промени по съдържанието на таблицата */
+	
+	UpdateAllViews(0);
+	
+	return bRes;
 }
 
 BOOL CSubscriberPhoneNumbersDoc::DeleteWhereId(const int iId)
 {
-  BOOL bRes = m_oSubscriberPhoneNumbersTable.DeleteWhereId(iId);
-  if(!bRes)
-    return FALSE;
+	BOOL bRes = m_oSubscriberPhoneNumbersTable.DeleteWhereId(iId);
+	if(!bRes)
+		return FALSE;
 
-  /* индициране за извършени промени по съдържанието на таблицата */
-  
-  UpdateAllViews(0);
-  
-  return bRes;
+	/* индициране за извършени промени по съдържанието на таблицата */
+	
+	UpdateAllViews(0);
+	
+	return bRes;
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
-  /* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
-  int iTableCol = (int)eCol + (int)CSubscriberPhoneNumbersTable::eColSubscrCode ;
-  return m_oSubscriberPhoneNumbersTable.SortByColumn((CSubscriberPhoneNumbersTable::eColumn)iTableCol , bAsc);
+	/* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
+	int iTableCol = (int)eCol + (int)CSubscriberPhoneNumbersTable::eColSubscrCode ;
+	return m_oSubscriberPhoneNumbersTable.SortByColumn((CSubscriberPhoneNumbersTable::eColumn)iTableCol , bAsc);
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectByContent(const CSubscriberPhoneNumbers &oSubscriber)
 {
-  CSubscriberPhoneNumbers oModCity = oSubscriber;
-  /* търсенето да включи всички записи */ 
-  oModCity.m_iId = DNC;
-  return m_oSubscriberPhoneNumbersTable.SelectByContent(oModCity);
+	CSubscriberPhoneNumbers oModCity = oSubscriber;
+	/* търсенето да включи всички записи */ 
+	oModCity.m_iId = DNC;
+	return m_oSubscriberPhoneNumbersTable.SelectByContent(oModCity);
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray)
 {
-  return m_oSubscriberPhoneNumbersTable.SelectAllSubscribersCodes(oSubscribersArray);
+	return m_oSubscriberPhoneNumbersTable.SelectAllSubscribersCodes(oSubscribersArray);
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray)
 {
-  return m_oSubscriberPhoneNumbersTable.SelectAllPhoneTypesCodes(oPhoneTypesArray);
+	return m_oSubscriberPhoneNumbersTable.SelectAllPhoneTypesCodes(oPhoneTypesArray);
 }
 
 // CSubscriberPhoneNumbersDoc diagnostics
@@ -137,12 +137,12 @@ BOOL CSubscriberPhoneNumbersDoc::SelectAllPhoneTypesCodes(CPhoneTypesArray &oPho
 #ifdef _DEBUG
 void CSubscriberPhoneNumbersDoc::AssertValid() const
 {
-  CDocument::AssertValid();
+	CDocument::AssertValid();
 }
 
 void CSubscriberPhoneNumbersDoc::Dump(CDumpContext& dc) const
 {
-  CDocument::Dump(dc);
+	CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
