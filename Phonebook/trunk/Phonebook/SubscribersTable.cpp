@@ -94,16 +94,23 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 		bRes = Open(CRecordset::dynaset);
 	}
 		
-	if(bRes && !IsBOF())
+	try
 	{
-		/* запъвлване на масива с указатели към данни на редове от таблицата */
-		while(!IsEOF())
+		if(bRes && !IsBOF())
 		{
-			CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), m_CODE, GetCityCodeByCityId(m_CITY_ID), m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
-															 m_THIRD_NAME.GetBuffer(), m_IDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
-			oSubscribersArray.Add(poSubscribers);		 
-			MoveNext();
+			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			while(!IsEOF())
+			{
+				CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), m_CODE, GetCityCodeByCityId(m_CITY_ID), m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
+																m_THIRD_NAME.GetBuffer(), m_IDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
+				oSubscribersArray.Add(poSubscribers);		 
+				MoveNext();
+			}
 		}
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
 	}
 
 	return TRUE;
@@ -117,13 +124,20 @@ BOOL CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
 	m_strFilter.Format(_T("ID = %d"), iId);
 	Open(CRecordset::dynaset);
 
-	if(IsBOF())
-		return FALSE; 
+	try
+	{
+		if(IsBOF())
+			return FALSE; 
 
-	MoveFirst();
+		MoveFirst();
 
-	DoExchangeFromDatabaseData(oSubscribers);
-	
+		DoExchangeFromDatabaseData(oSubscribers);
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
@@ -144,15 +158,25 @@ BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscr
 	if(oCurrSubscriber.m_iRevNumb != oSubscribers.m_iRevNumb)
 		return FALSE;
 
-	MoveFirst();
-	Edit();
+	try
+	{
+		MoveFirst();
+		Edit();
 
-	CSubscribers oSubscrCopy = oSubscribers;
-	oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
-	
-	DoExchangeТоDatabaseData(oSubscrCopy);
+		CSubscribers oSubscrCopy = oSubscribers;
+		oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
+		
+		DoExchangeТоDatabaseData(oSubscrCopy);
 
-	Update();
+		Update();
+	}
+	catch(CDBException *)
+	{
+		m_strFilter = _T("");
+		m_strSort = _T("");
+
+		return FALSE;
+	}
 
 	m_strFilter = _T("");
 	m_strSort = _T("");
@@ -178,19 +202,25 @@ BOOL CSubscribersTable::Insert(const CSubscribers &oSubscribers)
 	m_strSort = _T("");
 	Open(CRecordset::dynaset);
 
-	MoveLast();	
-	/* буфериране ID на последният ред от раблицата */ 
-	int iLastRowId = m_ID;
-	AddNew();
+	try
+	{
+		MoveLast();	
+		/* буфериране ID на последният ред от раблицата */ 
+		int iLastRowId = m_ID;
+		AddNew();
 
-	CSubscribers oSubscrCopy = oSubscribers;
-	oSubscrCopy.m_iId = iLastRowId + 1;
-	oSubscrCopy.m_iRevNumb = 0;
+		CSubscribers oSubscrCopy = oSubscribers;
+		oSubscrCopy.m_iId = iLastRowId + 1;
+		oSubscrCopy.m_iRevNumb = 0;
 
-	DoExchangeТоDatabaseData(oSubscrCopy);
+		DoExchangeТоDatabaseData(oSubscrCopy);
 
-	Update();
-
+		Update();
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 	return TRUE;
 }
 
@@ -203,12 +233,20 @@ BOOL CSubscribersTable::DeleteWhereId(const int iId)
 		return FALSE;
 	}
 	
-	if(!CanUpdate())
+	try
+	{
+		if(!CanUpdate())
+			return FALSE;
+
+		Delete();
+	}
+	catch(CDBException *)
+	{
+		m_strFilter = _T("");
 		return FALSE;
-
-	Delete();
+	}
+	
 	m_strFilter = _T("");
-
 	return TRUE;
 }
 
@@ -244,7 +282,14 @@ BOOL CSubscribersTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
 		return FALSE;
 	}
 
-	Open(CRecordset::dynaset);
+	try
+	{
+		Open(CRecordset::dynaset);
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -344,11 +389,17 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 		m_strFilter += szColFilter;
 	}
 
-	Open(CRecordset::dynaset);
+	try
+	{
+		Open(CRecordset::dynaset);
 
-	if(IsBOF())
-		return FALSE; 
-
+		if(IsBOF())
+			return FALSE; 
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 	return TRUE;
 }
 

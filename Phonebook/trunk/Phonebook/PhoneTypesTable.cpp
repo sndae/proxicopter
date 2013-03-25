@@ -83,15 +83,22 @@ BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 		bRes = Open(CRecordset::dynaset);
 	}
 		
-	if(bRes && !IsBOF())
+	try
 	{
-		/* запъвлване на масива с указатели към данни на редове от таблицата */
-		while(!IsEOF())
+		if(bRes && !IsBOF())
 		{
-			CPhoneTypes *poPhoneTypes = new CPhoneTypes(int(m_ID), int(m_REV_NUMB), int(m_CODE), m_PHONE_TYPE.GetBuffer());
-			oPhoneTypesArray.Add(poPhoneTypes);		 
-			MoveNext();
+			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			while(!IsEOF())
+			{
+				CPhoneTypes *poPhoneTypes = new CPhoneTypes(int(m_ID), int(m_REV_NUMB), int(m_CODE), m_PHONE_TYPE.GetBuffer());
+				oPhoneTypesArray.Add(poPhoneTypes);		 
+				MoveNext();
+			}
 		}
+	}
+	catch(CDBException *e)
+	{
+		return FALSE;
 	}
 
 	return TRUE;
@@ -103,14 +110,21 @@ BOOL CPhoneTypesTable::SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes)
 		Close(); 
 
 	m_strFilter.Format(_T("ID = %d"), iId);
-	Open(CRecordset::dynaset);
+	try
+	{
+		Open(CRecordset::dynaset);
 
-	if(IsBOF())
-		return FALSE; 
+		if(IsBOF())
+			return FALSE; 
 
-	MoveFirst();
+		MoveFirst();
 
-	DoExchangeFromDatabaseData(oPhoneTypes);
+		DoExchangeFromDatabaseData(oPhoneTypes);
+	}
+	catch(CDBException *e)
+	{
+		return FALSE;
+	}
 
 	return TRUE;	
 }
@@ -132,12 +146,22 @@ BOOL CPhoneTypesTable::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTyp
 	if(oCurrPhoneType.m_iRevNumb != oPhoneTypes.m_iRevNumb)
 		return FALSE;
 
-	MoveFirst();	
-	Edit();
+	try
+	{
+		MoveFirst();	
+		Edit();
 
-	DoExchangeТоDatabaseData(CPhoneTypes(oPhoneTypes.m_iId, oCurrPhoneType.m_iRevNumb + 1, oPhoneTypes.m_iCode, oPhoneTypes.m_szType));
+		DoExchangeТоDatabaseData(CPhoneTypes(oPhoneTypes.m_iId, oCurrPhoneType.m_iRevNumb + 1, oPhoneTypes.m_iCode, oPhoneTypes.m_szType));
 
-	Update();
+		Update();
+	}
+	catch(CDBException *e)
+	{
+		m_strFilter = _T("");
+		m_strSort = _T("");
+
+		return FALSE;
+	}
 
 	m_strFilter = _T("");
 	m_strSort = _T("");
@@ -161,16 +185,23 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
 	Close();
 	m_strFilter = _T("");
 	m_strSort = _T("");
-	Open(CRecordset::dynaset);
+	try
+	{
+		Open(CRecordset::dynaset);
 
-	MoveLast();	
-	/* буфериране ID на последният ред от раблицата */ 
-	int iLastRowId = m_ID;
-	AddNew();
+		MoveLast();	
+		/* буфериране ID на последният ред от раблицата */ 
+		int iLastRowId = m_ID;
+		AddNew();
 
-	DoExchangeТоDatabaseData(CPhoneTypes(iLastRowId + 1, 0, oPhoneTypes.m_iCode, oPhoneTypes.m_szType));
+		DoExchangeТоDatabaseData(CPhoneTypes(iLastRowId + 1, 0, oPhoneTypes.m_iCode, oPhoneTypes.m_szType));
 
-	Update();
+		Update();
+	}
+	catch(CDBException *e)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -187,9 +218,17 @@ BOOL CPhoneTypesTable::DeleteWhereId(const int iId)
 	if(!CanUpdate())
 		return FALSE;
 
-	Delete();
-	m_strFilter = _T("");
+	try
+	{
+		Delete();
+	}
+	catch(CDBException *e)
+	{
+		m_strFilter = _T("");
+		return FALSE;
+	}
 
+  m_strFilter = _T("");
 	return TRUE;
 }
 
@@ -210,8 +249,15 @@ BOOL CPhoneTypesTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
 	default:
 		return FALSE;
 	}
-
-	Open(CRecordset::dynaset);
+	
+	try
+	{
+		Open(CRecordset::dynaset);
+	}
+	catch(CDBException *e)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -248,10 +294,17 @@ BOOL CPhoneTypesTable::SelectByContent(const CPhoneTypes &oPhoneTypes)
 		m_strFilter += szColFilter;
 	}
 
-	Open(CRecordset::dynaset);
+	try
+	{
+		Open(CRecordset::dynaset);
 
-	if(IsBOF())
-		return FALSE; 
+		if(IsBOF())
+			return FALSE; 
+	}
+	catch(CDBException *e)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }

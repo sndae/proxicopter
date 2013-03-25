@@ -86,16 +86,23 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
     bRes = Open(CRecordset::dynaset);
   }
     
-  if(bRes && !IsBOF())
-  {
-    /* запъвлване на масива с указатели към данни на редове от таблицата */
-    while(!IsEOF())
-    {
-      CCities *poCity = new CCities(int(m_ID), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer());
-      oCitiesArray.Add(poCity);     
-      MoveNext();
-    }
-  }
+	try
+	{
+		if(bRes && !IsBOF())
+		{
+			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			while(!IsEOF())
+			{
+				CCities *poCity = new CCities(int(m_ID), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer());
+				oCitiesArray.Add(poCity);     
+				MoveNext();
+			}
+		}
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 
   return TRUE;
 }
@@ -106,15 +113,21 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
     Close(); 
 
   m_strFilter.Format(_T("ID = %d"), iId);
-  Open(CRecordset::dynaset);
+  try
+	{
+		Open(CRecordset::dynaset);
 
-  if(IsBOF())
-    return FALSE; 
+		if(IsBOF())
+			return FALSE; 
 
-  MoveFirst();
+		MoveFirst();
 
-  DoExchangeFromDatabaseData(oCity);
-
+		DoExchangeFromDatabaseData(oCity);
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
   return TRUE;  
 }
 
@@ -135,17 +148,27 @@ BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
   if(oCurrCity.m_iRevNumb != oCity.m_iRevNumb)
     return FALSE;
 
-  MoveFirst();  
-  Edit();
+	try
+	{
+		MoveFirst();  
+		Edit();
 
-  DoExchangeТоDatabaseData(CCities(oCity.m_iId, oCurrCity.m_iRevNumb + 1, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
+		DoExchangeТоDatabaseData(CCities(oCity.m_iId, oCurrCity.m_iRevNumb + 1, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
 
-  Update();
+		Update();
+	}
+	catch(CDBException *)
+	{
+		m_strFilter = _T("");
+		m_strSort = _T("");
 
-  m_strFilter = _T("");
-  m_strSort = _T("");
+		return FALSE;
+	}
 
-  return TRUE;
+	m_strFilter = _T("");
+	m_strSort = _T("");
+
+	return TRUE;
 }
 
 BOOL CCitiesTable::Insert(const CCities &oCity)
@@ -169,12 +192,16 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
   MoveLast();  
   /* буфериране ID на последният ред от раблицата */ 
   int iLastRowId = m_ID;
-  AddNew();
-
-  DoExchangeТоDatabaseData(CCities(iLastRowId + 1, 0, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
-
-  Update();
-
+  try
+	{
+		AddNew();
+	  DoExchangeТоDatabaseData(CCities(iLastRowId + 1, 0, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
+	  Update();
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
   return TRUE;
 }
 
@@ -190,7 +217,15 @@ BOOL CCitiesTable::DeleteWhereId(const int iId)
   if(!CanUpdate())
     return FALSE;
 
-  Delete();
+	try
+	{
+	  Delete();
+	}
+	catch(CDBException *)
+	{
+		m_strFilter = _T("");
+		return FALSE;
+	}
   m_strFilter = _T("");
 
   return TRUE;
@@ -217,8 +252,14 @@ BOOL CCitiesTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
     return FALSE;
   }
 
-  Open(CRecordset::dynaset);
-
+	try
+	{
+	  Open(CRecordset::dynaset);
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
   return TRUE;
 }
 
@@ -261,12 +302,17 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
     szColFilter.Format(_T("AREA = '%s'"), oCity.m_szArea);
     m_strFilter += szColFilter;
   }
+	try
+	{
+	  Open(CRecordset::dynaset);
 
-  Open(CRecordset::dynaset);
-
-  if(IsBOF())
-    return FALSE; 
-
+		if(IsBOF())
+			return FALSE; 
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
   return TRUE;
 }
 

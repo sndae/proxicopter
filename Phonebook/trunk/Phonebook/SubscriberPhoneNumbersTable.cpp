@@ -85,17 +85,24 @@ BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubs
 		m_bSQLEn = FALSE;
 		bRes = Open(CRecordset::dynaset);
 	}
-		
-	if(bRes && !IsBOF())
+	
+	try
 	{
-		/* запъвлване на масива с указатели към данни на редове от таблицата */
-		while(!IsEOF())
+		if(bRes && !IsBOF())
 		{
-			CSubscriberPhoneNumbers *poSubscrPhoneNmbPhoneNumbers = new CSubscriberPhoneNumbers(int(m_ID), int(m_REV_NUMB), GetSubscrCodeBySubscrId(m_SUBSCRIBER_ID), 
-																								GetPhoneCodeByPhoneId(m_PHONE_ID), m_PHONE_NUMB);
-			oSubscrPhoneNmbPhoneNumbersArray.Add(poSubscrPhoneNmbPhoneNumbers);		 
-			MoveNext();
+			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			while(!IsEOF())
+			{
+				CSubscriberPhoneNumbers *poSubscrPhoneNmbPhoneNumbers = new CSubscriberPhoneNumbers(int(m_ID), int(m_REV_NUMB), GetSubscrCodeBySubscrId(m_SUBSCRIBER_ID), 
+																									GetPhoneCodeByPhoneId(m_PHONE_ID), m_PHONE_NUMB);
+				oSubscrPhoneNmbPhoneNumbersArray.Add(poSubscrPhoneNmbPhoneNumbers);		 
+				MoveNext();
+			}
 		}
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
 	}
 
 	return TRUE;
@@ -109,26 +116,25 @@ BOOL CSubscriberPhoneNumbersTable::SelectWhereId(const int iId, CSubscriberPhone
 	m_strFilter.Format(_T("ID = %d"), iId);
 	Open(CRecordset::dynaset);
 
-	if(IsBOF())
-		return FALSE; 
+	try
+	{
+		if(IsBOF())
+			return FALSE; 
 
-	MoveFirst();
+		MoveFirst();
 
-	DoExchangeFromDatabaseData(oSubscrPhoneNmbPhoneNumbers);
-	
+		DoExchangeFromDatabaseData(oSubscrPhoneNmbPhoneNumbers);
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
+
 	return TRUE;	
 }
 
 BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers)
 {
-//	/* Проверка дали има друг абонат със такъв код */
-//	if(SelectByContent(CSubscriberPhoneNumbers(oSubscrPhoneNmbPhoneNumbers.m_iId, 0, oSubscrPhoneNmbPhoneNumbers.m_iCode)) == TRUE)
-//		return FALSE;
-
-//	/* Проверка дали има запис със такова ЕГН на абонат */
-//	if(SelectByContent(CSubscriberPhoneNumbers(oSubscrPhoneNmbPhoneNumbers.m_iId, 0, DNC, 0, 0, 0, 0, oSubscrPhoneNmbPhoneNumbers.m_szIDNumb)) == TRUE)
-//		return FALSE;
-
 	CSubscriberPhoneNumbers oCurrSubscriber;
 	if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
 		return FALSE;
@@ -136,15 +142,24 @@ BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscribe
 	if(oCurrSubscriber.m_iRevNumb != oSubscrPhoneNmbPhoneNumbers.m_iRevNumb)
 		return FALSE;
 
-	MoveFirst();	
-	Edit();
+	try
+	{
+		MoveFirst();	
+		Edit();
 
-	CSubscriberPhoneNumbers oSubscrCopy = oSubscrPhoneNmbPhoneNumbers;
-	oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
-	
-	DoExchangeТоDatabaseData(oSubscrCopy);
+		CSubscriberPhoneNumbers oSubscrCopy = oSubscrPhoneNmbPhoneNumbers;
+		oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
+		
+		DoExchangeТоDatabaseData(oSubscrCopy);
 
-	Update();
+		Update();
+	}
+	catch(CDBException *)
+	{
+		m_strFilter = _T("");
+		m_strSort = _T("");
+		return FALSE;
+	}
 
 	m_strFilter = _T("");
 	m_strSort = _T("");
@@ -165,15 +180,23 @@ BOOL CSubscriberPhoneNumbersTable::Insert(const CSubscriberPhoneNumbers &oSubscr
 	MoveLast();	
 	/* буфериране ID на последният ред от раблицата */ 
 	int iLastRowId = m_ID;
-	AddNew();
+	
+	try
+	{
+		AddNew();
 
-	CSubscriberPhoneNumbers oSubscrCopy = oSubscrPhoneNmbPhoneNumbers;
-	oSubscrCopy.m_iId = iLastRowId + 1;
-	oSubscrCopy.m_iRevNumb = 0;
+		CSubscriberPhoneNumbers oSubscrCopy = oSubscrPhoneNmbPhoneNumbers;
+		oSubscrCopy.m_iId = iLastRowId + 1;
+		oSubscrCopy.m_iRevNumb = 0;
 
-	DoExchangeТоDatabaseData(oSubscrCopy);
+		DoExchangeТоDatabaseData(oSubscrCopy);
 
-	Update();
+		Update();
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -186,13 +209,21 @@ BOOL CSubscriberPhoneNumbersTable::DeleteWhereId(const int iId)
 		m_strFilter = _T("");
 		return FALSE;
 	}
-	
-	if(!CanUpdate())
+
+	try
+	{
+		if(!CanUpdate())
+			return FALSE;
+
+		Delete();
+	}
+	catch(CDBException *)
+	{
+		m_strFilter = _T("");
 		return FALSE;
+	}
 
-	Delete();
-	m_strFilter = _T("");
-
+  m_strFilter = _T("");
 	return TRUE;
 }
 
@@ -216,8 +247,15 @@ BOOL CSubscriberPhoneNumbersTable::SortByColumn(const eColumn eCol, const BOOL b
 	default:
 		return FALSE;
 	}
-
-	Open(CRecordset::dynaset);
+	
+	try
+	{
+		Open(CRecordset::dynaset);
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -305,10 +343,17 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 		m_strFilter += szColFilter;
 	}	
 
-	Open(CRecordset::dynaset);
+	try
+	{
+		Open(CRecordset::dynaset);
 
-	if(IsBOF())
-		return FALSE; 
+		if(IsBOF())
+			return FALSE; 
+	}
+	catch(CDBException *)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
