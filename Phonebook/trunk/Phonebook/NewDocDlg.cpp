@@ -49,7 +49,7 @@ void CNewDocDlg::InitItems()
 
   POSITION oPos = m_poTemplateList->GetHeadPosition();
   CString  csClassName;
-  int iCntr = 0;
+	int iCntr = m_poTemplateList->GetCount();
   while(oPos)
   {
    ((CDocTemplate*)m_poTemplateList->GetAt(oPos))->GetDocString(csClassName, CDocTemplate::fileNewName);
@@ -60,7 +60,7 @@ void CNewDocDlg::InitItems()
 		lvi.iItem = iCntr;
 		lvi.iSubItem = 0;
     lvi.pszText = (LPTSTR)(LPCTSTR)(csClassName.GetBuffer());
-		lvi.iImage = iCntr%8;		// Налични са 8 изображения в листа с иконите
+		lvi.iImage = --iCntr;		// Налични са 8 изображения в листа с иконите
 		m_cListCtrl.InsertItem(&lvi);
 #if 0
 		// Вмъкване на подобкет 1
@@ -73,7 +73,6 @@ void CNewDocDlg::InitItems()
 		lvi.pszText = (LPTSTR)(LPCTSTR)(csClassName.GetBuffer());
 		m_cListCtrl.SetItem(&lvi);
 #endif
-    iCntr++;
     m_poTemplateList->GetNext(oPos);
   }
   

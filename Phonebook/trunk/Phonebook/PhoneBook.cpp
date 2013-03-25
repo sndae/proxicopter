@@ -220,6 +220,7 @@ void CPhoneBookApp::OnFileNew()
 	/* Във всеки CDocTemplate трябва да се съдържа само една единствена инстанция на 
 		 CDocument - тази която е създадена и добавена във InitInstance */
 	POSITION oDocPos = pSelectedDocTemplate->GetFirstDocPosition();
+	ASSERT(oDocPos != 0);
 	CDocument* poSelectedDoc =	pSelectedDocTemplate->GetNextDoc(oDocPos);
 
 	/* Създаване на рамка за новото CView и инициализирането му */

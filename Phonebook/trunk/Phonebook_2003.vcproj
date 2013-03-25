@@ -51,7 +51,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;_SQL_DE"
 				Culture="1033"
 				AdditionalIncludeDirectories="$(IntDir)"/>
 			<Tool
