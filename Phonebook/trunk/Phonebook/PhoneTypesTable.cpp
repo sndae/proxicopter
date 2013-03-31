@@ -96,7 +96,7 @@ BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 			}
 		}
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		return FALSE;
 	}
@@ -121,7 +121,7 @@ BOOL CPhoneTypesTable::SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes)
 
 		DoExchangeFromDatabaseData(oPhoneTypes);
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		return FALSE;
 	}
@@ -155,7 +155,7 @@ BOOL CPhoneTypesTable::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTyp
 
 		Update();
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		m_strFilter = _T("");
 		m_strSort = _T("");
@@ -198,7 +198,7 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
 
 		Update();
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		return FALSE;
 	}
@@ -222,7 +222,7 @@ BOOL CPhoneTypesTable::DeleteWhereId(const int iId)
 	{
 		Delete();
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		m_strFilter = _T("");
 		return FALSE;
@@ -254,7 +254,7 @@ BOOL CPhoneTypesTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
 	{
 		Open(CRecordset::dynaset);
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		return FALSE;
 	}
@@ -301,7 +301,7 @@ BOOL CPhoneTypesTable::SelectByContent(const CPhoneTypes &oPhoneTypes)
 		if(IsBOF())
 			return FALSE; 
 	}
-	catch(CDBException *e)
+	catch(CDBException *)
 	{
 		return FALSE;
 	}

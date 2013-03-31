@@ -303,6 +303,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Person"
+				>
+				<File
+					RelativePath=".\PersonDoc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PersonView.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -434,6 +446,26 @@
 				</File>
 				<File
 					RelativePath=".\SubscriberPhoneNumbersView.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Person"
+				>
+				<File
+					RelativePath=".\Person.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PersonDlg.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PersonDoc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PersonView.h"
 					>
 				</File>
 			</Filter>

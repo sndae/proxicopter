@@ -71,16 +71,19 @@ BOOL CPhoneBookApp::InitInstance()
 	LoadStdProfileSettings(4);	// Load standard INI file options (including MRU)
 
 	/* Създаване на инстанции на наличните типове докоменти */
+	CPersonDoc *poPersonDoc = new CPersonDoc;
 	CCitiesDoc *poCitiesDoc = new CCitiesDoc;
 	CPhoneTypesDoc *poCPhnTypesDoc = new CPhoneTypesDoc;
 	CSubscribersDoc *poSubscribersDoc = new CSubscribersDoc;
 	CSubscriberPhoneNumbersDoc *poSubscrPhnNmbDoc = new CSubscriberPhoneNumbersDoc;
 
+	poPersonDoc->SetTitle(L"Абонати данни");
 	poCitiesDoc->SetTitle(L"Градове");
 	poCPhnTypesDoc->SetTitle(L"Типове телефони");
 	poSubscribersDoc->SetTitle(L"Абонати"); 
 	poSubscrPhnNmbDoc->SetTitle(L"Телефонни номера на абонати");
 
+	poPersonDoc->OnNewDocument();
 	poCitiesDoc->OnNewDocument();
 	poCPhnTypesDoc->OnNewDocument();
 	poSubscribersDoc->OnNewDocument(); 
@@ -135,6 +138,18 @@ BOOL CPhoneBookApp::InitInstance()
 
 	/* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
 	pDocTemplate->AddDocument(poSubscrPhnNmbDoc);
+	AddDocTemplate(pDocTemplate);
+
+	pDocTemplate = new CMultiDocTemplate(IDR_PERSONS_TYPE,
+		RUNTIME_CLASS(CPersonDoc),
+		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+		RUNTIME_CLASS(CPersonView));
+
+	if (!pDocTemplate)
+		return FALSE;
+
+	/* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
+	pDocTemplate->AddDocument(poPersonDoc);
 	AddDocTemplate(pDocTemplate);
 
 	// create main MDI Frame window

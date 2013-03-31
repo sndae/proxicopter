@@ -15,7 +15,8 @@
 #include "SubscribersView.h"
 #include "SubscriberPhoneNumbersDoc.h"
 #include "SubscriberPhoneNumbersView.h"
-
+#include "PersonDoc.h"
+#include "PersonView.h"
 // CPhoneBookApp:
 // See PhoneBook.cpp for the implementation of this class
 //
