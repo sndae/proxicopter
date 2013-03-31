@@ -177,7 +177,9 @@ BOOL CSubscriberPhoneNumbersTable::Insert(const CSubscriberPhoneNumbers &oSubscr
 	m_strSort = _T("");
 	Open(CRecordset::dynaset);
 
-	MoveLast();	
+	if(!IsBOF())
+		MoveLast();	
+
 	/* буфериране ID на последният ред от раблицата */ 
 	int iLastRowId = m_ID;
 	

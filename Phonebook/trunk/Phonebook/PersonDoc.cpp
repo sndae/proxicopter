@@ -84,6 +84,8 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 			if(!m_oSubscrPhoneNumbsTable.SelectAll(poPerson->m_oPhoneNumbsArr))
 				return FALSE;
 		}
+
+		oPersonArray.Add(poPerson);
 	}
 
 	return TRUE;

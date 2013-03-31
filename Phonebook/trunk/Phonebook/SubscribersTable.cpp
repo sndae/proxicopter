@@ -204,7 +204,8 @@ BOOL CSubscribersTable::Insert(const CSubscribers &oSubscribers)
 
 	try
 	{
-		MoveLast();	
+		if(!IsBOF())
+			MoveLast();	
 		/* буфериране ID на последният ред от раблицата */ 
 		int iLastRowId = m_ID;
 		AddNew();
