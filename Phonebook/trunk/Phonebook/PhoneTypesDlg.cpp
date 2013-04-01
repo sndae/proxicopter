@@ -23,38 +23,37 @@ CPhoneTypesDlg::~CPhoneTypesDlg()
 
 BOOL CPhoneTypesDlg::OnInitDialog()
 {
-	if(CDialog::OnInitDialog())
+	CDialog::OnInitDialog();
+
+	switch(m_eMenuCmd)
 	{
-		switch(m_eMenuCmd)
-		{
-			case eCmdFind:	 
-				SetWindowText(MENU_CMD_FIND); 
-				ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
-				m_oPhoneTypes.m_iCode = DNC;
-				break;
-			case eCmdUpdate: 
-				SetWindowText(MENU_CMD_UPDATE); 
-				break;
-			case eCmdInsert: 
-				SetWindowText(MENU_CMD_INSERT); 
-				ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
-				break;
-			case eCmdDelete: 
-				SetWindowText(MENU_CMD_DELETE); 
-				m_Code.EnableWindow(FALSE); 
-				m_PhoneType.EnableWindow(FALSE);
-				break;
-			default: 
-				ASSERT(0);
-				break;
-		}
-
-		m_PhoneType.SetWindowTextW(m_oPhoneTypes.m_szType);
-
-		return TRUE;
+		case eCmdFind:	 
+			SetWindowText(MENU_CMD_FIND); 
+			ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
+			m_oPhoneTypes.m_iCode = DNC;
+			break;
+		case eCmdUpdate: 
+			SetWindowText(MENU_CMD_UPDATE); 
+			break;
+		case eCmdInsert: 
+			SetWindowText(MENU_CMD_INSERT); 
+			ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
+			break;
+		case eCmdDelete: 
+			SetWindowText(MENU_CMD_DELETE); 
+			m_Code.EnableWindow(FALSE); 
+			m_PhoneType.EnableWindow(FALSE);
+			break;
+		default: 
+			ASSERT(0);
+			break;
 	}
-	return FALSE;
+
+	m_PhoneType.SetWindowTextW(m_oPhoneTypes.m_szType);
+
+	return TRUE;
 }
+
 void CPhoneTypesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);

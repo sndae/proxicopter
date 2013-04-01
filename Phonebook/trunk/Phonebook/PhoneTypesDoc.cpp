@@ -24,7 +24,7 @@ END_MESSAGE_MAP()
 CPhoneTypesDoc::CPhoneTypesDoc()
 {
 	// TODO: add one-time construction code here
-
+	m_bAutoDelete = FALSE;
 }
 
 CPhoneTypesDoc::~CPhoneTypesDoc()

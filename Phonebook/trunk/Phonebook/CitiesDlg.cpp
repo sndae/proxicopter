@@ -23,33 +23,31 @@ CCitiesDlg::~CCitiesDlg()
 
 BOOL CCitiesDlg::OnInitDialog()
 {
-  if(CDialog::OnInitDialog())
+  CDialog::OnInitDialog();
+
+  switch(m_eMenuCmd)
   {
-    switch(m_eMenuCmd)
-    {
-      case eCmdFind:   
-        SetWindowText(MENU_CMD_FIND); 
-        ZeroMemory(&m_oCity, sizeof(m_oCity)); 
-        break;
-      case eCmdUpdate: 
-        SetWindowText(MENU_CMD_UPDATE); 
-        break;
-      case eCmdInsert: 
-        SetWindowText(MENU_CMD_INSERT); 
-        ZeroMemory(&m_oCity, sizeof(m_oCity)); 
-        break;
-      default: 
-        ASSERT(0);
-        break;
-    }
-
-    m_Name.SetWindowTextW(m_oCity.m_szName);
-    m_Area.SetWindowTextW(m_oCity.m_szArea);
-    m_Code.SetWindowTextW(m_oCity.m_szCode);
-
-    return TRUE;
+    case eCmdFind:   
+      SetWindowText(MENU_CMD_FIND); 
+      ZeroMemory(&m_oCity, sizeof(m_oCity)); 
+      break;
+    case eCmdUpdate: 
+      SetWindowText(MENU_CMD_UPDATE); 
+      break;
+    case eCmdInsert: 
+      SetWindowText(MENU_CMD_INSERT); 
+      ZeroMemory(&m_oCity, sizeof(m_oCity)); 
+      break;
+    default: 
+      ASSERT(0);
+      break;
   }
-  return FALSE;
+
+  m_Name.SetWindowTextW(m_oCity.m_szName);
+  m_Area.SetWindowTextW(m_oCity.m_szArea);
+  m_Code.SetWindowTextW(m_oCity.m_szCode);
+
+  return TRUE;  
 }
 void CCitiesDlg::DoDataExchange(CDataExchange* pDX)
 {

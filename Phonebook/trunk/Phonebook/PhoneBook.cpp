@@ -71,23 +71,23 @@ BOOL CPhoneBookApp::InitInstance()
 	LoadStdProfileSettings(4);	// Load standard INI file options (including MRU)
 
 	/* Създаване на инстанции на наличните типове докоменти */
-	CPersonDoc *poPersonDoc = new CPersonDoc;
-	CCitiesDoc *poCitiesDoc = new CCitiesDoc;
-	CPhoneTypesDoc *poCPhnTypesDoc = new CPhoneTypesDoc;
-	CSubscribersDoc *poSubscribersDoc = new CSubscribersDoc;
-	CSubscriberPhoneNumbersDoc *poSubscrPhnNmbDoc = new CSubscriberPhoneNumbersDoc;
+	m_poPersonDoc = new CPersonDoc;
+	m_poCitiesDoc = new CCitiesDoc;
+	m_poPhoneTypesDoc = new CPhoneTypesDoc;
+	m_poSubscribersDoc = new CSubscribersDoc;
+	m_poSubscrPhnNmbDoc = new CSubscriberPhoneNumbersDoc;
 
-	poPersonDoc->SetTitle(L"Абонати данни");
-	poCitiesDoc->SetTitle(L"Градове");
-	poCPhnTypesDoc->SetTitle(L"Типове телефони");
-	poSubscribersDoc->SetTitle(L"Абонати"); 
-	poSubscrPhnNmbDoc->SetTitle(L"Телефонни номера на абонати");
+	m_poPersonDoc->SetTitle(L"Абонати данни");
+	m_poCitiesDoc->SetTitle(L"Градове");
+	m_poPhoneTypesDoc->SetTitle(L"Типове телефони");
+	m_poSubscribersDoc->SetTitle(L"Абонати"); 
+	m_poSubscrPhnNmbDoc->SetTitle(L"Телефонни номера на абонати");
 
-	poPersonDoc->OnNewDocument();
-	poCitiesDoc->OnNewDocument();
-	poCPhnTypesDoc->OnNewDocument();
-	poSubscribersDoc->OnNewDocument(); 
-	poSubscrPhnNmbDoc->OnNewDocument();	
+	m_poPersonDoc->OnNewDocument();
+	m_poCitiesDoc->OnNewDocument();
+	m_poPhoneTypesDoc->OnNewDocument();
+	m_poSubscribersDoc->OnNewDocument(); 
+	m_poSubscrPhnNmbDoc->OnNewDocument();	
 
 	// Register the application's document templates.	Document templates
 	//	serve as the connection between documents, frame windows and views	
@@ -101,7 +101,7 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 
 	/* Добавяне новосъздадената инстанция на CitiesDoc към темплейта */
-	pDocTemplate->AddDocument(poCitiesDoc);
+	pDocTemplate->AddDocument(m_poCitiesDoc);
 	AddDocTemplate(pDocTemplate);
 
 	pDocTemplate = new CMultiDocTemplate(IDR_PHONES_TYPE,
@@ -113,7 +113,7 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 
 	/* Добавяне новосъздадената инстанция на CPhoneTypesDoc към темплейта */
-	pDocTemplate->AddDocument(poCPhnTypesDoc);
+	pDocTemplate->AddDocument(m_poPhoneTypesDoc);
 	AddDocTemplate(pDocTemplate);
 
 	pDocTemplate = new CMultiDocTemplate(IDR_SUBSCRIBERS_TYPE,
@@ -125,7 +125,7 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 
 	/* Добавяне новосъздадената инстанция на CSubscribersDoc към темплейта */
-	pDocTemplate->AddDocument(poSubscribersDoc);
+	pDocTemplate->AddDocument(m_poSubscribersDoc);
 	AddDocTemplate(pDocTemplate);
 
 	pDocTemplate = new CMultiDocTemplate(IDR_SUBSCRIBER_PHONE_NUMBERS_TYPE,
@@ -137,7 +137,7 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 
 	/* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
-	pDocTemplate->AddDocument(poSubscrPhnNmbDoc);
+	pDocTemplate->AddDocument(m_poSubscrPhnNmbDoc);
 	AddDocTemplate(pDocTemplate);
 
 	pDocTemplate = new CMultiDocTemplate(IDR_PERSONS_TYPE,
@@ -149,7 +149,7 @@ BOOL CPhoneBookApp::InitInstance()
 		return FALSE;
 
 	/* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
-	pDocTemplate->AddDocument(poPersonDoc);
+	pDocTemplate->AddDocument(m_poPersonDoc);
 	AddDocTemplate(pDocTemplate);
 
 	// create main MDI Frame window
@@ -170,6 +170,12 @@ BOOL CPhoneBookApp::InitInstance()
 
 int CPhoneBookApp::ExitInstance()
 {	
+	delete m_poCitiesDoc;
+	delete m_poPersonDoc;
+	delete m_poPhoneTypesDoc;
+	delete m_poSubscribersDoc;
+	delete m_poSubscrPhnNmbDoc;
+
 	return CWinApp::ExitInstance();
 }
 

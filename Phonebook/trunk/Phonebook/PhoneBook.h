@@ -36,6 +36,11 @@ public:
 	afx_msg void OnAppAbout();
 
 	DECLARE_MESSAGE_MAP()
+	CCitiesDoc *m_poCitiesDoc;
+	CPersonDoc *m_poPersonDoc;
+	CPhoneTypesDoc *m_poPhoneTypesDoc;
+	CSubscribersDoc *m_poSubscribersDoc;
+	CSubscriberPhoneNumbersDoc *m_poSubscrPhnNmbDoc;
 
 };
 

@@ -28,8 +28,12 @@ protected:
 // Implementation
 public:
 	virtual ~CPersonView();
+  virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	void UpdateColumnsContent();
 	void SetRowData(int iRowIdx, CPerson &oPerson, CSubscriberPhoneNumbers &oPhoneNumber);
+  void ExecuteCntxMenuCmd(eMenuCmd eCmd);
+	CPersonDoc* GetDocument() const;
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -40,11 +44,7 @@ protected:
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
-  virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
-public:
-  void ExecuteCntxMenuCmd(eMenuCmd eCmd);
-	CPersonDoc* GetDocument() const;
   /* Текущият избран ред от списъка */
   int   m_iCurrRowSelected;
  /* Масив указващ начина на сортиране на всяка една от колоните */

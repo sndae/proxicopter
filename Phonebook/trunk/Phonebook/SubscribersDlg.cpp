@@ -24,51 +24,50 @@ CSubscribersDlg::~CSubscribersDlg()
 
 BOOL CSubscribersDlg::OnInitDialog()
 {
-	if(CDialog::OnInitDialog())
+	CDialog::OnInitDialog();
+
+	switch(m_eMenuCmd)
 	{
-		switch(m_eMenuCmd)
-		{
-			case eCmdFind:	 
-				SetWindowText(MENU_CMD_FIND); 
-				ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
-				m_oSubscribers.m_iCode = DNC;
-				break;
-			case eCmdUpdate: 
-				SetWindowText(MENU_CMD_UPDATE); 
-				break;
-			case eCmdInsert: 
-				SetWindowText(MENU_CMD_INSERT); 
-				ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
-				m_oSubscribers.m_iCode = DNC;
-				break;
-			default: 
-				ASSERT(0);
-				break;
-		}
-		CString csTembBuff;
-		if(m_oSubscribers.m_iCode != DNC)
-		{
-			csTembBuff.Format(_T("%d"), m_oSubscribers.m_iCode);
-			m_Code.SetWindowTextW(csTembBuff);
-		}
-		else
-			m_Code.SetWindowTextW(_T(""));
-
-		m_FirstName.SetWindowTextW(m_oSubscribers.m_szFirstName);
-		m_SecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
-		m_ThirdName.SetWindowTextW(m_oSubscribers.m_szThirdName);
-		m_IDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
-		if(m_pCitiesArray)
-		{
-			for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
-				m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
-		}
-		m_CityCode.SetWindowTextW(m_oSubscribers.m_szCityCode);
-		m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
-
-		return TRUE;
+		case eCmdFind:	 
+			SetWindowText(MENU_CMD_FIND); 
+			ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
+			m_oSubscribers.m_iCode = DNC;
+			break;
+		case eCmdUpdate: 
+			SetWindowText(MENU_CMD_UPDATE); 
+			break;
+		case eCmdInsert: 
+			SetWindowText(MENU_CMD_INSERT); 
+			ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
+			m_oSubscribers.m_iCode = DNC;
+			break;
+		default: 
+			ASSERT(0);
+			break;
 	}
-	return FALSE;
+	CString csTembBuff;
+	if(m_oSubscribers.m_iCode != DNC)
+	{
+		csTembBuff.Format(_T("%d"), m_oSubscribers.m_iCode);
+		m_Code.SetWindowTextW(csTembBuff);
+	}
+	else
+		m_Code.SetWindowTextW(_T(""));
+
+	m_FirstName.SetWindowTextW(m_oSubscribers.m_szFirstName);
+	m_SecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
+	m_ThirdName.SetWindowTextW(m_oSubscribers.m_szThirdName);
+	m_IDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
+	if(m_pCitiesArray)
+	{
+		for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
+			m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
+	}
+	m_CityCode.SetWindowTextW(m_oSubscribers.m_szCityCode);
+	m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
+
+	return TRUE;
+
 }
 void CSubscribersDlg::DoDataExchange(CDataExchange* pDX)
 {

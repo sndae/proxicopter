@@ -15,7 +15,7 @@ protected: // create from serialization only
 // Attributes
 public:
   /* »збро€ване имената на колоните и техните номера */
-  enum  eColumn{eColSubscrCode = 0, eColCity, eColFirstName, eColSecondName, eColThirdName, eColPhoneNumber, eColPhoneNumberType, eCOL_NUMB};
+  enum  eColumn{eColSubscrCode = 0, eColCity, eColFirstName, eColSecondName, eColThirdName, eColIdNumb, eColAddress, eColPhoneNumber, eColPhoneNumberType, eCOL_NUMB};
 // Operations
 public:
 
@@ -29,7 +29,9 @@ public:
 	virtual ~CPersonDoc();
   BOOL SelectAll(CPersonArray &oPersonArray);
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
-
+	BOOL SelectAllCities(CCitiesArray &oCitiesArr);
+	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr);
+	CString GetPhoneTypeName(CSubscriberPhoneNumbers &oSubscrPhoneNumb);
 	/*
   BOOL SelectWhereId(const int iId, CPerson &oCity);
   BOOL UpdateWhereId(const int iId, const CPerson &oCity);

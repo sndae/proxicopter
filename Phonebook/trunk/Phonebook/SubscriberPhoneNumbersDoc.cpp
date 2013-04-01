@@ -24,7 +24,7 @@ END_MESSAGE_MAP()
 CSubscriberPhoneNumbersDoc::CSubscriberPhoneNumbersDoc()
 {
 	// TODO: add one-time construction code here
-
+	m_bAutoDelete = FALSE;
 }
 
 CSubscriberPhoneNumbersDoc::~CSubscriberPhoneNumbersDoc()

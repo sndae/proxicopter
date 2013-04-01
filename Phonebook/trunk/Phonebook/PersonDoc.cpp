@@ -24,6 +24,7 @@ END_MESSAGE_MAP()
 CPersonDoc::CPersonDoc()
 {
   // TODO: add one-time construction code here
+	m_bAutoDelete = FALSE;
 }
 
 CPersonDoc::~CPersonDoc()
@@ -154,6 +155,29 @@ BOOL CPersonDoc::SelectByContent(const CPerson &oCity)
 #endif
 
 
+BOOL CPersonDoc::SelectAllCities(CCitiesArray &oCitiesArr)
+{
+	m_oCityTable.SelectByContent(CCities());
+	return m_oCityTable.SelectAll(oCitiesArr);
+}
+
+BOOL CPersonDoc::SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr)
+{
+	m_oPhoneTypeTable.SelectByContent(CPhoneTypes());
+	return m_oPhoneTypeTable.SelectAll(oPhoneTypesArr);
+}
+
+CString CPersonDoc::GetPhoneTypeName(CSubscriberPhoneNumbers &oSubscrPhoneNumb)
+{
+	if(!m_oPhoneTypeTable.SelectByContent(CPhoneTypes(DNC, 0, oSubscrPhoneNumb.m_iPhoneCode)))
+		return 0;
+
+	CPhoneTypesArray oPhoneTypeArr;	
+	if(!m_oPhoneTypeTable.SelectAll(oPhoneTypeArr))
+		return 0;
+
+	return oPhoneTypeArr[0]->m_szType;
+}
 
 // CPersonDoc diagnostics
 
