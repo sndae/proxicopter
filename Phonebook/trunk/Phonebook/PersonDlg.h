@@ -9,7 +9,7 @@ class CPersonDlg : public CDialog
 	DECLARE_DYNAMIC(CPersonDlg)
 
 public:
-	CPersonDlg(eMenuCmd eCmd, CPerson *poPerson = 0, CCitiesArray *poCitiesArr = 0, CPhoneTypesArray *poPhoneTypesArr = 0, CWnd* pParent = NULL);   // standard constructor
+	CPersonDlg(eMenuCmd eCmd, CPerson *poPerson , CSubscriberPhoneNumbers *poPhoneNumb, CPhoneTypes *poPhoneType, CCitiesArray *poCitiesArr, CPhoneTypesArray *poPhoneTypesArr, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
 
 // Dialog Data
@@ -21,6 +21,8 @@ protected:
 	CPerson m_oPerson;
 	CCitiesArray *m_poCitiesArr;
 	CPhoneTypesArray *m_poPhoneTypesArr;
+	CSubscriberPhoneNumbers *m_poPhoneNumb;
+	CPhoneTypes *m_poPhoneType;
 	eMenuCmd m_eMenuCmd;
 	DECLARE_MESSAGE_MAP()
 public:

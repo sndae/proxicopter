@@ -167,7 +167,7 @@ BOOL CPersonDoc::SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr)
 	return m_oPhoneTypeTable.SelectAll(oPhoneTypesArr);
 }
 
-CString CPersonDoc::GetPhoneTypeName(CSubscriberPhoneNumbers &oSubscrPhoneNumb)
+CPhoneTypes CPersonDoc::GetPhoneType(CSubscriberPhoneNumbers &oSubscrPhoneNumb)
 {
 	if(!m_oPhoneTypeTable.SelectByContent(CPhoneTypes(DNC, 0, oSubscrPhoneNumb.m_iPhoneCode)))
 		return 0;
@@ -176,7 +176,7 @@ CString CPersonDoc::GetPhoneTypeName(CSubscriberPhoneNumbers &oSubscrPhoneNumb)
 	if(!m_oPhoneTypeTable.SelectAll(oPhoneTypeArr))
 		return 0;
 
-	return oPhoneTypeArr[0]->m_szType;
+	return *oPhoneTypeArr[0];
 }
 
 // CPersonDoc diagnostics

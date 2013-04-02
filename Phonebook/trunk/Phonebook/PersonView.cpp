@@ -78,9 +78,19 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 
 void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
-	CPerson *poPersons;
-	if(m_PersonsArray.GetCount())
-		poPersons = m_PersonsArray[m_iCurrRowSelected];
+	int iPersonSelected = 0;
+	
+	int i = 0;
+	for( ; i < m_iCurrRowSelected; i += m_PersonsArray[iPersonSelected - 1]->m_oPhoneNumbsArr.GetCount())
+	{
+		if((i + m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr.GetCount()) <= m_iCurrRowSelected)
+			iPersonSelected++;
+		else
+			break;
+	}
+
+	CSubscriberPhoneNumbers *poPhoneNumbSelected = m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr[m_iCurrRowSelected - i];
+	CPerson *poPersons = m_PersonsArray[iPersonSelected];
 
 	if(eCmd == eCmdDelete)
 	{
@@ -92,7 +102,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		GetDocument()->SelectAllCities(oCitiesArr);
 		CPhoneTypesArray oPhoneTyopesArr;
 		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
-		CPersonDlg oEditDlg(eCmd, poPersons, &oCitiesArr, &oPhoneTyopesArr);
+		CPersonDlg oEditDlg(eCmd, poPersons, poPhoneNumbSelected, &(GetDocument()->GetPhoneType(*poPhoneNumbSelected)), &oCitiesArr, &oPhoneTyopesArr);
 		if(oEditDlg.DoModal() != IDOK)
 			return;
 
@@ -177,7 +187,7 @@ void CPersonView::UpdateColumnsContent()
 				csTempBuff.Format(_T("%d"), m_PersonsArray[i]->m_tSubscriber.m_iCode);
 				int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
 	      
-				SetRowData(iRowIdx, *m_PersonsArray[i], *m_PersonsArray[i]->m_oPhoneNumbsArr[c]);
+				SetRowData(iRowIdx, *m_PersonsArray[i], *m_PersonsArray[i]->m_oPhoneNumbsArr[m_PersonsArray[i]->m_oPhoneNumbsArr.GetCount() - c - 1]);
 			}
     }
   }
@@ -193,7 +203,7 @@ void CPersonView::SetRowData(int iRowIdx, CPerson &oPerson, CSubscriberPhoneNumb
   oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColIdNumb,			oPerson.m_tSubscriber.m_szIDNumb);
   oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColAddress,			oPerson.m_tSubscriber.m_szAddress);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColPhoneNumber, oPhoneNumber.m_szPhoneNumber);
-	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColPhoneNumberType, GetDocument()->GetPhoneTypeName(oPhoneNumber)); 
+	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColPhoneNumberType, GetDocument()->GetPhoneType(oPhoneNumber).m_szType); 
 	
 	/* Оразмеряване на колоната спрямо дължината на името й */
   oListCtrl.SetColumnWidth(CPersonDoc::eColSubscrCode, LVSCW_AUTOSIZE_USEHEADER);

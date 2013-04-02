@@ -9,13 +9,14 @@
 // CPersonDlg dialog
 
 IMPLEMENT_DYNAMIC(CPersonDlg, CDialog)
-CPersonDlg::CPersonDlg(eMenuCmd eCmd, CPerson *poPerson , CCitiesArray *poCitiesArr, CPhoneTypesArray *poPhoneTypesArr, CWnd* pParent /*=NULL*/)
+CPersonDlg::CPersonDlg(eMenuCmd eCmd, CPerson *poPerson, CSubscriberPhoneNumbers *poPhoneNumb, CPhoneTypes *poPhoneType, CCitiesArray *poCitiesArr, CPhoneTypesArray *poPhoneTypesArr, CWnd* pParent /*=NULL*/)
 	: CDialog(CPersonDlg::IDD, pParent)
 {
 	m_oPerson = *poPerson;
 	m_poCitiesArr = poCitiesArr;
 	m_poPhoneTypesArr = poPhoneTypesArr;
-
+	m_poPhoneNumb = poPhoneNumb;
+	m_poPhoneType = poPhoneType;
 	m_eMenuCmd = eCmd;
 }
 
@@ -73,15 +74,14 @@ BOOL CPersonDlg::OnInitDialog()
 	for(int i = 0; i < m_poPhoneTypesArr->GetCount(); i++)
 		m_oPhoneType.InsertString(i, m_poPhoneTypesArr->GetAt(i)->m_szType);
 	
-	//m_oPhoneType.SetWindowText(m_oPerson.m_tSubscriber.
-	//m_oPhoneType.SetWindowTextW(m_oPhoneTyp .m_szType);
+	m_oPhoneType.SetWindowText(m_poPhoneType->m_szType);
 	m_oFirstName.SetWindowText(m_oPerson.m_tSubscriber.m_szFirstName);
 	m_SecName.SetWindowText(m_oPerson.m_tSubscriber.m_szSecondName);
 	m_oThirdName.SetWindowText(m_oPerson.m_tSubscriber.m_szThirdName);
 	m_oSubscrCode.SetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb);
 	m_oAddress.SetWindowText(m_oPerson.m_tSubscriber.m_szAddress);
 	m_SubscrId.SetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb);
-	//m_oPhoneNumber.SetWindowText(m_oPerson.m_oPhoneNumbsArr[]);
+	m_oPhoneNumber.SetWindowText(m_poPhoneNumb->m_szPhoneNumber);
 
 	return TRUE;
 }
