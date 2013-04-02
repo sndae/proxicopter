@@ -17,6 +17,7 @@ CPersonView::CPersonView()
 
 CPersonView::~CPersonView()
 {
+
 }
 
 
@@ -131,6 +132,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		}	
 	}	
 }
+
 
 void CPersonView::OnInitialUpdate()
 {

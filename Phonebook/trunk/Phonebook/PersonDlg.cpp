@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Phonebook.h"
 #include "PersonDlg.h"
+#include ".\persondlg.h"
 
 
 // CPersonDlg dialog
@@ -79,7 +80,6 @@ BOOL CPersonDlg::OnInitDialog()
 	m_cFirstName.SetWindowText(m_oPerson.m_tSubscriber.m_szFirstName);
 	m_cSecName.SetWindowText(m_oPerson.m_tSubscriber.m_szSecondName);
 	m_cThirdName.SetWindowText(m_oPerson.m_tSubscriber.m_szThirdName);
-	m_cSubscrCode.SetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb);
 	m_cAddress.SetWindowText(m_oPerson.m_tSubscriber.m_szAddress);
 	m_cSubscrId.SetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb);
 	m_cPhoneNumber.SetWindowText(m_oPhoneNumb.m_szPhoneNumber);
@@ -89,7 +89,28 @@ BOOL CPersonDlg::OnInitDialog()
 
 
 BEGIN_MESSAGE_MAP(CPersonDlg, CDialog)
+	ON_BN_CLICKED(IDOK, OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
 // CPersonDlg message handlers
+
+void CPersonDlg::OnBnClickedOk()
+{
+	// TODO: Add your control notification handler code here
+	m_oPhoneType = *m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel());
+	
+	m_cCities.GetWindowText(m_oPerson.m_tCity.m_szName, CITIES_TABLE_STRING_MAX_LEN);
+	m_cFirstName.GetWindowText(m_oPerson.m_tSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cSecName.GetWindowText(m_oPerson.m_tSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cThirdName.GetWindowText(m_oPerson.m_tSubscriber.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cAddress.GetWindowText(m_oPerson.m_tSubscriber.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cSubscrId.GetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
+	m_cPhoneNumber.GetWindowText(m_oPhoneNumb.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
+
+	CString csTempBuff;
+	m_cSubscrCode.GetWindowText(csTempBuff);
+	m_oPerson.m_tSubscriber.m_iCode = _ttoi(csTempBuff);
+
+	OnOK();
+}

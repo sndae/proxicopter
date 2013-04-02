@@ -12,7 +12,9 @@ public:
 	CPersonDlg(const eMenuCmd eCmd, const CPerson &oPerson , const CSubscriberPhoneNumbers &oPhoneNumb, const CPhoneTypes &oPhoneType, 
 						 CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
-
+	CSubscribers						GetSubscriber(){return m_oPerson.m_tSubscriber;};
+	CSubscriberPhoneNumbers GetPhoneNumber(){return m_oPhoneNumb;};
+	CPhoneTypes							GetPhoneType(){return m_oPhoneType;};
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
 
@@ -36,4 +38,5 @@ public:
 	CEdit m_cAddress;
 	CEdit m_cPhoneNumber;
 	CComboBox m_cPhoneType;
+	afx_msg void OnBnClickedOk();
 };
