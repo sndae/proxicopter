@@ -102,7 +102,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		GetDocument()->SelectAllCities(oCitiesArr);
 		CPhoneTypesArray oPhoneTyopesArr;
 		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
-		CPersonDlg oEditDlg(eCmd, poPersons, poPhoneNumbSelected, &(GetDocument()->GetPhoneType(*poPhoneNumbSelected)), &oCitiesArr, &oPhoneTyopesArr);
+		CPersonDlg oEditDlg(eCmd, *poPersons, *poPhoneNumbSelected, (GetDocument()->GetPhoneType(*poPhoneNumbSelected)), oCitiesArr, oPhoneTyopesArr);
 		if(oEditDlg.DoModal() != IDOK)
 			return;
 
