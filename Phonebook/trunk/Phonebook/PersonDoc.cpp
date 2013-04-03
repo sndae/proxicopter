@@ -5,6 +5,7 @@
 #include "PhoneBook.h"
 #include "Person.h"
 #include "PersonDoc.h"
+#include <algorithm>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -80,11 +81,11 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 
 	  poPerson->m_tCity = *oCitiesArr[0];
 
-		if(m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_iCode)))
-		{
-			if(!m_oSubscrPhoneNumbsTable.SelectAll(poPerson->m_oPhoneNumbsArr))
-				return FALSE;
-		}
+		if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_iCode)))
+			return FALSE;
+
+		if(!m_oSubscrPhoneNumbsTable.SelectAll(poPerson->m_oPhoneNumbsArr))
+			return FALSE;
 
 		oPersonArray.Add(poPerson);
 	}
@@ -177,6 +178,64 @@ CPhoneTypes CPersonDoc::GetPhoneType(CSubscriberPhoneNumbers &oSubscrPhoneNumb)
 		return 0;
 
 	return *oPhoneTypeArr[0];
+}
+
+BOOL CPersonDoc::UpdateWhereId(const int iId, const CPerson &oPerson)
+{
+	CSubscribers oSubscr;
+	if(!m_oSubscrTable.SelectWhereId(oPerson.m_tSubscriber.m_iId, oSubscr))
+		return FALSE;
+
+	if(oSubscr != oPerson.m_tSubscriber)
+	{
+		if(oSubscr.m_iRevNumb != oPerson.m_tSubscriber.m_iRevNumb)
+			return FALSE;
+
+		if(!m_oSubscrTable.UpdateWhereId(oSubscr.m_iId, oPerson.m_tSubscriber))
+			return FALSE;
+	}
+	
+	CSubscriberPhoneNumbersArray oSubscrPhoneNumbs;
+	m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0, oPerson.m_tSubscriber.m_iCode));
+	if(!m_oSubscrPhoneNumbsTable.SelectAll(oSubscrPhoneNumbs))
+		return FALSE;
+
+	for(int i = 0; i < min(oSubscrPhoneNumbs.GetCount(), oPerson.m_oPhoneNumbsArr.GetCount()); i++)
+	{
+		if(*oSubscrPhoneNumbs[i] != *oPerson.m_oPhoneNumbsArr[i])
+		{
+			if(!m_oSubscrPhoneNumbsTable.UpdateWhereId(oPerson.m_oPhoneNumbsArr[i]->m_iId, *oPerson.m_oPhoneNumbsArr[i]))
+				return FALSE;
+		}
+	}
+
+	//if(
+
+	return TRUE;
+}
+
+BOOL CPersonDoc::DeleteWhereId(const int iId)
+{
+
+	return TRUE;
+}
+BOOL CPersonDoc::SelectWhereId(const int iId, CPerson &oPerson)
+{
+	if(!m_oSubscrTable.SelectWhereId(iId, oPerson.m_tSubscriber))
+		return FALSE;
+
+	oPerson.m_iId = oPerson.m_tSubscriber.m_iId;
+
+	if(!m_oCityTable.SelectByContent(CCities(DNC, 0, oPerson.m_tSubscriber.m_szCityCode)))
+		return FALSE;
+
+	if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oPerson.m_tSubscriber.m_iId)))
+		return FALSE;
+
+	if(!m_oSubscrPhoneNumbsTable.SelectAll(oPerson.m_oPhoneNumbsArr))
+		return FALSE;
+
+	return TRUE;
 }
 
 // CPersonDoc diagnostics

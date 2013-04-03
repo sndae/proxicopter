@@ -10,6 +10,7 @@
 
 struct CPerson
 {
+	int								m_iId;
 	CCities						m_tCity;
 	CSubscribers			m_tSubscriber;
   CSubscriberPhoneNumbersArray	m_oPhoneNumbsArr;
@@ -28,6 +29,7 @@ struct CPerson
 			m_oPhoneNumbsArr.InsertAt(i, poPhoneNume);
 		}
 		
+		m_iId = op.m_tSubscriber.m_iId;
 		m_tCity = op.m_tCity;
 		m_tSubscriber = op.m_tSubscriber;
 

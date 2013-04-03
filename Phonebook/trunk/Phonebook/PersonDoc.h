@@ -32,11 +32,12 @@ public:
 	BOOL SelectAllCities(CCitiesArray &oCitiesArr);
 	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr);
 	CPhoneTypes GetPhoneType(CSubscriberPhoneNumbers &oSubscrPhoneNumb);
-	/*
-  BOOL SelectWhereId(const int iId, CPerson &oCity);
-  BOOL UpdateWhereId(const int iId, const CPerson &oCity);
+	BOOL UpdateWhereId(const int iId, const CPerson &oPerson);
+	BOOL SelectWhereId(const int iId, CPerson &oPerson);
+	BOOL DeleteWhereId(const int iId);
+	/*  
   BOOL Insert(const CPerson &oCity);
-  BOOL DeleteWhereId(const int iId);
+  
   BOOL SelectByContent(const CPerson &oCity);
   */
 #ifdef _DEBUG

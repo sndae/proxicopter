@@ -90,8 +90,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 			break;
 	}
 
-	CSubscriberPhoneNumbers *poPhoneNumbSelected = m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr[m_iCurrRowSelected - i];
-	CPerson *poPersons = m_PersonsArray[iPersonSelected];
+	int iPhoneNumbSelected = m_iCurrRowSelected - i;
 
 	if(eCmd == eCmdDelete)
 	{
@@ -103,17 +102,18 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		GetDocument()->SelectAllCities(oCitiesArr);
 		CPhoneTypesArray oPhoneTyopesArr;
 		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
-		CPersonDlg oEditDlg(eCmd, *poPersons, *poPhoneNumbSelected, (GetDocument()->GetPhoneType(*poPhoneNumbSelected)), oCitiesArr, oPhoneTyopesArr);
+		CPersonDlg oEditDlg(eCmd, *m_PersonsArray[iPersonSelected], iPhoneNumbSelected, 
+												(GetDocument()->GetPhoneType(*m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr[iPhoneNumbSelected])).m_iId, oCitiesArr, 
+												oPhoneTyopesArr);
 		if(oEditDlg.DoModal() != IDOK)
 			return;
 
-		CPerson oPerson;
+		CPerson &oPerson = oEditDlg.GetPerson();
 		switch(eCmd)
 		{
-		case eCmdUpdate:
-			//oPerson = oEditDlg.GetCityData();
-			//if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
-			//	MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+		case eCmdUpdate:			
+			if(!GetDocument()->UpdateWhereId(oPerson.m_iId, oPerson))
+				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			
 			break;
 		case eCmdInsert:

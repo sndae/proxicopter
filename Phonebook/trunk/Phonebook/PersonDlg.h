@@ -9,12 +9,12 @@ class CPersonDlg : public CDialog
 	DECLARE_DYNAMIC(CPersonDlg)
 
 public:
-	CPersonDlg(const eMenuCmd eCmd, const CPerson &oPerson , const CSubscriberPhoneNumbers &oPhoneNumb, const CPhoneTypes &oPhoneType, 
+	CPersonDlg(const eMenuCmd eCmd, const CPerson &oPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx,
 						 CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
-	CSubscribers						GetSubscriber(){return m_oPerson.m_tSubscriber;};
-	CSubscriberPhoneNumbers GetPhoneNumber(){return m_oPhoneNumb;};
-	CPhoneTypes							GetPhoneType(){return m_oPhoneType;};
+	CPerson	&GetPerson(){return m_oPerson;};
+	int      GetPhoneTypeIdx(){return m_iPhoneTypeIdx;};
+	int			 GetPhoneNumbIdx(){return m_iPhoneNumbIdx;};
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
 
@@ -24,8 +24,8 @@ protected:
 	CPerson m_oPerson;
 	CCitiesArray			*m_poCitiesArr;
 	CPhoneTypesArray	*m_poPhoneTypesArr;
-	CSubscriberPhoneNumbers m_oPhoneNumb;
-	CPhoneTypes m_oPhoneType;
+	int  m_iPhoneNumbIdx;
+	int  m_iPhoneTypeIdx;
 	eMenuCmd m_eMenuCmd;
 	DECLARE_MESSAGE_MAP()
 public:

@@ -10,15 +10,15 @@
 // CPersonDlg dialog
 
 IMPLEMENT_DYNAMIC(CPersonDlg, CDialog)
-CPersonDlg::CPersonDlg(const eMenuCmd eCmd, const CPerson &oPerson , const CSubscriberPhoneNumbers &oPhoneNumb, const CPhoneTypes &oPhoneType, 
+CPersonDlg::CPersonDlg(const eMenuCmd eCmd, const CPerson &oPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx, 
 											 CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent)
 											: CDialog(CPersonDlg::IDD, pParent)
 {
 	m_oPerson = oPerson;
 	m_poCitiesArr = &oCitiesArr;
 	m_poPhoneTypesArr = &oPhoneTypesArr;
-	m_oPhoneNumb = oPhoneNumb;
-	m_oPhoneType = oPhoneType;
+	m_iPhoneNumbIdx = iSubscrPhoneNumbIdx;
+	m_iPhoneTypeIdx = iPhoneTypeIdx;
 	m_eMenuCmd = eCmd;
 }
 
@@ -71,18 +71,19 @@ BOOL CPersonDlg::OnInitDialog()
 	for(int i = 0; i < m_poCitiesArr->GetCount(); i++)
 		m_cCities.InsertString(i, m_poCitiesArr->GetAt(i)->m_szName);
 	
-	m_cCities.SetWindowText(m_oPerson.m_tCity.m_szName);
+	m_cCities.SetCurSel(m_oPerson.m_tCity.m_iId);
 
 	for(int i = 0; i < m_poPhoneTypesArr->GetCount(); i++)
 		m_cPhoneType.InsertString(i, m_poPhoneTypesArr->GetAt(i)->m_szType);
 	
-	m_cPhoneType.SetWindowText(m_oPhoneType.m_szType);
+	m_cPhoneType.SetCurSel(m_iPhoneTypeIdx);
+	//m_oPerson.m_tSubscriber.
 	m_cFirstName.SetWindowText(m_oPerson.m_tSubscriber.m_szFirstName);
 	m_cSecName.SetWindowText(m_oPerson.m_tSubscriber.m_szSecondName);
 	m_cThirdName.SetWindowText(m_oPerson.m_tSubscriber.m_szThirdName);
 	m_cAddress.SetWindowText(m_oPerson.m_tSubscriber.m_szAddress);
 	m_cSubscrId.SetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb);
-	m_cPhoneNumber.SetWindowText(m_oPhoneNumb.m_szPhoneNumber);
+	m_cPhoneNumber.SetWindowText(m_oPerson.m_oPhoneNumbsArr[m_iPhoneNumbIdx]->m_szPhoneNumber);
 
 	return TRUE;
 }
@@ -98,15 +99,17 @@ END_MESSAGE_MAP()
 void CPersonDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
-	m_oPhoneType = *m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel());
-	
-	m_cCities.GetWindowText(m_oPerson.m_tCity.m_szName, CITIES_TABLE_STRING_MAX_LEN);
+	m_iPhoneTypeIdx = m_cPhoneType.GetCurSel();	
+	m_oPerson.m_tCity = *m_poCitiesArr->GetAt(m_cCities.GetCurSel());
+	_tcscpy(m_oPerson.m_tSubscriber.m_szCityCode, m_oPerson.m_tCity.m_szCode);
+
 	m_cFirstName.GetWindowText(m_oPerson.m_tSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cSecName.GetWindowText(m_oPerson.m_tSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cThirdName.GetWindowText(m_oPerson.m_tSubscriber.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cAddress.GetWindowText(m_oPerson.m_tSubscriber.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cSubscrId.GetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
-	m_cPhoneNumber.GetWindowText(m_oPhoneNumb.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
+	m_cPhoneNumber.GetWindowText(m_oPerson.m_oPhoneNumbsArr[m_iPhoneNumbIdx]->m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
+	m_oPerson.m_oPhoneNumbsArr[m_iPhoneNumbIdx]->m_iPhoneCode = m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel())->m_iCode;
 
 	CString csTempBuff;
 	m_cSubscrCode.GetWindowText(csTempBuff);

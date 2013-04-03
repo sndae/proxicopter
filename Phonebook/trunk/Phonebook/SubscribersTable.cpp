@@ -110,7 +110,7 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 	}
 	catch(CDBException *)
 	{
-		return FALSE;
+		//return FALSE;
 	}
 
 	return TRUE;

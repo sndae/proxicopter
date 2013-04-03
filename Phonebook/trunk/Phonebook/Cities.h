@@ -20,6 +20,15 @@ struct CCities
     if(pszName)_tcscpy(m_szName, pszName);
     if(pszArea)_tcscpy(m_szArea, pszArea);    
   }
+	BOOL operator==(CCities op)
+	{
+		if(_tcscmp(m_szCode, op.m_szCode) ||
+		 	 _tcscmp(m_szName, op.m_szName) ||
+			 _tcscmp(m_szArea, op.m_szArea))
+			 return FALSE;
+
+		return TRUE;
+	}
 };
 
 typedef CRowsPtrArray<CCities>  CCitiesArray;

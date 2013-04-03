@@ -21,6 +21,20 @@ struct CSubscriberPhoneNumbers
 		m_iPhoneCode = iPhoneCode;
 		if(pszCityCode)_tcscpy(m_szPhoneNumber, pszCityCode);
 	}
+	
+	BOOL operator==(CSubscriberPhoneNumbers op)
+	{
+		if((m_iSubscrCode != op.m_iSubscrCode) ||
+			(m_iPhoneCode != op.m_iPhoneCode) ||
+			_tcscmp(m_szPhoneNumber, op.m_szPhoneNumber))
+			return FALSE;
+
+		return TRUE;
+	}
+	BOOL operator!=(CSubscriberPhoneNumbers op)
+	{
+		return !(*this == op);
+	}
 };
 
 typedef CRowsPtrArray<CSubscriberPhoneNumbers>	CSubscriberPhoneNumbersArray;

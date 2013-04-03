@@ -30,6 +30,23 @@ struct CSubscribers
 		if(pszIDNumb)_tcscpy(m_szIDNumb, pszIDNumb);	
 		if(pszAddress)_tcscpy(m_szAddress, pszAddress);	
 	}
+
+	BOOL operator==(CSubscribers op)
+	{
+		if(_tcscmp(m_szFirstName, op.m_szFirstName) ||
+			 _tcscmp(m_szSecondName, op.m_szSecondName) ||
+			 _tcscmp(m_szThirdName, op.m_szThirdName) ||
+			 _tcscmp(m_szIDNumb, op.m_szIDNumb) ||
+			 _tcscmp(m_szCityCode, op.m_szCityCode) ||
+			 _tcscmp(m_szAddress, op.m_szAddress))
+			 return FALSE;
+
+		return TRUE;
+ 	}
+	BOOL operator!=(CSubscribers op)
+	{
+		return !(*this == op);
+	}
 };
 
 typedef CRowsPtrArray<CSubscribers>	CSubscribersArray;
