@@ -324,7 +324,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("PHONE_ID = %d"), GetPhoneIdByPhoneCode(oSubscrPhoneNmbPhoneNumbers.m_iPhoneId));
+		szColFilter.Format(_T("PHONE_ID = %d"), oSubscrPhoneNmbPhoneNumbers.m_iPhoneId);
 		m_strFilter += szColFilter;
 	}
 	if(oSubscrPhoneNmbPhoneNumbers.m_iSubscrId != DNC)
@@ -332,7 +332,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("SUBSCRIBER_ID = %d"), GetSubscrIdBySubscrCode(oSubscrPhoneNmbPhoneNumbers.m_iSubscrId));
+		szColFilter.Format(_T("SUBSCRIBER_ID = %d"), oSubscrPhoneNmbPhoneNumbers.m_iSubscrId);
 		m_strFilter += szColFilter;
 	}
 	if(_tcslen(oSubscrPhoneNmbPhoneNumbers.m_szPhoneNumber))
@@ -374,8 +374,8 @@ void CSubscriberPhoneNumbersTable::DoExchange“ÓDatabaseData(const CSubscriberPho
 {
 	m_ID = oSubscrPhoneNmb.m_iId;
 	m_REV_NUMB = oSubscrPhoneNmb.m_iRevNumb;
-	m_SUBSCRIBER_ID = GetSubscrIdBySubscrCode(oSubscrPhoneNmb.m_iSubscrId);
-	m_PHONE_ID = GetPhoneIdByPhoneCode(oSubscrPhoneNmb.m_iPhoneId);
+	m_SUBSCRIBER_ID = oSubscrPhoneNmb.m_iSubscrId;
+	m_PHONE_ID = oSubscrPhoneNmb.m_iPhoneId;
 	m_PHONE_NUMB = oSubscrPhoneNmb.m_szPhoneNumber;	
 }
 

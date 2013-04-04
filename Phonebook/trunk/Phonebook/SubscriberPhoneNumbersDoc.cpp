@@ -134,12 +134,12 @@ BOOL CSubscriberPhoneNumbersDoc::SelectAllPhoneTypesCodes(CPhoneTypesArray &oPho
 	return m_oPhoneTypesTable.SelectAll(oPhoneTypesArray);
 }
 
-BOOL CSubscriberPhoneNumbersDoc::SelectPhoneTypeWhereId(const iId, CPhoneTypes &oPhoneType)
+BOOL CSubscriberPhoneNumbersDoc::SelectPhoneTypeWhereId(const int iId, CPhoneTypes &oPhoneType)
 {
 	return m_oPhoneTypesTable.SelectWhereId(iId, oPhoneType);
 }
 
-BOOL CSubscriberPhoneNumbersDoc::SelectSubscriberWhereId(const iId, CSubscribers &oSubscriber)
+BOOL CSubscriberPhoneNumbersDoc::SelectSubscriberWhereId(const int iId, CSubscribers &oSubscriber)
 {
 	return m_oSubscribersTable.SelectWhereId(iId, oSubscriber);
 }

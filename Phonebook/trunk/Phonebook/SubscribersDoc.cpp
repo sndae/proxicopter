@@ -83,7 +83,8 @@ BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oSubscrib
 
 BOOL CSubscribersDoc::Insert(const CSubscribers &oSubscriber)
 {
-	BOOL bRes = m_oSubscribersTable.Insert(oSubscriber);
+	CSubscribers oSubscrCpy = oSubscriber;
+	BOOL bRes = m_oSubscribersTable.Insert(oSubscrCpy);
 	if(!bRes)
 		return FALSE;
 

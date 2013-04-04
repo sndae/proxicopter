@@ -31,7 +31,7 @@ public:
   BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
 	BOOL SelectAllCities(CCitiesArray &oCitiesArr);
 	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr);
-	CPhoneTypes GetPhoneType(CSubscriberPhoneNumbers &oSubscrPhoneNumb);
+	BOOL SelectPhoneTypeWhereId(const int iIdx, CPhoneTypes &oPhoneType);
 	BOOL UpdateWhereId(const int iId, const CPerson &oPerson);
 	BOOL SelectWhereId(const int iId, CPerson &oPerson);
 	BOOL DeleteWhereId(const int iId);

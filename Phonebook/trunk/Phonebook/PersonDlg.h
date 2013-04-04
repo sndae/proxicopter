@@ -18,7 +18,7 @@ public:
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
 private:
-	virtual INT_PTR DoModal(){return CDialog::DoModal;};
+	virtual INT_PTR DoModal(){return CDialog::DoModal();};
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();

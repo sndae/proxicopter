@@ -13,10 +13,10 @@ enum eMenuCmd{eCmdUpdate = 0, eCmdInsert, eCmdDelete, eCmdFind, eCmdInsertSubscr
 #define MENU_CMD_INSERT _T("Вмъкни")
 #define MENU_CMD_UPDATE _T("Редактирай")
 #define MENU_CMD_FIND   _T("Търси")
-#define MENU_CMD_INSERT_NEW_SUBSCRIBER _T("Вмъкни нов абонат")
-#define MENU_CMD_INSERT_NEW_NUMBER		 _T("Вмъкни нов номер")
-#define MENU_CMD_DELETE_NEW_SUBSCRIBER _T("Изтрий нов абонат")
-#define MENU_CMD_DELETE_NEW_NUMBER		 _T("Изтрий нов номер")
+#define MENU_CMD_INSERT_SUBSCRIBER _T("Вмъкни нов абонат")
+#define MENU_CMD_INSERT_NUMBER		 _T("Вмъкни нов номер")
+#define MENU_CMD_DELETE_SUBSCRIBER _T("Изтрий нов абонат")
+#define MENU_CMD_DELETE_NUMBER		 _T("Изтрий нов номер")
 
 
 /* Don't care стойност */

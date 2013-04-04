@@ -184,7 +184,7 @@ BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscr
 	return TRUE;
 }
 
-BOOL CSubscribersTable::Insert(const CSubscribers &oSubscribers)
+BOOL CSubscribersTable::Insert(CSubscribers &oSubscribers)
 {
 	if(!CanAppend())
 		return FALSE;
@@ -210,11 +210,10 @@ BOOL CSubscribersTable::Insert(const CSubscribers &oSubscribers)
 		int iLastRowId = m_ID;
 		AddNew();
 
-		CSubscribers oSubscrCopy = oSubscribers;
-		oSubscrCopy.m_iId = iLastRowId + 1;
-		oSubscrCopy.m_iRevNumb = 0;
+		oSubscribers.m_iId = iLastRowId + 1;
+		oSubscribers.m_iRevNumb = 0;
 
-		DoExchange“ÓDatabaseData(oSubscrCopy);
+		DoExchange“ÓDatabaseData(oSubscribers);
 
 		Update();
 	}

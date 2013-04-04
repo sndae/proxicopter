@@ -22,11 +22,15 @@ struct CPerson
   }
 	CPerson & operator=(const CPerson &op)
 	{
+		int iLen = op.m_oPhoneNumbsArr.GetCount();
 		for(int i = 0; i < op.m_oPhoneNumbsArr.GetCount(); i++)
 		{
+			
 			CSubscriberPhoneNumbers *poPhoneNume = new CSubscriberPhoneNumbers;
 			*poPhoneNume = *op.m_oPhoneNumbsArr[i];
+			iLen = op.m_oPhoneNumbsArr.GetCount();
 			m_oPhoneNumbsArr.InsertAt(i, poPhoneNume);
+			iLen = op.m_oPhoneNumbsArr.GetCount();
 		}
 		
 		m_iId = op.m_tSubscriber.m_iId;

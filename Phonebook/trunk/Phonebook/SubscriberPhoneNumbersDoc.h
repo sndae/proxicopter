@@ -36,8 +36,8 @@ public:
 	BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
 	BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
 	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
-	BOOL SelectPhoneTypeWhereId(const iId, CPhoneTypes &oPhoneType);
-	BOOL SelectSubscriberWhereId(const iId, CSubscribers &oSubscriber);
+	BOOL SelectPhoneTypeWhereId(const int iId, CPhoneTypes &oPhoneType);
+	BOOL SelectSubscriberWhereId(const int iId, CSubscribers &oSubscriber);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

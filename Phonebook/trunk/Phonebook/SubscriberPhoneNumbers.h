@@ -22,6 +22,17 @@ struct CSubscriberPhoneNumbers
 		if(pszPhoneNumb)_tcscpy(m_szPhoneNumber, pszPhoneNumb);
 	}
 	
+	CSubscriberPhoneNumbers & operator=(const CSubscriberPhoneNumbers &op)
+	{
+		m_iId = op.m_iId;
+		m_iRevNumb = op.m_iRevNumb;
+		m_iSubscrId = op.m_iSubscrId;
+		m_iPhoneId = op.m_iPhoneId;
+		_tcscpy(m_szPhoneNumber, op.m_szPhoneNumber);	
+
+		return *this;
+	}
+
 	BOOL operator==(CSubscriberPhoneNumbers op)
 	{
 		if((m_iSubscrId != op.m_iSubscrId) ||
