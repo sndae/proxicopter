@@ -36,7 +36,8 @@ public:
 	BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
 	BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
 	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
-
+	BOOL SelectPhoneTypeWhereId(const iId, CPhoneTypes &oPhoneType);
+	BOOL SelectSubscriberWhereId(const iId, CSubscribers &oSubscriber);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -44,6 +45,9 @@ public:
 
 protected:
 	CSubscriberPhoneNumbersTable m_oSubscriberPhoneNumbersTable;
+	CPhoneTypesTable						 m_oPhoneTypesTable;
+	CSubscribersTable            m_oSubscribersTable;
+
 
 // Generated message map functions
 protected:

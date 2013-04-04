@@ -93,8 +93,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubs
 			/* запъвлване на масива с указатели към данни на редове от таблицата */
 			while(!IsEOF())
 			{
-				CSubscriberPhoneNumbers *poSubscrPhoneNmbPhoneNumbers = new CSubscriberPhoneNumbers(int(m_ID), int(m_REV_NUMB), GetSubscrCodeBySubscrId(m_SUBSCRIBER_ID), 
-																									GetPhoneCodeByPhoneId(m_PHONE_ID), m_PHONE_NUMB);
+				CSubscriberPhoneNumbers *poSubscrPhoneNmbPhoneNumbers = new CSubscriberPhoneNumbers(int(m_ID), int(m_REV_NUMB), m_SUBSCRIBER_ID, m_PHONE_ID, m_PHONE_NUMB);
 				oSubscrPhoneNmbPhoneNumbersArray.Add(poSubscrPhoneNmbPhoneNumbers);		 
 				MoveNext();
 			}
@@ -320,20 +319,20 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 		m_strFilter += szColFilter;
 	}
 	/* формиране на низ за филтриране, на база наличните в структурата ненулеви записи */
-	if(oSubscrPhoneNmbPhoneNumbers.m_iPhoneCode != DNC)
+	if(oSubscrPhoneNmbPhoneNumbers.m_iPhoneId != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("PHONE_ID = %d"), GetPhoneIdByPhoneCode(oSubscrPhoneNmbPhoneNumbers.m_iPhoneCode));
+		szColFilter.Format(_T("PHONE_ID = %d"), GetPhoneIdByPhoneCode(oSubscrPhoneNmbPhoneNumbers.m_iPhoneId));
 		m_strFilter += szColFilter;
 	}
-	if(oSubscrPhoneNmbPhoneNumbers.m_iSubscrCode != DNC)
+	if(oSubscrPhoneNmbPhoneNumbers.m_iSubscrId != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("SUBSCRIBER_ID = %d"), GetSubscrIdBySubscrCode(oSubscrPhoneNmbPhoneNumbers.m_iSubscrCode));
+		szColFilter.Format(_T("SUBSCRIBER_ID = %d"), GetSubscrIdBySubscrCode(oSubscrPhoneNmbPhoneNumbers.m_iSubscrId));
 		m_strFilter += szColFilter;
 	}
 	if(_tcslen(oSubscrPhoneNmbPhoneNumbers.m_szPhoneNumber))
@@ -360,35 +359,14 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 	return TRUE;
 }
 
-BOOL CSubscriberPhoneNumbersTable::SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray)
-{
-	if(!m_oSubscribersTable.SelectByContent(CSubscribers(DNC)))
-		return FALSE;
-
-	if(!m_oSubscribersTable.SelectAll(oSubscribersArray))
-		return FALSE;
-
-	return TRUE;
-}
-
-BOOL CSubscriberPhoneNumbersTable::SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray)
-{
-	if(!m_oPhoneTypesTable.SelectByContent(CPhoneTypes(DNC)))
-		return FALSE;
-
-	if(!m_oPhoneTypesTable.SelectAll(oPhoneTypesArray))
-		return FALSE;
-
-	return TRUE;
-}
 
 
 void CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscrPhoneNmb)
 {
 	oSubscrPhoneNmb.m_iId = m_ID;
 	oSubscrPhoneNmb.m_iRevNumb = m_REV_NUMB;
-	oSubscrPhoneNmb.m_iSubscrCode =	GetSubscrCodeBySubscrId(m_SUBSCRIBER_ID);
-	oSubscrPhoneNmb.m_iPhoneCode = GetPhoneCodeByPhoneId(m_PHONE_ID);
+	oSubscrPhoneNmb.m_iSubscrId =	GetSubscrCodeBySubscrId(m_SUBSCRIBER_ID);
+	oSubscrPhoneNmb.m_iPhoneId = GetPhoneCodeByPhoneId(m_PHONE_ID);
 	_tcscpy(oSubscrPhoneNmb.m_szPhoneNumber, m_PHONE_NUMB);
 }
 
@@ -396,8 +374,8 @@ void CSubscriberPhoneNumbersTable::DoExchangeТоDatabaseData(const CSubscriberPho
 {
 	m_ID = oSubscrPhoneNmb.m_iId;
 	m_REV_NUMB = oSubscrPhoneNmb.m_iRevNumb;
-	m_SUBSCRIBER_ID = GetSubscrIdBySubscrCode(oSubscrPhoneNmb.m_iSubscrCode);
-	m_PHONE_ID = GetPhoneIdByPhoneCode(oSubscrPhoneNmb.m_iPhoneCode);
+	m_SUBSCRIBER_ID = GetSubscrIdBySubscrCode(oSubscrPhoneNmb.m_iSubscrId);
+	m_PHONE_ID = GetPhoneIdByPhoneCode(oSubscrPhoneNmb.m_iPhoneId);
 	m_PHONE_NUMB = oSubscrPhoneNmb.m_szPhoneNumber;	
 }
 

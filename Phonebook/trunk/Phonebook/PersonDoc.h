@@ -35,6 +35,9 @@ public:
 	BOOL UpdateWhereId(const int iId, const CPerson &oPerson);
 	BOOL SelectWhereId(const int iId, CPerson &oPerson);
 	BOOL DeleteWhereId(const int iId);
+	BOOL DeleteSubscrPhoneNumb(const int iId);
+  BOOL Insert(CPerson &oCity);
+	BOOL InsertPhoneNumber(CSubscriberPhoneNumbers &oPhoneNumb);
 	/*  
   BOOL Insert(const CPerson &oCity);
   

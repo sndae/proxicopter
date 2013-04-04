@@ -52,12 +52,12 @@ public:
 	virtual void DoFieldExchange(CFieldExchange* pFX); // RFX support
 
 	BOOL SelectAll(CSubscriberPhoneNumbersArray &oSubscriberPhoneNumbersArray);
-	BOOL SelectWhereId(const int iId, CSubscriberPhoneNumbers &oSubscriber);
-	BOOL UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oSubscriber);
-	BOOL Insert(const CSubscriberPhoneNumbers &oSubscriber);
+	BOOL SelectWhereId(const int iId, CSubscriberPhoneNumbers &oPhoneNumb);
+	BOOL UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oPhoneNumb);
+	BOOL Insert(const CSubscriberPhoneNumbers &oPhoneNumb);
 	BOOL DeleteWhereId(const int iId);
 	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
-	BOOL SelectByContent(const CSubscriberPhoneNumbers &oSubscriber);
+	BOOL SelectByContent(const CSubscriberPhoneNumbers &oPhoneNumb);
 	BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
 	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
 
@@ -68,8 +68,8 @@ public:
 	int	GetPhoneIdByPhoneCode(const int iPhoneCode);
 
 private:
-	void DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscriber);
-	void DoExchange“ÓDatabaseData(const CSubscriberPhoneNumbers &oSubscriber);
+	void DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oPhoneNumb);
+	void DoExchange“ÓDatabaseData(const CSubscriberPhoneNumbers &oPhoneNumb);
 // Implementation
 #ifdef _DEBUG
 	virtual void AssertValid() const;

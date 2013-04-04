@@ -124,13 +124,27 @@ BOOL CSubscriberPhoneNumbersDoc::SelectByContent(const CSubscriberPhoneNumbers &
 
 BOOL CSubscriberPhoneNumbersDoc::SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray)
 {
-	return m_oSubscriberPhoneNumbersTable.SelectAllSubscribersCodes(oSubscribersArray);
+	m_oSubscribersTable.SelectByContent(CSubscribers());
+	return m_oSubscribersTable.SelectAll(oSubscribersArray);
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray)
 {
-	return m_oSubscriberPhoneNumbersTable.SelectAllPhoneTypesCodes(oPhoneTypesArray);
+	m_oPhoneTypesTable.SelectByContent(CPhoneTypes());
+	return m_oPhoneTypesTable.SelectAll(oPhoneTypesArray);
 }
+
+BOOL CSubscriberPhoneNumbersDoc::SelectPhoneTypeWhereId(const iId, CPhoneTypes &oPhoneType)
+{
+	return m_oPhoneTypesTable.SelectWhereId(iId, oPhoneType);
+}
+
+BOOL CSubscriberPhoneNumbersDoc::SelectSubscriberWhereId(const iId, CSubscribers &oSubscriber)
+{
+	return m_oSubscribersTable.SelectWhereId(iId, oSubscriber);
+}
+
+
 
 // CSubscriberPhoneNumbersDoc diagnostics
 

@@ -101,61 +101,6 @@ BOOL CPersonDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 	return FALSE;
 }
 
-#if 0
-BOOL CPersonDoc::SelectWhereId(const int iId, CPerson &oCity)
-{
-  return m_oCityTable.SelectWhereId(iId, oCity);
-}
-
-BOOL CPersonDoc::UpdateWhereId(const int iId, const CPerson &oCity)
-{
-  BOOL bRes = m_oCityTable.UpdateWhereId(iId, oCity);
-  if(!bRes)
-    return FALSE;
-
-  /* индициране за извършени промени по съдържанието на таблицата */
-  
-  UpdateAllViews(0, (LPARAM)&oCity);
-    
-  return bRes;
-}
-
-BOOL CPersonDoc::Insert(const CPerson &oCity)
-{
-  BOOL bRes = m_oCityTable.Insert(oCity);
-  if(!bRes)
-    return FALSE;
-
-  /* индициране за извършени промени по съдържанието на таблицата */
-  
-  UpdateAllViews(0);
-  
-  return bRes;
-}
-
-BOOL CPersonDoc::DeleteWhereId(const int iId)
-{
-  BOOL bRes = m_oCityTable.DeleteWhereId(iId);
-  if(!bRes)
-    return FALSE;
-
-  /* индициране за извършени промени по съдържанието на таблицата */
-  
-  UpdateAllViews(0);
-  
-  return bRes;
-}
-
-BOOL CPersonDoc::SelectByContent(const CPerson &oCity)
-{
-  CPerson oModCity = oCity;
-  /* търсенето да включи всички записи */ 
-  oModCity.m_iId = DNC;
-  return m_oCityTable.SelectByContent(oModCity);
-}
-#endif
-
-
 BOOL CPersonDoc::SelectAllCities(CCitiesArray &oCitiesArr)
 {
 	m_oCityTable.SelectByContent(CCities());
@@ -170,7 +115,7 @@ BOOL CPersonDoc::SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr)
 
 CPhoneTypes CPersonDoc::GetPhoneType(CSubscriberPhoneNumbers &oSubscrPhoneNumb)
 {
-	if(!m_oPhoneTypeTable.SelectByContent(CPhoneTypes(DNC, 0, oSubscrPhoneNumb.m_iPhoneCode)))
+	if(!m_oPhoneTypeTable.SelectByContent(CPhoneTypes(DNC, 0, oSubscrPhoneNumb.m_iPhoneId)))
 		return 0;
 
 	CPhoneTypesArray oPhoneTypeArr;	
@@ -216,13 +161,33 @@ BOOL CPersonDoc::UpdateWhereId(const int iId, const CPerson &oPerson)
 	return TRUE;
 }
 
+BOOL CPersonDoc::DeleteSubscrPhoneNumb(const int iId)
+{
+	return m_oSubscrPhoneNumbsTable.DeleteWhereId(iId);
+}
+
+BOOL CPersonDoc::Insert(CPerson &oPerson)
+{
+	if(oPerson.m_tSubscriber.m_iId == DNC)
+	{
+		m_oSubscrTable.Insert(oPerson.m_tSubscriber);
+	}
+	
+	return TRUE;
+}
+
+BOOL CPersonDoc::InsertPhoneNumber(CSubscriberPhoneNumbers &oPhoneNumb)
+{
+	return m_oSubscrPhoneNumbsTable.Insert(oPhoneNumb);
+}
+
 BOOL CPersonDoc::DeleteWhereId(const int iId)
 {
 	CSubscribers oSubscriber;
 	if(!m_oSubscrTable.SelectWhereId(iId, oSubscriber))
 		return FALSE;
 	
-	if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0, oSubscriber.m_iCode))
+	if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0, oSubscriber.m_iCode)))
 		return FALSE;
 
 	CSubscriberPhoneNumbersArray oPhoneNumbArr;
@@ -234,6 +199,9 @@ BOOL CPersonDoc::DeleteWhereId(const int iId)
 		if(!m_oSubscrPhoneNumbsTable.DeleteWhereId(oPhoneNumbArr[i]->m_iId))
 			return FALSE;
 	}
+
+	if(!m_oSubscrTable.DeleteWhereId(iId))
+		return FALSE;
 
   /* индициране за извършени промени по съдържанието на таблицата */
   

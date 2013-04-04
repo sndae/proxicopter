@@ -8,24 +8,24 @@
 struct CSubscriberPhoneNumbers
 {
 	TABLE_HEADER;
-	int	 m_iSubscrCode;
-	int	 m_iPhoneCode;
+	int	 m_iSubscrId;
+	int	 m_iPhoneId;
 	TCHAR m_szPhoneNumber[SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN];
 	
-	CSubscriberPhoneNumbers(const int iId = DNC, const int iRevNumb = 0, const int iSubscrCode = DNC, const int iPhoneCode = DNC, const TCHAR *pszCityCode = 0)
+	CSubscriberPhoneNumbers(const int iId = DNC, const int iRevNumb = 0, const int iSubscrId = DNC, const int iPhoneId = DNC, const TCHAR *pszPhoneNumb = 0)
 	{
 		ZeroMemory(this, sizeof(*this));
 		m_iId = iId;
 		m_iRevNumb = iRevNumb;
-		m_iSubscrCode = iSubscrCode;
-		m_iPhoneCode = iPhoneCode;
-		if(pszCityCode)_tcscpy(m_szPhoneNumber, pszCityCode);
+		m_iSubscrId = iSubscrId;
+		m_iPhoneId = iPhoneId;
+		if(pszPhoneNumb)_tcscpy(m_szPhoneNumber, pszPhoneNumb);
 	}
 	
 	BOOL operator==(CSubscriberPhoneNumbers op)
 	{
-		if((m_iSubscrCode != op.m_iSubscrCode) ||
-			(m_iPhoneCode != op.m_iPhoneCode) ||
+		if((m_iSubscrId != op.m_iSubscrId) ||
+			(m_iPhoneId != op.m_iPhoneId) ||
 			_tcscmp(m_szPhoneNumber, op.m_szPhoneNumber))
 			return FALSE;
 

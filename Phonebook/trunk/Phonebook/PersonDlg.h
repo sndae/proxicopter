@@ -9,15 +9,16 @@ class CPersonDlg : public CDialog
 	DECLARE_DYNAMIC(CPersonDlg)
 
 public:
-	CPersonDlg(const eMenuCmd eCmd, const CPerson &oPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx,
-						 CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent = NULL);   // standard constructor
+	CPersonDlg(const eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
-	CPerson	&GetPerson(){return m_oPerson;};
+	CPerson	*GetPerson(){return &m_oPerson;};
 	int      GetPhoneTypeIdx(){return m_iPhoneTypeIdx;};
 	int			 GetPhoneNumbIdx(){return m_iPhoneNumbIdx;};
+	INT_PTR	 DoModal(const CPerson &oPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx);
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
-
+private:
+	virtual INT_PTR DoModal(){return CDialog::DoModal;};
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();

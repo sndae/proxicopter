@@ -44,18 +44,19 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         ExecuteCntxMenuCmd(eCmdUpdate); 
         break;
       case NM_RCLICK:        
-        oCntxMenu.LoadMenuW(IDR_CONTEXT_MENU);
+				oCntxMenu.LoadMenuW(IDR_PERSONS_MENU);
         pSubMenu = oCntxMenu.GetSubMenu(0);
         GetCursorPos(&tCur);
         iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
         /* изпълнение на команда, избрана от конктекстното меню */
         switch(iMenuChoice)
         {
-          case ID_OPTIONS_EDIT:   ExecuteCntxMenuCmd(eCmdUpdate); break;
-          case ID_OPTIONS_DELETE: ExecuteCntxMenuCmd(eCmdDelete); break;
-          case ID_OPTIONS_ADD:    ExecuteCntxMenuCmd(eCmdInsert); break;        
-          case ID_OPTIONS_FIND:   ExecuteCntxMenuCmd(eCmdFind);   break; 
-          default: break; 
+					case ID_OPTIONS_PERSON_EDIT					 :ExecuteCntxMenuCmd(eCmdUpdate); break;
+					case ID_OPTIONS_PERSON_ADD_SUBSCR    :ExecuteCntxMenuCmd(eCmdInsertSubscr); break;
+					case ID_OPTIONS_PERSON_ADD_NUMB			 :ExecuteCntxMenuCmd(eCmdInsertNumb); break;        
+					case ID_OPTIONS_PERSON_DELETE_SUBSCR :ExecuteCntxMenuCmd(eCmdDelSubscr);   break; 
+					case ID_OPTIONS_PERSON_DELETE_NUMB	 :ExecuteCntxMenuCmd(eCmdDelNumb);   break; 	
+					default: break; 
         }
         break;
       case LVN_COLUMNCLICK:
@@ -92,9 +93,13 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 	int iPhoneNumbSelected = m_iCurrRowSelected - i;
 
-	if(eCmd == eCmdDelete)
+	if(eCmd == eCmdDelSubscr)
 	{
-		//GetDocument()->DeleteWhereId(oPersons.m_iId);
+		return GetDocument()->DeleteWhereId(m_PersonsArray[iPersonSelected]->m_iId);
+	}
+	else if(eCmd == eCmdDelNumb)
+	{
+		return GetDocument()->DeleteSubscrPhoneNumb(m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr[iPhoneNumbSelected]);
 	}
 	else
 	{
@@ -102,35 +107,39 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		GetDocument()->SelectAllCities(oCitiesArr);
 		CPhoneTypesArray oPhoneTyopesArr;
 		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
-		CPersonDlg oEditDlg(eCmd, *m_PersonsArray[iPersonSelected], iPhoneNumbSelected, 
-												(GetDocument()->GetPhoneType(*m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr[iPhoneNumbSelected])).m_iId, oCitiesArr, 
-												oPhoneTyopesArr);
-		if(oEditDlg.DoModal() != IDOK)
-			return;
-
-		CPerson &oPerson = oEditDlg.GetPerson();
+		
+		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr);
+		CPerson *poPerson;
+		
 		switch(eCmd)
 		{
+		case eCmdInsertNumb: 
+			if(IDOK != oEditDlg.DoModal(m_PersonsArray[iPersonSelected], DNC, DNC))
+				return;
+			poPerson = oEditDlg.GetPerson();
+			GetDocument()->InsertPhoneNumber(*poPerson->m_oPhoneNumbsArr[poPerson->m_oPhoneNumbsArr.GetCount() - 1]);
+			break;
+		case eCmdInsertSubscr:
+			if(IDOK != oEditDlg.DoModal(m_PersonsArray[iPersonSelected], iPersonSelected, iPhoneNumbSelected)
+				return;
+
+			poPerson = oEditDlg.GetPerson();
+			GetDocument()->Insert(poPerson);
 		case eCmdUpdate:			
-			if(!GetDocument()->UpdateWhereId(oPerson.m_iId, oPerson))
+			if(IDOK != oEditDlg.DoModal(m_PersonsArray[iPersonSelected], iPersonSelected, iPhoneNumbSelected)
+				return;
+
+			if(!GetDocument()->UpdateWhereId(oPerson.m_iId, *m_PersonsArray[iPersonSelected]))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			
+			poPerson = oEditDlg.GetPerson();			
+			if(!GetDocument()->UpdateWhereId(*poPerson->m_iId, *poPerson))
+				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
-		case eCmdInsert:
-			//oPhoneType = oEditDlg.GetCityData();
-			//if(GetDocument()->Insert(oPhoneType) == FALSE)
-			//	MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
-			break;
-		case eCmdFind:
-			//oPhoneType = oEditDlg.GetCityData();
-			//GetDocument()->SelectByContent(oPhoneType);
-			UpdateColumnsContent();
-			break;
-		default:
-			ASSERT(0);
-			break;
-		}	
-	}	
+	
+		}
+		
+
 }
 
 

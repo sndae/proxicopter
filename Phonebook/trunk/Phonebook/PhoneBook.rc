@@ -232,6 +232,18 @@ BEGIN
     END
 END
 
+IDR_PERSONS_MENU MENU 
+BEGIN
+    POPUP "Options"
+    BEGIN
+        MENUITEM "Редактирай",                  ID_OPTIONS_
+        MENUITEM "Добави нов абонат",           ID_OPTIONS_32778
+        MENUITEM "Добави нов номер",            ID_OPTIONS_32779
+        MENUITEM "Изтрий абонат",               ID_OPTIONS_32780
+        MENUITEM "Изтрий номер",                ID_OPTIONS_32781
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

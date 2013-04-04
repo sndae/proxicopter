@@ -133,7 +133,7 @@ void CSubscriberPhoneNumbersView::UpdateColumnsContent()
 		{
 			i--;
 			CString csTempBuff;
-			csTempBuff.Format(_T("%d"),	m_SubscriberPhoneNumbersArray[i]->m_iSubscrCode);
+			csTempBuff.Format(_T("%d"),	m_SubscriberPhoneNumbersArray[i]->m_iSubscrId);
 			int iRowIdx = oListCtrl.InsertItem(CSubscriberPhoneNumbersDoc::eColSubscrCode, csTempBuff);
 			SetRowData(iRowIdx, *m_SubscriberPhoneNumbersArray[i]);
 		}
@@ -142,13 +142,13 @@ void CSubscriberPhoneNumbersView::UpdateColumnsContent()
 
 void CSubscriberPhoneNumbersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
-	CSubscriberPhoneNumbers oSubscriberPhoneNumbers;
+	CSubscriberPhoneNumbers oSubscriberPhoneNumber;
 	if(m_SubscriberPhoneNumbersArray.GetCount())
-		oSubscriberPhoneNumbers = *m_SubscriberPhoneNumbersArray[m_iCurrRowSelected];
+		oSubscriberPhoneNumber = *m_SubscriberPhoneNumbersArray[m_iCurrRowSelected];
 
 	if(eCmd == eCmdDelete)
 	{
-		GetDocument()->DeleteWhereId(oSubscriberPhoneNumbers.m_iId);
+		GetDocument()->DeleteWhereId(oSubscriberPhoneNumber.m_iId);
 	}
 	else
 	{
@@ -157,7 +157,7 @@ void CSubscriberPhoneNumbersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		CPhoneTypesArray oPhoneTypesArray;
 		GetDocument()->SelectAllPhoneTypesCodes(oPhoneTypesArray);
 
-		CSubscriberPhoneNumbersDlg oEditDlg(oSubscriberPhoneNumbers, eCmd, &oSubscrArray, &oPhoneTypesArray);
+		CSubscriberPhoneNumbersDlg oEditDlg(oSubscriberPhoneNumber, eCmd, &oSubscrArray, &oPhoneTypesArray);
 		
 		if(oEditDlg.DoModal() != IDOK)
 			return;
@@ -220,16 +220,25 @@ void CSubscriberPhoneNumbersView::UpdateSingleRow(int iRecId)
 	}
 }
 
-void CSubscriberPhoneNumbersView::SetRowData(int iRowIdx, CSubscriberPhoneNumbers &oSubscriber)
+void CSubscriberPhoneNumbersView::SetRowData(int iRowIdx, CSubscriberPhoneNumbers &oSubscriberPhoneNumb)
 {
 	CListCtrl& oListCtrl = GetListCtrl();
-	CString csTempBuff;
-	csTempBuff.Format(_T("%d"),	oSubscriber.m_iSubscrCode);
-	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColSubscrCode,	csTempBuff);
-	csTempBuff.Format(_T("%d"),	oSubscriber.m_iPhoneCode);
-	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneCode,	 csTempBuff);
-	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneNumber, oSubscriber.m_szPhoneNumber); 
+	CSubscribers oSubscriber;
+	if(!GetDocument()->SelectSubscriberWhereId(oSubscriberPhoneNumb.m_iSubscrId, oSubscriber))
+		return;
 
+	CString csTempBuff;
+	csTempBuff.Format(_T("%d"),	oSubscriber.m_iCode);
+	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColSubscrCode,	csTempBuff);
+
+	CPhoneTypes oPhoneType;
+	if(!GetDocument()->SelectPhoneTypeWhereId(oSubscriberPhoneNumb.m_iPhoneId, oPhoneType))
+		return;
+
+	csTempBuff.Format(_T("%d"),	oPhoneType.m_iCode);
+	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneCode, csTempBuff); 
+
+	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneNumber, oSubscriberPhoneNumb.m_szPhoneNumber);
 	/* Оразмеряване на колоната спрямо дължината на името й */
 	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode, LVSCW_AUTOSIZE_USEHEADER);
 	/* Оразмеряване на колоната спрямо макс. дължина на неин запис */

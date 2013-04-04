@@ -20,6 +20,8 @@
 #define IDB_IMAGES_NORMAL               140
 #define IDD_PERSON_EDIT                 142
 #define IDR_PERSONS_TYPE                143
+#define IDR_MENU1                       144
+#define IDR_PERSONS_MENU                144
 #define IDC_CITIES_EDIT_CODE            1000
 #define IDC_CITIES_EDIT_NAME            1001
 #define IDC_CITIES_EDIT_AREA            1002
@@ -42,7 +44,6 @@
 #define IDC_PERSON_EDIT_SUBSCR_ID       1012
 #define IDC_SUBSCRIBERS_EDIT_FIRST_NAME 1013
 #define IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE 1013
-#define IDC_PERSON_EDIT_CITY2           1013
 #define IDC_PERSON_EDIT_PHONE_TYPES     1013
 #define IDC_SUBSCRIBERS_EDIT_SECOND_NAME 1014
 #define IDC_EDIT4                       1014
@@ -66,13 +67,18 @@
 #define ID_OPTIONS_DELETE               32774
 #define ID_OPTIONS_ADD                  32775
 #define ID_OPTIONS_FIND                 32776
+#define ID_OPTIONS_PERSON_EDIT          32777
+#define ID_OPTIONS_PERSON_ADD_SUBSCR    32778
+#define ID_OPTIONS_PERSON_ADD_NUMB		  32779
+#define ID_OPTIONS_PERSON_DELETE_SUBSCR 32780
+#define ID_OPTIONS_PERSON_DELETE_NUMB   32781
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        144
-#define _APS_NEXT_COMMAND_VALUE         32777
+#define _APS_NEXT_RESOURCE_VALUE        145
+#define _APS_NEXT_COMMAND_VALUE         32782
 #define _APS_NEXT_CONTROL_VALUE         1021
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
