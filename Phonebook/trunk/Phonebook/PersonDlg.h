@@ -14,7 +14,7 @@ public:
 	CPerson	*GetPerson(){return &m_oPerson;};
 	int      GetPhoneTypeIdx(){return m_iPhoneTypeIdx;};
 	int			 GetPhoneNumbIdx(){return m_iPhoneNumbIdx;};
-	INT_PTR	 DoModal(const CPerson &oPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx);
+	INT_PTR	 DoModal(const CPerson *poPerson = 0, const int iSubscrPhoneNumbIdx = DNC, const int iPhoneTypeIdx = DNC);
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
 private:

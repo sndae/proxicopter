@@ -60,6 +60,99 @@ void CPersonDoc::Serialize(CArchive& ar)
   }
 }
 
+BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
+{
+	if(eCol == eColCity)
+	{
+		if(!m_oCityTable.SortByColumn(CCitiesTable::eColName, bAsc))
+			return FALSE;
+
+		CCitiesArray oCitiesArr;
+		if(!m_oCityTable.SelectAll(oCitiesArr))
+			return FALSE;
+
+		for(int i = 0; i < oCitiesArr.GetCount(); i++)
+		{
+			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_szCode)))
+				continue;
+				
+			SelectAll(oPersonArray);			
+		}
+	}
+	else if(eCol == eColPhoneNumberType)
+	{
+		if(!m_oPhoneTypeTable.SortByColumn(CPhoneTypesTable::eColType, bAsc))
+			return FALSE;
+		
+		CPhoneTypesArray oPhoneTypesArr;
+		if(!m_oPhoneTypeTable.SelectAll(oPhoneTypesArr))
+			return FALSE;
+
+		for(int i = 0; i < oPhoneTypesArr.GetCount(); i++)
+		{
+			if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0, DNC, oPersonArray[i]->m_iId)))
+				continue;
+
+			CSubscriberPhoneNumbersArray oSubscrPhoneNumbs;
+			if(m_oSubscrPhoneNumbsTable.SelectAll(oSubscrPhoneNumbs))
+				continue;
+			
+			for(int c = 0; c < oSubscrPhoneNumbs.GetCount(); c++)
+			{
+				if(!m_oSubscrTable.SelectByContent(CSubscribers(oSubscrPhoneNumbs[c]->m_iId)))
+					continue;
+				
+				SelectAll(oPersonArray);					
+			}							
+		}
+	}
+	else if(eCol == eColCity)
+	{
+		if(!m_oCityTable.SortByColumn(CCitiesTable::eColName, bAsc))
+			return FALSE;
+
+		CCitiesArray oCitiesArr;
+		if(!m_oCityTable.SelectAll(oCitiesArr))
+			return FALSE;
+
+		for(int i = 0; i < oCitiesArr.GetCount(); i++)
+		{
+			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_szCode)))
+				continue;
+
+			SelectAll(oPersonArray);	
+		}
+	}
+	else
+	{
+		switch(eCol)
+		{
+			case eColSubscrCode:
+				m_oSubscrTable.SortByColumn(CSubscribersTable::eColCode, bAsc);
+				break;
+			case eColFirstName: 
+				m_oSubscrTable.SortByColumn(CSubscribersTable::eColFirstName, bAsc);
+				break;
+			case eColSecondName: 
+				m_oSubscrTable.SortByColumn(CSubscribersTable::eColSecondName, bAsc);
+				break;
+			case eColThirdName: 
+				m_oSubscrTable.SortByColumn(CSubscribersTable::eColThirdName, bAsc);
+				break;
+			case eColIdNumb: 
+				m_oSubscrTable.SortByColumn(CSubscribersTable::eColIDNumb, bAsc);
+				break;
+			case eColAddress:
+				m_oSubscrTable.SortByColumn(CSubscribersTable::eColAddress, bAsc);
+			default:
+				ASSERT(0);
+		}
+		SelectAll(oPersonArray);
+	}
+
+	return TRUE;
+}
+
 BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 {
 
@@ -91,12 +184,15 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 	return TRUE;
 }
 
-BOOL CPersonDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CPersonDoc::SelectByContent(const CPerson &oPerson)
 {
-  /* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
-  //int iTableCol = (int)eCol + (int)CPersonTable::eColCode ;
-  //return m_oCityTable.SortByColumn((CPersonTable::eColumn)iTableCol , bAsc);
-	return FALSE;
+	if(!m_oSubscrTable.SelectByContent(oPerson.m_tSubscriber))
+		return FALSE;
+	
+	if(!m_oSubscrPhoneNumbsTable.SelectByContent(*oPerson.m_oPhoneNumbsArr[0]))
+		return FALSE;
+
+	return TRUE;
 }
 
 BOOL CPersonDoc::SelectAllCities(CCitiesArray &oCitiesArr)
@@ -161,7 +257,7 @@ BOOL CPersonDoc::DeleteSubscrPhoneNumb(const int iId)
 	if(!SelectWhereId(iId, oPerson))
 		return FALSE;
 	
-	UpdateAllViews(0, (LPARAM)&oPerson);
+	UpdateAllViews(0);
 
 	return TRUE;
 }
@@ -192,7 +288,7 @@ BOOL CPersonDoc::InsertPhoneNumber(CSubscriberPhoneNumbers &oPhoneNumb)
 	if(!SelectWhereId(oPhoneNumb.m_iSubscrId, oPerson))
 		return FALSE;
 	
-	UpdateAllViews(0, (LPARAM)&oPerson);
+	UpdateAllViews(0);
 
 	return TRUE;
 }

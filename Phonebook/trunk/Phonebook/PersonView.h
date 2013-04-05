@@ -24,12 +24,14 @@ public:
 
 protected:
 	virtual void OnInitialUpdate(); // called first time after construct
-
+	virtual void OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint);
 // Implementation
 public:
 	virtual ~CPersonView();
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	void UpdateColumnsContent();
+	void UpdateColumnsContent(CPersonArray &oPersonsArr);
+	void UpdateSingleRow(int iRecId);
 	void SetRowData(int iRowIdx, CPerson &oPerson, CSubscriberPhoneNumbers &oPhoneNumber);
   void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 	CPersonDoc* GetDocument() const;

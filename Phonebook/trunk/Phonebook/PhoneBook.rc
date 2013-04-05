@@ -236,11 +236,14 @@ IDR_PERSONS_MENU MENU
 BEGIN
     POPUP "Options"
     BEGIN
-        MENUITEM "Редактирай",                  ID_OPTIONS_PERSON_EDIT         
-        MENUITEM "Добави нов абонат",           ID_OPTIONS_PERSON_ADD_SUBSCR   
-        MENUITEM "Добави нов номер",            ID_OPTIONS_PERSON_ADD_NUMB		 
+        MENUITEM "Редактирай",                  ID_OPTIONS_PERSON_EDIT
+        MENUITEM "Вмъкни нов абонат",           ID_OPTIONS_PERSON_ADD_SUBSCR
+        MENUITEM "Вмъкни нов номер",            ID_OPTIONS_PERSON_ADD_NUMB
         MENUITEM "Изтрий абонат",               ID_OPTIONS_PERSON_DELETE_SUBSCR
-        MENUITEM "Изтрий номер",                ID_OPTIONS_PERSON_DELETE_NUMB  
+
+        MENUITEM "Изтрий номер",                ID_OPTIONS_PERSON_DELETE_NUMB
+
+        MENUITEM "Търси",                       ID_OPTIONS_PERSON_FIND
     END
 END
 

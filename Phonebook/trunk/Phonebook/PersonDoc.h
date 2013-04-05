@@ -28,21 +28,17 @@ public:
 public:
 	virtual ~CPersonDoc();
   BOOL SelectAll(CPersonArray &oPersonArray);
-  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+  BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc);
 	BOOL SelectAllCities(CCitiesArray &oCitiesArr);
 	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr);
 	BOOL SelectPhoneTypeWhereId(const int iIdx, CPhoneTypes &oPhoneType);
+  BOOL SelectByContent(const CPerson &oPerson);
 	BOOL UpdateWhereId(const int iId, const CPerson &oPerson);
 	BOOL SelectWhereId(const int iId, CPerson &oPerson);
 	BOOL DeleteWhereId(const int iId);
 	BOOL DeleteSubscrPhoneNumb(const int iId);
   BOOL Insert(CPerson &oCity);
 	BOOL InsertPhoneNumber(CSubscriberPhoneNumbers &oPhoneNumb);
-	/*  
-  BOOL Insert(const CPerson &oCity);
-  
-  BOOL SelectByContent(const CPerson &oCity);
-  */
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

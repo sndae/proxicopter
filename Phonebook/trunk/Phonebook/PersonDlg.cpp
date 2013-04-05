@@ -115,11 +115,11 @@ void CPersonDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 	m_iPhoneTypeIdx = m_cPhoneType.GetCurSel();	
-	if(m_iPhoneTypeIdx < 0)
+	if((m_iPhoneTypeIdx < 0) && (m_eMenuCmd != eCmdFind))
 		return;
 
 	int iCityIdx = m_cCities.GetCurSel();
-	if(iCityIdx < 0)
+	if((iCityIdx < 0) && (m_eMenuCmd != eCmdFind))
 		return;
 
 	m_oPerson.m_tCity = *m_poCitiesArr->GetAt(iCityIdx);
@@ -166,11 +166,14 @@ void CPersonDlg::OnBnClickedOk()
 	OnOK();
 }
 
-INT_PTR	 CPersonDlg::DoModal(const CPerson &oPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx)
+INT_PTR	 CPersonDlg::DoModal(const CPerson *poPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx)
 {
 	m_iPhoneNumbIdx = iSubscrPhoneNumbIdx;
 	m_iPhoneTypeIdx = iPhoneTypeIdx;
-	m_oPerson = oPerson;
+	if(poPerson)
+		m_oPerson = *poPerson;
+	else
+		m_oPerson = 0;
 
-	return DoModal();
+	return CDialog::DoModal();
 }

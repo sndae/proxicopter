@@ -54,8 +54,9 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 					case ID_OPTIONS_PERSON_EDIT					 :ExecuteCntxMenuCmd(eCmdUpdate); break;
 					case ID_OPTIONS_PERSON_ADD_SUBSCR    :ExecuteCntxMenuCmd(eCmdInsertSubscr); break;
 					case ID_OPTIONS_PERSON_ADD_NUMB			 :ExecuteCntxMenuCmd(eCmdInsertNumb); break;        
-					case ID_OPTIONS_PERSON_DELETE_SUBSCR :ExecuteCntxMenuCmd(eCmdDelSubscr);   break; 
-					case ID_OPTIONS_PERSON_DELETE_NUMB	 :ExecuteCntxMenuCmd(eCmdDelNumb);   break; 	
+					case ID_OPTIONS_PERSON_DELETE_SUBSCR :ExecuteCntxMenuCmd(eCmdDelSubscr);  break; 
+					case ID_OPTIONS_PERSON_DELETE_NUMB	 :ExecuteCntxMenuCmd(eCmdDelNumb); break; 	
+					case ID_OPTIONS_PERSON_FIND 				 :ExecuteCntxMenuCmd(eCmdFind); break;
 					default: break; 
         }
         break;
@@ -63,9 +64,11 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         /* Сортиране по номер на колона */
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
         m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
-        //GetDocument()->SortByColumn((CCitiesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
-        UpdateColumnsContent();
-        break;
+				m_PersonsArray.RemoveAndFreeAll();
+				if(GetDocument()->SelectAll(m_PersonsArray, (CPersonDoc::eColumn)iNumb, m_abAscSorting[iNumb]))
+	        UpdateColumnsContent(m_PersonsArray);
+        
+				break;
       case LVN_ITEMCHANGED:
         /* Запис на последно избраният ред */
         m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
@@ -113,30 +116,78 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		switch(eCmd)
 		{
 		case eCmdInsertNumb: 
-			if(IDOK != oEditDlg.DoModal(*poPerson, DNC, DNC))
+			if(IDOK != oEditDlg.DoModal(poPerson, DNC, DNC))
 				return;
 
 			poPerson = oEditDlg.GetPerson();
-			GetDocument()->InsertPhoneNumber(*poPerson->m_oPhoneNumbsArr[poPerson->m_oPhoneNumbsArr.GetCount() - 1]);
+			if(!GetDocument()->InsertPhoneNumber(*poPerson->m_oPhoneNumbsArr[poPerson->m_oPhoneNumbsArr.GetCount() - 1]))
+				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdInsertSubscr:
-			if(IDOK != oEditDlg.DoModal(*poPerson, iPersonSelected, iPhoneNumbSelected))
+			if(IDOK != oEditDlg.DoModal(0))
 				return;
 
 			poPerson = oEditDlg.GetPerson();
 
-			GetDocument()->Insert(*poPerson);
+			if(!GetDocument()->Insert(*poPerson))
+				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdUpdate:			
-			if(IDOK != oEditDlg.DoModal(*poPerson, iPersonSelected, iPhoneNumbSelected))
+			if(IDOK != oEditDlg.DoModal(poPerson, iPersonSelected, iPhoneNumbSelected))
 				return;
 
 			poPerson = oEditDlg.GetPerson();
 			if(!GetDocument()->UpdateWhereId(poPerson->m_iId, *poPerson))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
+		case eCmdFind:
+			if(IDOK != oEditDlg.DoModal(0))
+				return;
+
+			poPerson = oEditDlg.GetPerson();
+
+			if(!GetDocument()->SelectByContent(*poPerson))
+				MessageBox(_T("Грешка при търсене.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
+			
+			UpdateColumnsContent();
+							
+			break;
 		default:
 			ASSERT(0);
+		}
+	}
+}
+
+void CPersonView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
+{
+	if(lHint == 0)
+	{
+		UpdateColumnsContent();
+	}
+	else
+	{
+		UpdateSingleRow(((CPerson*)lHint)->m_iId);
+	}
+}
+
+void CPersonView::UpdateSingleRow(int iRecId)
+{
+  /* Проверка дали ред с такова ID в момента е показан на потребителят */
+	for(int i = 0; i < m_PersonsArray.GetCount(); i++)
+	{
+		if(m_PersonsArray[i]->m_iId == iRecId)
+		{      
+			CPerson *poUpdPerson= new CPerson;
+			if(!GetDocument()->SelectWhereId(iRecId, *poUpdPerson))
+				return;
+
+			delete m_PersonsArray[i];
+			m_PersonsArray[i] = poUpdPerson;
+			for(int c = 0; c < poUpdPerson->m_oPhoneNumbsArr.GetCount(); c++)
+			{
+				SetRowData(c, *poUpdPerson, *poUpdPerson->m_oPhoneNumbsArr[c]);
+			}
+			break;
 		}
 	}
 }
@@ -184,23 +235,28 @@ void CPersonView::UpdateColumnsContent()
 {
   m_PersonsArray.RemoveAndFreeAll();
   /* запълване на листът с редове, спрямо последно наложеният филтър */
-  if(GetDocument()->SelectAll(m_PersonsArray) == TRUE)
+  if(!GetDocument()->SelectAll(m_PersonsArray))
+		return;
+
+	UpdateColumnsContent(m_PersonsArray);
+}
+
+void CPersonView::UpdateColumnsContent(CPersonArray &oPersonsArr)
+{
+	CListCtrl& oListCtrl = GetListCtrl();   
+  oListCtrl.DeleteAllItems();
+  for(int i = m_PersonsArray.GetCount(); i != 0 ; )
   {
-    CListCtrl& oListCtrl = GetListCtrl();   
-    oListCtrl.DeleteAllItems();
-    for(int i = m_PersonsArray.GetCount(); i != 0 ; )
-    {
-      i--;
-			for(int c = 0; c < m_PersonsArray[i]->m_oPhoneNumbsArr.GetCount(); c++)
-			{
-				CString csTempBuff;
-				csTempBuff.Format(_T("%d"), m_PersonsArray[i]->m_tSubscriber.m_iCode);
-				int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
-	      
-				SetRowData(iRowIdx, *m_PersonsArray[i], *m_PersonsArray[i]->m_oPhoneNumbsArr[m_PersonsArray[i]->m_oPhoneNumbsArr.GetCount() - c - 1]);
-			}
-    }
-  }
+    i--;
+		for(int c = 0; c < m_PersonsArray[i]->m_oPhoneNumbsArr.GetCount(); c++)
+		{
+			CString csTempBuff;
+			csTempBuff.Format(_T("%d"), m_PersonsArray[i]->m_tSubscriber.m_iCode);
+			int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
+	    
+			SetRowData(iRowIdx, *m_PersonsArray[i], *m_PersonsArray[i]->m_oPhoneNumbsArr[m_PersonsArray[i]->m_oPhoneNumbsArr.GetCount() - c - 1]);
+		}
+	}  
 }
 
 void CPersonView::SetRowData(int iRowIdx, CPerson &oPerson, CSubscriberPhoneNumbers &oPhoneNumber)
