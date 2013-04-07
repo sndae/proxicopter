@@ -73,7 +73,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 
 		for(int i = 0; i < oCitiesArr.GetCount(); i++)
 		{
-			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_szCode)))
+			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_iId)))
 				continue;
 				
 			SelectAll(oPersonArray);			
@@ -90,19 +90,19 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 
 		for(int i = 0; i < oPhoneTypesArr.GetCount(); i++)
 		{
-			if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0, DNC, oPersonArray[i]->m_iId)))
+			if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0, DNC, oPhoneTypesArr[i]->m_iId)))
 				continue;
 
 			CSubscriberPhoneNumbersArray oSubscrPhoneNumbs;
-			if(m_oSubscrPhoneNumbsTable.SelectAll(oSubscrPhoneNumbs))
+			if(!m_oSubscrPhoneNumbsTable.SelectAll(oSubscrPhoneNumbs))
 				continue;
-			
+
 			for(int c = 0; c < oSubscrPhoneNumbs.GetCount(); c++)
 			{
-				if(!m_oSubscrTable.SelectByContent(CSubscribers(oSubscrPhoneNumbs[c]->m_iId)))
+				if(!m_oSubscrTable.SelectWhereId(oSubscrPhoneNumbs[c]->m_iSubscrId, CSubscribers()))
 					continue;
 				
-				SelectAll(oPersonArray);					
+				SelectAll(oPersonArray, TRUE);
 			}							
 		}
 	}
@@ -117,10 +117,32 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 
 		for(int i = 0; i < oCitiesArr.GetCount(); i++)
 		{
-			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_szCode)))
+			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_iId)))
 				continue;
 
 			SelectAll(oPersonArray);	
+		}
+	}
+	else if(eCol == eColPhoneNumber)
+	{
+		if(!m_oSubscrPhoneNumbsTable.SortByColumn(CSubscriberPhoneNumbersTable::eColPhoneNumber, bAsc))
+			return FALSE;
+
+		CSubscriberPhoneNumbersArray oPhoneNumbersArr;
+		if(!m_oSubscrPhoneNumbsTable.SelectAll(oPhoneNumbersArr))
+			return FALSE;
+
+		int iPrevSubscrId = DNC;
+		for(int i = 0; i < oPhoneNumbersArr.GetCount(); i++)
+		{
+			if(iPrevSubscrId != oPhoneNumbersArr[i]->m_iSubscrId)
+			{
+				if(!m_oSubscrTable.SelectWhereId(oPhoneNumbersArr[i]->m_iSubscrId, CSubscribers()))
+					continue;
+
+				SelectAll(oPersonArray);
+				iPrevSubscrId = oPhoneNumbersArr[i]->m_iSubscrId;
+			}
 		}
 	}
 	else
@@ -144,6 +166,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 				break;
 			case eColAddress:
 				m_oSubscrTable.SortByColumn(CSubscribersTable::eColAddress, bAsc);
+				break;
 			default:
 				ASSERT(0);
 		}
@@ -153,7 +176,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 	return TRUE;
 }
 
-BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
+BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter)
 {
 
 	CSubscribersArray oSubscrArr;
@@ -165,16 +188,10 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 		CPerson *poPerson = new CPerson;
 		poPerson->m_tSubscriber = *oSubscrArr[i];
 		poPerson->m_iId = poPerson->m_tSubscriber.m_iId;
-		if(!m_oCityTable.SelectByContent(CCities(DNC, 0, oSubscrArr[i]->m_szCityCode)))
-			return FALSE;
 
-		CCitiesArray oCitiesArr;
-		if(!m_oCityTable.SelectAll(oCitiesArr))
-			return FALSE;
+		m_oCityTable.SelectWhereId(oSubscrArr[i]->m_iCityId, poPerson->m_tCity);
 
-	  poPerson->m_tCity = *oCitiesArr[0];
-
-		if(m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_iId)))
+		if(m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_iId), !bApplyFilter))
 		{
 			if(m_oSubscrPhoneNumbsTable.SelectAll(poPerson->m_oPhoneNumbsArr))
 				oPersonArray.Add(poPerson);
@@ -328,7 +345,7 @@ BOOL CPersonDoc::SelectWhereId(const int iId, CPerson &oPerson)
 
 	oPerson.m_iId = oPerson.m_tSubscriber.m_iId;
 
-	if(!m_oCityTable.SelectByContent(CCities(DNC, 0, oPerson.m_tSubscriber.m_szCityCode)))
+	if(!m_oCityTable.SelectByContent(CCities(oPerson.m_tSubscriber.m_iId)))
 		return FALSE;
 
 	if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oPerson.m_tSubscriber.m_iCode)))

@@ -27,7 +27,7 @@ public:
 // Implementation
 public:
 	virtual ~CPersonDoc();
-  BOOL SelectAll(CPersonArray &oPersonArray);
+  BOOL SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter = FALSE);
   BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc);
 	BOOL SelectAllCities(CCitiesArray &oCitiesArr);
 	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr);

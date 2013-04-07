@@ -235,7 +235,10 @@ void CSubscribersView::SetRowData(int iRowIdx, CSubscribers &oSubscriber)
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColSecondName,oSubscriber.m_szSecondName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColThirdName, oSubscriber.m_szThirdName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColIDNumb, oSubscriber.m_szIDNumb);
-	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCityCode, oSubscriber.m_szCityCode);
+	CCities oCity;
+	if(GetDocument()->SelectCityWhereId(oSubscriber.m_iCityId, oCity))
+		oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCityCode, oCity.m_szCode);
+
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColAddress, oSubscriber.m_szAddress);	
 
 	/* Оразмеряване на колоната спрямо дължината на името й */

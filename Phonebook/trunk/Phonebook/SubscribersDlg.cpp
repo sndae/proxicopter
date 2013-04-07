@@ -63,7 +63,9 @@ BOOL CSubscribersDlg::OnInitDialog()
 		for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
 			m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
 	}
-	m_CityCode.SetWindowTextW(m_oSubscribers.m_szCityCode);
+	if(m_oSubscribers.m_iCityId != DNC)
+		m_CityCode.SetWindowTextW(m_pCitiesArray->GetAt(m_oSubscribers.m_iCityId)->m_szCode);
+	
 	m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
 
 	return TRUE;
@@ -104,6 +106,7 @@ void CSubscribersDlg::OnBnClickedOk()
 	m_ThirdName.GetWindowTextW(m_oSubscribers.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_IDNumber.GetWindowTextW(m_oSubscribers.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
 	m_Address.GetWindowTextW(m_oSubscribers.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_CityCode.GetWindowText(m_oSubscribers.m_szCityCode, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	
+	m_oSubscribers.m_iCityId = m_CityCode.GetCurSel();
 	OnOK();
 }

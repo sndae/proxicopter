@@ -57,7 +57,7 @@ public:
 	BOOL Insert(const CSubscriberPhoneNumbers &oPhoneNumb);
 	BOOL DeleteWhereId(const int iId);
 	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
-	BOOL SelectByContent(const CSubscriberPhoneNumbers &oPhoneNumb);
+	BOOL SelectByContent(const CSubscriberPhoneNumbers &oPhoneNumb, BOOL bClearFilter = TRUE);
 	BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
 	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
 

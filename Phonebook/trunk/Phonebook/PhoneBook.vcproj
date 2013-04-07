@@ -282,26 +282,26 @@
 					RelativePath=".\SubscribersView.cpp"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="SubscriberPhoneNumbers"
-				>
-				<File
-					RelativePath=".\SubscriberPhoneNumbersDlg.cpp"
+				<Filter
+					Name="SubscriberPhoneNumbers"
 					>
-				</File>
-				<File
-					RelativePath=".\SubscriberPhoneNumbersDoc.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SubscriberPhoneNumbersTable.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SubscriberPhoneNumbersView.cpp"
-					>
-				</File>
+					<File
+						RelativePath=".\SubscriberPhoneNumbersDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SubscriberPhoneNumbersDoc.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SubscriberPhoneNumbersTable.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SubscriberPhoneNumbersView.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Person"

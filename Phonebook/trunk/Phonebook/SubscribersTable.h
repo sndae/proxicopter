@@ -42,8 +42,7 @@ public:
 
 	/* Флаг разрешаващ търсенето на DSN:SQLEXPRESS */
 	BOOL m_bSQLEn;
-		
-	CCitiesTable m_oCitiesTable;
+
 
 // Overrides
 	// Wizard generated virtual function overrides
@@ -59,10 +58,6 @@ public:
 	BOOL DeleteWhereId(const int iId);
 	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
 	BOOL SelectByContent(const CSubscribers &oSubscriber);
-	BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
-	/* Функции за достъп до таблица "Градове */
-	CString GetCityCodeByCityId(const int iCityId);
-	int		GetCityIdByCityCode(const TCHAR *pszCityCode);
 private:
 	void DoExchangeFromDatabaseData(CSubscribers &oSubscriber);
 	void DoExchangeТоDatabaseData(const CSubscribers &oSubscriber);

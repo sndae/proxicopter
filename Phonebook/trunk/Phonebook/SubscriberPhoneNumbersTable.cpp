@@ -304,13 +304,17 @@ int	CSubscriberPhoneNumbersTable::GetPhoneIdByPhoneCode(const int iPhoneCode)
 }
 
 
-BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers)
+BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers, BOOL bClearFilter)
 {
 	if(IsOpen())
 		Close(); 
 
-	m_strSort = _T("");
-	m_strFilter = _T("");
+	if(bClearFilter)
+	{
+		m_strSort = _T("");
+		m_strFilter = _T("");
+	}
+
 	CString szColFilter;
 	if(oSubscrPhoneNmbPhoneNumbers.m_iId != DNC)
 	{

@@ -101,7 +101,7 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 			/* запъвлване на масива с указатели към данни на редове от таблицата */
 			while(!IsEOF())
 			{
-				CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), m_CODE, GetCityCodeByCityId(m_CITY_ID), m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
+				CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), m_CODE, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
 																m_THIRD_NAME.GetBuffer(), m_IDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
 				oSubscribersArray.Add(poSubscribers);		 
 				MoveNext();
@@ -294,29 +294,6 @@ BOOL CSubscribersTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
 	return TRUE;
 }
 
-CString CSubscribersTable::GetCityCodeByCityId(const int iCityId)
-{
-	CCities oCity;
-	if(!m_oCitiesTable.SelectWhereId(iCityId, oCity))
-		return FALSE;
-
-	return CString(oCity.m_szCode);
-}
-
-int CSubscribersTable::GetCityIdByCityCode(const TCHAR *pszCityCode)
-{
-	if(!m_oCitiesTable.SelectByContent(CCities(DNC, 0, pszCityCode)))
-		return DNC;
-	
-	CCitiesArray apCities;
-	if(!m_oCitiesTable.SelectAll(apCities))
-		return DNC;
-
-	return apCities[0]->m_iId;
-}
-
-
-
 BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 {
 	if(IsOpen())
@@ -372,13 +349,13 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 		szColFilter.Format(_T("IDENT_NUMB = '%s'"), oSubscribers.m_szIDNumb);
 		m_strFilter += szColFilter;
 	}
-	if(_tcslen(oSubscribers.m_szCityCode))
+	if(oSubscribers.m_iCityId != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		//szColFilter.Format(_T("CITY_ID = '%s'"), oSubscribers.m_iCityId);
-		//m_strFilter += szColFilter;
+		szColFilter.Format(_T("CITY_ID = %d"), oSubscribers.m_iCityId);
+		m_strFilter += szColFilter;
 	}
 	if(_tcslen(oSubscribers.m_szAddress))
 	{
@@ -403,17 +380,6 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 	return TRUE;
 }
 
-BOOL CSubscribersTable::SelectAllCityCodes(CCitiesArray &oCitiesArray)
-{
-	if(!m_oCitiesTable.SelectByContent(CCities(DNC)))
-		return FALSE;
-
-	if(!m_oCitiesTable.SelectAll(oCitiesArray))
-		return FALSE;
-
-	return TRUE;
-}
-
 void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 {
 	oSubscriber.m_iId = m_ID;
@@ -423,7 +389,7 @@ void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 	_tcscpy(oSubscriber.m_szSecondName, m_SECOND_NAME);
 	_tcscpy(oSubscriber.m_szThirdName,	m_THIRD_NAME);
 	_tcscpy(oSubscriber.m_szIDNumb,		 m_IDENT_NUMB);
-	_tcscpy(oSubscriber.m_szCityCode, GetCityCodeByCityId(m_CITY_ID));
+	oSubscriber.m_iCityId = m_CITY_ID;
 	_tcscpy(oSubscriber.m_szAddress, m_CITY_ADDR);
 }
 
@@ -436,7 +402,7 @@ void CSubscribersTable::DoExchangeТоDatabaseData(const CSubscribers &oSubscriber
 	m_SECOND_NAME = oSubscriber.m_szSecondName; 
 	m_THIRD_NAME = oSubscriber.m_szThirdName;	
 	m_IDENT_NUMB = oSubscriber.m_szIDNumb;	 
-	m_CITY_ID = GetCityIdByCityCode(oSubscriber.m_szCityCode);		 
+	m_CITY_ID = oSubscriber.m_iCityId;		 
 	m_CITY_ADDR	= oSubscriber.m_szAddress; 
 
 }

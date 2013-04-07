@@ -125,9 +125,27 @@ BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oSubscriber)
 
 BOOL CSubscribersDoc::SelectAllCityCodes(CCitiesArray &oCitiesArray)
 {
-	return m_oSubscribersTable.SelectAllCityCodes(oCitiesArray);
+	m_oCitiesTable.SelectByContent(CCities());
+
+	return m_oCitiesTable.SelectAll(oCitiesArray);
 }
 
+BOOL CSubscribersDoc::SelectCityWhereId(int iId, CCities &oCity)
+{
+	return m_oCitiesTable.SelectWhereId(iId, oCity);
+}
+
+int CSubscribersDoc::GetCityIdByCode(TCHAR *pszCityCode)
+{
+	if(!m_oCitiesTable.SelectByContent(CCities(DNC, 0, pszCityCode)))
+		return DNC;
+
+	CCitiesArray oCitiesArr;
+	if(!m_oCitiesTable.SelectAll(oCitiesArr))	
+		return DNC;
+
+	return oCitiesArr[0]->m_iId;
+}
 // CSubscribersDoc diagnostics
 
 #ifdef _DEBUG

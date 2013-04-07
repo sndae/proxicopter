@@ -254,7 +254,7 @@ void CPersonView::UpdateColumnsContent(CPersonArray &oPersonsArr)
 			csTempBuff.Format(_T("%d"), m_PersonsArray[i]->m_tSubscriber.m_iCode);
 			int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
 	    
-			SetRowData(iRowIdx, *m_PersonsArray[i], *m_PersonsArray[i]->m_oPhoneNumbsArr[m_PersonsArray[i]->m_oPhoneNumbsArr.GetCount() - c - 1]);
+			SetRowData(iRowIdx, *m_PersonsArray[i], *m_PersonsArray[i]->m_oPhoneNumbsArr[c]);
 		}
 	}  
 }

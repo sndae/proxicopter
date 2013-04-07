@@ -4,7 +4,7 @@
 
 #pragma once
 #include "SubscribersTable.h"
-
+#include "CitiesTable.h"
 class CSubscribersDoc : public CDocument
 {
 public:
@@ -35,14 +35,16 @@ public:
 	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
 	BOOL SelectByContent(const CSubscribers &oSubscriber);
 	BOOL SelectAllCityCodes(CCitiesArray &oCitiesArray);
+	BOOL SelectCityWhereId(int iId, CCities &oCity);
+	int  GetCityIdByCode(TCHAR *pszCityCode);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:
-	CSubscribersTable m_oSubscribersTable;
-
+	CSubscribersTable m_oSubscribersTable;		
+	CCitiesTable			m_oCitiesTable;
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()

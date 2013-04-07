@@ -123,7 +123,7 @@ void CPersonDlg::OnBnClickedOk()
 		return;
 
 	m_oPerson.m_tCity = *m_poCitiesArr->GetAt(iCityIdx);
-	_tcscpy(m_oPerson.m_tSubscriber.m_szCityCode, m_oPerson.m_tCity.m_szCode);
+	m_oPerson.m_tSubscriber.m_iCityId = m_cCities.GetCurSel();
 
 	m_cFirstName.GetWindowText(m_oPerson.m_tSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cSecName.GetWindowText(m_oPerson.m_tSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
