@@ -166,14 +166,18 @@ void CPersonDlg::OnBnClickedOk()
 	OnOK();
 }
 
-INT_PTR	 CPersonDlg::DoModal(const CPerson *poPerson, const int iSubscrPhoneNumbIdx, const int iPhoneTypeIdx)
+INT_PTR	 CPersonDlg::DoModal(const CPerson *poPerson, const int iPersonId, const int iPhoneNumbId)
 {
-	m_iPhoneNumbIdx = iSubscrPhoneNumbIdx;
-	m_iPhoneTypeIdx = iPhoneTypeIdx;
 	if(poPerson)
 		m_oPerson = *poPerson;
 	else
 		m_oPerson = 0;
+
+	m_iPhoneNumbIdx = iPhoneNumbId;
+	if(m_iPhoneNumbIdx != DNC)
+		m_iPhoneTypeIdx = m_oPerson.m_oPhoneNumbsArr[iPhoneNumbId]->m_iPhoneId;
+	else
+		m_iPhoneNumbIdx = DNC;
 
 	return CDialog::DoModal();
 }

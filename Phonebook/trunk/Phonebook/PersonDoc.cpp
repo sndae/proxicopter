@@ -81,6 +81,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 	}
 	else if(eCol == eColPhoneNumberType)
 	{
+#if 0
 		if(!m_oPhoneTypeTable.SortByColumn(CPhoneTypesTable::eColType, bAsc))
 			return FALSE;
 		
@@ -105,6 +106,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 				SelectAll(oPersonArray, TRUE);
 			}							
 		}
+#endif
 	}
 	else if(eCol == eColCity)
 	{
@@ -178,7 +180,6 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 
 BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter)
 {
-
 	CSubscribersArray oSubscrArr;
 	if(!m_oSubscrTable.SelectAll(oSubscrArr))
 		return FALSE;
@@ -348,7 +349,7 @@ BOOL CPersonDoc::SelectWhereId(const int iId, CPerson &oPerson)
 	if(!m_oCityTable.SelectByContent(CCities(oPerson.m_tSubscriber.m_iId)))
 		return FALSE;
 
-	if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oPerson.m_tSubscriber.m_iCode)))
+	if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oPerson.m_tSubscriber.m_iId)))
 		return FALSE;
 
 	if(!m_oSubscrPhoneNumbsTable.SelectAll(oPerson.m_oPhoneNumbsArr))
