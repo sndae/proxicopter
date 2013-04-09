@@ -27,18 +27,22 @@ public:
 // Implementation
 public:
 	virtual ~CPersonDoc();
-  BOOL SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter = FALSE);
-  BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc);
-	BOOL SelectAllCities(CCitiesArray &oCitiesArr);
-	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr);
-	BOOL SelectPhoneTypeWhereId(const int iIdx, CPhoneTypes &oPhoneType);
-  BOOL SelectByContent(const CPerson &oPerson);
-	BOOL UpdateWhereId(const int iId, const CPerson &oPerson);
-	BOOL SelectWhereId(const int iId, CPerson &oPerson);
+	BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc);
+	BOOL SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter = FALSE);
+	BOOL SelectByContent(const CPerson &oPerson);
+	BOOL UpdateWhereId(const CPerson &oPerson, CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb);
+	BOOL Insert(CSubscribers &oNewSubscriber, CSubscriberPhoneNumbers &oNewPhoneNumb);
 	BOOL DeleteWhereId(const int iId);
 	BOOL DeleteSubscrPhoneNumb(const int iId);
-  BOOL Insert(CPerson &oCity);
-	BOOL InsertPhoneNumber(CSubscriberPhoneNumbers &oPhoneNumb);
+
+	BOOL SelectAllCities(CCitiesArray &oCitiesArr){return m_oCityTable.SelectAll(oCitiesArr);};
+	BOOL SelectAllPhoneTypes(CPhoneTypesArray &oPhoneTypesArr){return m_oPhoneTypeTable.SelectAll(oPhoneTypesArr);};
+	BOOL SelectAllSubscriberPhoneNumbers(CSubscriberPhoneNumbersArray &oPhoneNumbersArr){return m_oSubscrPhoneNumbsTable.SelectAll(oPhoneNumbersArr);};
+	BOOL SelectAllSubscribers(CSubscribersArray &oSubscribersArr){return m_oSubscrTable.SelectAll(oSubscribersArr);};
+	BOOL SelectCityWhereId(int iId, CCities &oCity){return m_oCityTable.SelectWhereId(iId, oCity);};
+	BOOL SelectPhoneNumberWhereId(int iId, CSubscriberPhoneNumbers &oPhoneNumber){return m_oSubscrPhoneNumbsTable.SelectWhereId(iId, oPhoneNumber);};
+	BOOL SelectSubscriberWhereId(int iId, CSubscribers &oSubscriber){return m_oSubscrPhoneNumbsTable.SelectWhereIsd(iId, oSubscriber);};
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

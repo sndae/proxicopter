@@ -10,32 +10,21 @@
 
 struct CPerson
 {
-	int								m_iId;
-	CCities						m_tCity;
-	CSubscribers			m_tSubscriber;
-  CSubscriberPhoneNumbersArray	m_oPhoneNumbsArr;
+	int	m_iId;
+	int	m_iSubscriberId;
+	int m_iPhoneNumbId;
 	
-	CPerson(CCities *ptCity = 0, CSubscribers *ptSubscriber = 0)
+	CPerson(const int iId, const int iSubsrId, const int iPhoneNumbId)
   {
-    if(ptCity) m_tCity = *ptCity;  
-    if(ptSubscriber) m_tSubscriber = *ptSubscriber;  
+		m_iId = iId;
+		m_iSubscriberId = iSubscriberId;
+		m_iPhoneNumbId = iPhoneNumbId;		
   }
 	CPerson & operator=(const CPerson &op)
 	{
-		int iLen = op.m_oPhoneNumbsArr.GetCount();
-		for(int i = 0; i < op.m_oPhoneNumbsArr.GetCount(); i++)
-		{
-			
-			CSubscriberPhoneNumbers *poPhoneNume = new CSubscriberPhoneNumbers;
-			*poPhoneNume = *op.m_oPhoneNumbsArr[i];
-			iLen = op.m_oPhoneNumbsArr.GetCount();
-			m_oPhoneNumbsArr.InsertAt(i, poPhoneNume);
-			iLen = op.m_oPhoneNumbsArr.GetCount();
-		}
-		
-		m_iId = op.m_tSubscriber.m_iId;
-		m_tCity = op.m_tCity;
-		m_tSubscriber = op.m_tSubscriber;
+		m_iId = op.iId;
+		m_iSubscriberId = op.iSubscriberId;
+		m_iPhoneNumbId = op.iPhoneNumbId;		
 
 		return *this;
 	}

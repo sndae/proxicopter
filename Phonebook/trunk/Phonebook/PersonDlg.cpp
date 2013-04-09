@@ -118,12 +118,16 @@ void CPersonDlg::OnBnClickedOk()
 	if((m_iPhoneTypeIdx < 0) && (m_eMenuCmd != eCmdFind))
 		return;
 
-	int iCityIdx = m_cCities.GetCurSel();
-	if((iCityIdx < 0) && (m_eMenuCmd != eCmdFind))
-		return;
 
-	m_oPerson.m_tCity = *m_poCitiesArr->GetAt(iCityIdx);
-	m_oPerson.m_tSubscriber.m_iCityId = m_cCities.GetCurSel();
+	if(m_cCities.GetCurSel() >= 0)
+	{
+		m_oPerson.m_tCity = *m_poCitiesArr->GetAt(m_cCities.GetCurSel());		
+		m_oPerson.m_tSubscriber.m_iCityId = m_cCities.GetCurSel();
+	}
+	else if(m_eMenuCmd != eCmdFind)
+	{
+		return;
+	}
 
 	m_cFirstName.GetWindowText(m_oPerson.m_tSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cSecName.GetWindowText(m_oPerson.m_tSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
