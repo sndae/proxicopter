@@ -17,14 +17,14 @@ struct CPerson
 	CPerson(const int iId, const int iSubsrId, const int iPhoneNumbId)
   {
 		m_iId = iId;
-		m_iSubscriberId = iSubscriberId;
+		m_iSubscriberId = iSubsrId;
 		m_iPhoneNumbId = iPhoneNumbId;		
   }
 	CPerson & operator=(const CPerson &op)
 	{
-		m_iId = op.iId;
-		m_iSubscriberId = op.iSubscriberId;
-		m_iPhoneNumbId = op.iPhoneNumbId;		
+		m_iId = op.m_iId;
+		m_iSubscriberId = op.m_iSubscriberId;
+		m_iPhoneNumbId = op.m_iPhoneNumbId;		
 
 		return *this;
 	}

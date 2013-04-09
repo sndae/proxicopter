@@ -185,15 +185,15 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter)
 	return TRUE;
 }
 
-BOOL CPersonDoc::SelectByContent(const CPerson &oPerson)
+BOOL CPersonDoc::SelectByContent(CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb)
 {
-	/*
-	if(!m_oSubscrTable.SelectByContent(oPerson.m_tSubscriber))
+	
+	if(!m_oSubscrTable.SelectByContent(oUpdSubscriber))
 		return FALSE;
 	
-	if(!m_oSubscrPhoneNumbsTable.SelectByContent(*oPerson.m_oPhoneNumbsArr[0]))
+	if(!m_oSubscrPhoneNumbsTable.SelectByContent(oUpdPhoneNumb))
 		return FALSE;
-	*/
+	
 	return TRUE;
 }
 

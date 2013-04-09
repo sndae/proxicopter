@@ -31,8 +31,8 @@ public:
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	void UpdateColumnsContent();
 	void UpdateColumnsContent(CPersonArray &oPersonsArr);
-	void UpdateSingleRow(int iRecId);
-	void SetRowData(int iRowIdx, CPerson &oPerson, CSubscriberPhoneNumbers &oPhoneNumber);
+	void UpdateSingleRow(CPerson &oUpdPerson);
+	void SetRowData(int iRowIdx, CPerson &oPerson);
   void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 	CPersonDoc* GetDocument() const;
 

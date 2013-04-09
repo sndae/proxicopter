@@ -83,26 +83,14 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 
 void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
-	int iPersonSelected = 0;
-	
-	int i = 0;
-	for( ; i < m_iCurrRowSelected; i += m_PersonsArray[iPersonSelected - 1]->m_oPhoneNumbsArr.GetCount())
-	{
-		if((i + m_PersonsArray[iPersonSelected]->m_oPhoneNumbsArr.GetCount()) <= m_iCurrRowSelected)
-			iPersonSelected++;
-		else
-			break;
-	}
-
-	int iPhoneNumbSelected = m_iCurrRowSelected - i;
-	CPerson *poPerson = m_PersonsArray[iPersonSelected];
+	CPerson *poPerson = m_PersonsArray[m_iCurrRowSelected];
 	if(eCmd == eCmdDelSubscr)
 	{
-		GetDocument()->DeleteWhereId(poPerson->m_iId);
+		GetDocument()->DeleteWhereId(poPerson->m_iSubscriberId);
 	}
 	else if(eCmd == eCmdDelNumb)
 	{
-		GetDocument()->DeleteSubscrPhoneNumb(poPerson->m_oPhoneNumbsArr[iPhoneNumbSelected]->m_iId);
+		GetDocument()->DeleteSubscrPhoneNumb(poPerson->m_iPhoneNumbId);
 	}
 	else
 	{
@@ -110,13 +98,17 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		GetDocument()->SelectAllCities(oCitiesArr);
 		CPhoneTypesArray oPhoneTyopesArr;
 		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
+		CSubscriberPhoneNumbers oSubscrPhoneNumbs;
+		GetDocument()->SelectAllSubscriberPhoneNumbers(oSubscrPhoneNumbs);
+		CSubscribers oSubscribers;
+		GetDocument()->SelectAllSubscribers(oSubscribers);
 		
-		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr);	
+		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscribers, oSubscrPhoneNumbs);	
 		
 		switch(eCmd)
 		{
 		case eCmdInsertNumb: 
-			if(IDOK != oEditDlg.DoModal(poPerson, DNC, DNC))
+			if(IDOK != oEditDlg.DoModal(poPerson))
 				return;
 
 			poPerson = oEditDlg.GetPerson();
@@ -129,15 +121,15 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 			poPerson = oEditDlg.GetPerson();
 
-			if(!GetDocument()->Insert(*poPerson))
+			if(!GetDocument()->Insert((*poPerson))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdUpdate:			
-			if(IDOK != oEditDlg.DoModal(poPerson, iPersonSelected, iPhoneNumbSelected))
+			if(IDOK != oEditDlg.DoModal(poPerson))
 				return;
 
 			poPerson = oEditDlg.GetPerson();
-			if(!GetDocument()->UpdateWhereId(poPerson->m_iId, *poPerson))
+			if(!GetDocument()->UpdateWhereId(oEditDlg.GetPerson(), oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdFind:
@@ -146,7 +138,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 			poPerson = oEditDlg.GetPerson();
 
-			if(!GetDocument()->SelectByContent(*poPerson))
+			if(!GetDocument()->SelectByContent(oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при търсене.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
 			
 			UpdateColumnsContent();
@@ -166,27 +158,19 @@ void CPersonView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 	}
 	else
 	{
-		UpdateSingleRow(((CPerson*)lHint)->m_iId);
+		UpdateSingleRow((CPerson*)lHint);
 	}
 }
 
-void CPersonView::UpdateSingleRow(int iRecId)
+void CPersonView::UpdateSingleRow(CPerson &oUpdPerson)
 {
   /* Проверка дали ред с такова ID в момента е показан на потребителят */
 	for(int i = 0; i < m_PersonsArray.GetCount(); i++)
 	{
-		if(m_PersonsArray[i]->m_iId == iRecId)
+		if(m_PersonsArray[i]->m_iId == oUpdPerson.m_iId)
 		{      
-			CPerson *poUpdPerson= new CPerson;
-			if(!GetDocument()->SelectWhereId(iRecId, *poUpdPerson))
-				return;
-
-			delete m_PersonsArray[i];
-			m_PersonsArray[i] = poUpdPerson;
-			for(int c = 0; c < poUpdPerson->m_oPhoneNumbsArr.GetCount(); c++)
-			{
-				SetRowData(c, *poUpdPerson, *poUpdPerson->m_oPhoneNumbsArr[c]);
-			}
+			m_PersonsArray[i] = oUpdPerson;
+			SetRowData(i, oUpdPerson);
 			break;
 		}
 	}
@@ -262,18 +246,19 @@ void CPersonView::SetRowData(int iRowIdx, CPerson &oPerson)
 	if(!GetDocument()->SelectCityWhereId(oSubscriber.m_iCityId, oCity))
 		return;
 
-	CSubscriberPhoneNumbers;
-	m_Su
-	if(!GetDocument()->SelectSubscriberWhereId(oPerson.
+	CSubscriberPhoneNumbers oPhoneNumber;
+	if(!GetDocument()->SelectPhoneNumberWhereId(oPerson.m_iPhoneNumbId, oPhoneNumber))
+		return;
 
-
-	int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, _T(""));
+	CString csTempBuff;
+	csTempBuff.Format(_T("%d"), oSubscriber.m_iCode);
+	int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColCity,				oPerson.m_tCity.m_szName);
-	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColFirstName,		oPerson.m_tSubscriber.m_szFirstName);
-	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColSecondName,	oPerson.m_tSubscriber.m_szSecondName);
-  oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColThirdName,		oPerson.m_tSubscriber.m_szThirdName);
-  oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColIdNumb,			oPerson.m_tSubscriber.m_szIDNumb);
-  oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColAddress,			oPerson.m_tSubscriber.m_szAddress);
+	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColFirstName,		oSubscriber.m_szFirstName);
+	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColSecondName,	oSubscriber.m_szSecondName);
+  oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColThirdName,		oSubscriber.m_szThirdName);
+  oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColIdNumb,			oSubscriber.m_szIDNumb);
+  oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColAddress,			oSubscriber.m_szAddress);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColPhoneNumber, oPhoneNumber.m_szPhoneNumber);
 	CPhoneTypes oPhoneType;
 	if(GetDocument()->SelectPhoneTypeWhereId(oPhoneNumber.m_iPhoneId, oPhoneType))

@@ -29,7 +29,7 @@ public:
 	virtual ~CPersonDoc();
 	BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc);
 	BOOL SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter = FALSE);
-	BOOL SelectByContent(const CPerson &oPerson);
+	BOOL SelectByContent(CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb);
 	BOOL UpdateWhereId(const CPerson &oPerson, CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb);
 	BOOL Insert(CSubscribers &oNewSubscriber, CSubscriberPhoneNumbers &oNewPhoneNumb);
 	BOOL DeleteWhereId(const int iId);
@@ -41,7 +41,8 @@ public:
 	BOOL SelectAllSubscribers(CSubscribersArray &oSubscribersArr){return m_oSubscrTable.SelectAll(oSubscribersArr);};
 	BOOL SelectCityWhereId(int iId, CCities &oCity){return m_oCityTable.SelectWhereId(iId, oCity);};
 	BOOL SelectPhoneNumberWhereId(int iId, CSubscriberPhoneNumbers &oPhoneNumber){return m_oSubscrPhoneNumbsTable.SelectWhereId(iId, oPhoneNumber);};
-	BOOL SelectSubscriberWhereId(int iId, CSubscribers &oSubscriber){return m_oSubscrPhoneNumbsTable.SelectWhereIsd(iId, oSubscriber);};
+	BOOL SelectPhoneTypeWhereId(int iId, CPhoneTypes &oPhoneType){return m_oPhoneTypeTable.SelectWhereId(iId, oPhoneType);};
+	BOOL SelectSubscriberWhereId(int iId, CSubscribers &oSubscriber){return m_oSubscrTable.SelectWhereId(iId, oSubscriber);};
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;

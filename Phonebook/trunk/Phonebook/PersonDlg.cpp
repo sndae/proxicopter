@@ -10,11 +10,14 @@
 // CPersonDlg dialog
 
 IMPLEMENT_DYNAMIC(CPersonDlg, CDialog)
-CPersonDlg::CPersonDlg(const eMenuCmd eCmd,CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent)
+CPersonDlg::CPersonDlg(eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, 
+											 CSubscribersArray &oSubscribersArr, CSubscriberPhoneNumbersArray &oSubscrPhoneNumbsArr, CWnd* pParent)
 											: CDialog(CPersonDlg::IDD, pParent)
 {
 	m_poCitiesArr = &oCitiesArr;
 	m_poPhoneTypesArr = &oPhoneTypesArr;
+	m_poSubscriberPhoneNumbers = &oSubscrPhoneNumbsArr;
+	m_poSubscribers = &oSubscribersArr;
 	m_eMenuCmd = eCmd;
 }
 
@@ -83,7 +86,7 @@ BOOL CPersonDlg::OnInitDialog()
 	if((m_eMenuCmd == eCmdInsertNumb) || (m_eMenuCmd == eCmdUpdate))
 	{
 		CString csTempBuff;
-		csTempBuff.Format(_T("%d"), m_oPerson.m_tSubscriber.m_iCode);
+		csTempBuff.Format(_T("%d"), m_poSubscribers[m_oPerson.m_iSubscriberId].m_iCode);
 		m_cSubscrCode.SetWindowText(csTempBuff);
 		
 		m_cCities.SetCurSel(m_oPerson.m_tCity.m_iId);
@@ -170,18 +173,13 @@ void CPersonDlg::OnBnClickedOk()
 	OnOK();
 }
 
-INT_PTR	 CPersonDlg::DoModal(const CPerson *poPerson, const int iPersonId, const int iPhoneNumbId)
+INT_PTR	 CPersonDlg::DoModal(const CPerson *poPerson)
 {
 	if(poPerson)
 		m_oPerson = *poPerson;
 	else
 		m_oPerson = 0;
 
-	m_iPhoneNumbIdx = iPhoneNumbId;
-	if(m_iPhoneNumbIdx != DNC)
-		m_iPhoneTypeIdx = m_oPerson.m_oPhoneNumbsArr[iPhoneNumbId]->m_iPhoneId;
-	else
-		m_iPhoneNumbIdx = DNC;
-
+	m_oSubscriber = m_po
 	return CDialog::DoModal();
 }

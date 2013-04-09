@@ -9,12 +9,13 @@ class CPersonDlg : public CDialog
 	DECLARE_DYNAMIC(CPersonDlg)
 
 public:
-	CPersonDlg(const eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, CWnd* pParent = NULL);   // standard constructor
+	CPersonDlg(eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, 
+						 CSubscribersArray &oSubscribersArr, CSubscriberPhoneNumbersArray &oSubscrPhoneNumbsArr, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
-	CPerson	*GetPerson(){return &m_oPerson;};
-	int      GetPhoneTypeIdx(){return m_iPhoneTypeIdx;};
-	int			 GetPhoneNumbIdx(){return m_iPhoneNumbIdx;};
-	INT_PTR	 DoModal(const CPerson *poPerson = 0, const int iPersonId = DNC, const int iPhoneNumbId = DNC);
+	CPerson									&GetPerson(){return m_oPerson;};
+	CSubscribers						&GetSubscriber(){return m_oSubscriber;};
+	CSubscriberPhoneNumbers	&GetPhoneNumber(){return m_oPhoneNumber;};
+	INT_PTR	 DoModal(const CPerson *poPerson);
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
 private:
@@ -23,13 +24,17 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
 	CPerson m_oPerson;
-	CCitiesArray			*m_poCitiesArr;
-	CPhoneTypesArray	*m_poPhoneTypesArr;
+	CSubscribers						m_oSubscriber;
+	CSubscriberPhoneNumbers m_oPhoneNumber;
+	CCitiesArray						*m_poCitiesArr;
+	CPhoneTypesArray				*m_poPhoneTypesArr;
+	CSubscribersArray				*m_poSubscribers;
+	CSubscriberPhoneNumbersArray *m_poSubscriberPhoneNumbers;
 	int  m_iPhoneNumbIdx;
 	int  m_iPhoneTypeIdx;
 	eMenuCmd m_eMenuCmd;
 	DECLARE_MESSAGE_MAP()
-public:
+
 	CEdit m_cSubscrCode;
 	CComboBox m_cCities;
 	CEdit m_cFirstName;
