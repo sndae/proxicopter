@@ -86,7 +86,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 				if(!m_oSubscrTable.SelectWhereId(oSubscrPhoneNumbs[c]->m_iSubscrId, oSubscriber))
 					continue;
 
-				oPersonArray.Add(new CPerson(i + c, oSubscriber.m_iId, oSubscrPhoneNumbs[c]));
+				oPersonArray.Add(new CPerson(i + c, oSubscriber.m_iId, oSubscrPhoneNumbs[c]->m_iId));
 			}							
 		}
 	}
@@ -168,14 +168,14 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter)
 
 	for(int i = 0; i < oSubscrArr.GetCount(); i++)
 	{
-		if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_iId))
+		if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_iId)))
 			continue;
 
 		CSubscriberPhoneNumbersArray oPhoneNumbersArr;
 		if(!m_oSubscrPhoneNumbsTable.SelectAll(oPhoneNumbersArr))
 			continue;
 
-		for(c = 0; c < oPhoneNumbersArr.GetCount(); c++)
+		for(int c = 0; c < oPhoneNumbersArr.GetCount(); c++)
 		{
 			CPerson *poPerson = new CPerson(i, oSubscrArr[i]->m_iId, oPhoneNumbersArr[c]->m_iId);
 			oPersonArray.Add(poPerson);
@@ -200,7 +200,7 @@ BOOL CPersonDoc::SelectByContent(CSubscribers &oUpdSubscriber, CSubscriberPhoneN
 BOOL CPersonDoc::UpdateWhereId(const CPerson &oPerson, CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb)
 {
 	if(!m_oSubscrTable.UpdateWhereId(oUpdSubscriber.m_iId, oUpdSubscriber))
-		return FALSE:
+		return FALSE;
 
 	if(!m_oSubscrPhoneNumbsTable.UpdateWhereId(oUpdPhoneNumb.m_iId, oUpdPhoneNumb))
 		return FALSE;
@@ -226,13 +226,13 @@ BOOL CPersonDoc::Insert(CSubscribers &oNewSubscriber, CSubscriberPhoneNumbers &o
 {
 	if(oNewSubscriber.m_iId == DNC)
 	{
-		if(!m_oSubscrTable.Insert(oUpdSubscriber))
+		if(!m_oSubscrTable.Insert(oNewSubscriber))
 			return FALSE;
 	}
 
 	if(oNewPhoneNumb.m_iId == DNC)
 	{
-		oNewPhoneNumb.m_iSubscrId = oUpdSubscriber.m_iId;
+		oNewPhoneNumb.m_iSubscrId = oNewSubscriber.m_iId;
 		if(!m_oSubscrPhoneNumbsTable.Insert(oNewPhoneNumb))
 			return FALSE;
 	}

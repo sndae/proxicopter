@@ -98,12 +98,12 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		GetDocument()->SelectAllCities(oCitiesArr);
 		CPhoneTypesArray oPhoneTyopesArr;
 		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
-		CSubscriberPhoneNumbers oSubscrPhoneNumbs;
-		GetDocument()->SelectAllSubscriberPhoneNumbers(oSubscrPhoneNumbs);
-		CSubscribers oSubscribers;
-		GetDocument()->SelectAllSubscribers(oSubscribers);
+		CSubscriberPhoneNumbersArray oSubscrPhoneNumbsArr;
+		GetDocument()->SelectAllSubscriberPhoneNumbers(oSubscrPhoneNumbsArr);
+		CSubscribersArray oSubscribersArr;
+		GetDocument()->SelectAllSubscribers(oSubscribersArr);
 		
-		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscribers, oSubscrPhoneNumbs);	
+		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscribersArr, oSubscrPhoneNumbsArr);	
 		
 		switch(eCmd)
 		{
@@ -111,32 +111,26 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 			if(IDOK != oEditDlg.DoModal(poPerson))
 				return;
 
-			poPerson = oEditDlg.GetPerson();
-			if(!GetDocument()->Insert(*poPerson))
+			if(!GetDocument()->Insert(oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdInsertSubscr:
 			if(IDOK != oEditDlg.DoModal(0))
 				return;
 
-			poPerson = oEditDlg.GetPerson();
-
-			if(!GetDocument()->Insert((*poPerson))
+			if(!GetDocument()->Insert(oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdUpdate:			
 			if(IDOK != oEditDlg.DoModal(poPerson))
 				return;
 
-			poPerson = oEditDlg.GetPerson();
 			if(!GetDocument()->UpdateWhereId(oEditDlg.GetPerson(), oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			break;
 		case eCmdFind:
 			if(IDOK != oEditDlg.DoModal(0))
 				return;
-
-			poPerson = oEditDlg.GetPerson();
 
 			if(!GetDocument()->SelectByContent(oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при търсене.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
@@ -158,7 +152,7 @@ void CPersonView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 	}
 	else
 	{
-		UpdateSingleRow((CPerson*)lHint);
+		UpdateSingleRow(*((CPerson*)lHint));
 	}
 }
 
@@ -169,8 +163,8 @@ void CPersonView::UpdateSingleRow(CPerson &oUpdPerson)
 	{
 		if(m_PersonsArray[i]->m_iId == oUpdPerson.m_iId)
 		{      
-			m_PersonsArray[i] = oUpdPerson;
-			SetRowData(i, oUpdPerson);
+			*m_PersonsArray[i] = oUpdPerson;
+			InsertNewRow(oUpdPerson);
 			break;
 		}
 	}
@@ -229,13 +223,13 @@ void CPersonView::UpdateColumnsContent(CPersonArray &oPersonsArr)
 {
 	CListCtrl& oListCtrl = GetListCtrl();   
   oListCtrl.DeleteAllItems();
-	for(int i = 0; i < oPersonsArr.GetCount() ;!= 0 ; )
+	for(int i = 0; i < oPersonsArr.GetCount(); i++)
   {
-		SetRowData(i, oPersonsArr[i]);
+		InsertNewRow(*oPersonsArr[i]);
 	}  
 }
 
-void CPersonView::SetRowData(int iRowIdx, CPerson &oPerson)
+void CPersonView::InsertNewRow(CPerson &oPerson)
 {
 	CListCtrl& oListCtrl = GetListCtrl();
 	CSubscribers oSubscriber;
@@ -253,7 +247,7 @@ void CPersonView::SetRowData(int iRowIdx, CPerson &oPerson)
 	CString csTempBuff;
 	csTempBuff.Format(_T("%d"), oSubscriber.m_iCode);
 	int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
-	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColCity,				oPerson.m_tCity.m_szName);
+	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColCity,				oCity.m_szName);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColFirstName,		oSubscriber.m_szFirstName);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColSecondName,	oSubscriber.m_szSecondName);
   oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColThirdName,		oSubscriber.m_szThirdName);

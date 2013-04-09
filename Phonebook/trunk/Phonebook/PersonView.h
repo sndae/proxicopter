@@ -32,7 +32,7 @@ public:
 	void UpdateColumnsContent();
 	void UpdateColumnsContent(CPersonArray &oPersonsArr);
 	void UpdateSingleRow(CPerson &oUpdPerson);
-	void SetRowData(int iRowIdx, CPerson &oPerson);
+	void InsertNewRow(CPerson &oPerson);
   void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 	CPersonDoc* GetDocument() const;
 
