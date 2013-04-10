@@ -10,7 +10,7 @@ class CPersonDlg : public CDialog
 
 public:
 	CPersonDlg(eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, 
-						 CSubscribersArray &oSubscribersArr, CSubscriberPhoneNumbersArray &oSubscrPhoneNumbsArr, CWnd* pParent = NULL);   // standard constructor
+						 CSubscribers &oSubscriber, CSubscriberPhoneNumbers &oSubscrPhoneNumb, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
 	CPerson									&GetPerson(){return m_oPerson;};
 	CSubscribers						&GetSubscriber(){return m_oSubscriber;};
@@ -28,8 +28,6 @@ protected:
 	CSubscriberPhoneNumbers m_oPhoneNumber;
 	CCitiesArray						*m_poCitiesArr;
 	CPhoneTypesArray				*m_poPhoneTypesArr;
-	CSubscribersArray				*m_poSubscribersArr;
-	CSubscriberPhoneNumbersArray *m_poSubscrbPhoneNumbsArr;
 	int  m_iPhoneNumbIdx;
 	int  m_iPhoneTypeIdx;
 	eMenuCmd m_eMenuCmd;

@@ -102,14 +102,14 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		CPhoneTypesArray oPhoneTyopesArr;
 		if(!GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr))
 			return;
-		CSubscriberPhoneNumbersArray oSubscrPhoneNumbsArr;
-		if(!GetDocument()->SelectAllSubscriberPhoneNumbers(oSubscrPhoneNumbsArr))
+		CSubscriberPhoneNumbers oSubscrPhoneNumb;
+		if(!GetDocument()->SelectPhoneNumberWhereId(poPerson->m_iPhoneNumbId, oSubscrPhoneNumb))
 			return;
-		CSubscribersArray oSubscribersArr;		
-		if(!GetDocument()->SelectAllSubscribers(oSubscribersArr))
+		CSubscribers oSubscriber;		
+		if(!GetDocument()->SelectSubscriberWhereId(poPerson->m_iSubscriberId, oSubscriber))
 			return;
-		iCount = oSubscribersArr.GetCount();
-		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscribersArr, oSubscrPhoneNumbsArr);	
+		
+		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscriber, oSubscrPhoneNumb);	
 		
 		switch(eCmd)
 		{
@@ -229,7 +229,7 @@ void CPersonView::UpdateColumnsContent(CPersonArray &oPersonsArr)
 {
 	CListCtrl& oListCtrl = GetListCtrl();   
   oListCtrl.DeleteAllItems();
-	for(int i = 0; i < oPersonsArr.GetCount(); i++)
+	for(int i = oPersonsArr.GetCount() - 1; i != -1; i--)
   {
 		InsertNewRow(*oPersonsArr[i]);
 	}  

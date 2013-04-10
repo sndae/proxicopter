@@ -133,29 +133,33 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 	}
 	else
 	{
+		CSubscribersTable::eColumn eTableCol;
 		switch(eCol)
 		{
 			case eColSubscrCode:
-				if(m_oSubscrTable.SortByColumn(CSubscribersTable::eColCode, bAsc);
+				eTableCol = CSubscribersTable::eColCode;
 				break;
 			case eColFirstName: 
-				m_oSubscrTable.SortByColumn(CSubscribersTable::eColFirstName, bAsc);
+				eTableCol = CSubscribersTable::eColFirstName;
 				break;
 			case eColSecondName: 
-				m_oSubscrTable.SortByColumn(CSubscribersTable::eColSecondName, bAsc);
+				eTableCol = CSubscribersTable::eColSecondName;
 				break;
 			case eColThirdName: 
-				m_oSubscrTable.SortByColumn(CSubscribersTable::eColThirdName, bAsc);
+				eTableCol = CSubscribersTable::eColThirdName;
 				break;
 			case eColIdNumb: 
-				m_oSubscrTable.SortByColumn(CSubscribersTable::eColIDNumb, bAsc);
+				eTableCol = CSubscribersTable::eColIDNumb;
 				break;
 			case eColAddress:
-				m_oSubscrTable.SortByColumn(CSubscribersTable::eColAddress, bAsc);
+				eTableCol = CSubscribersTable::eColAddress;
 				break;
 			default:
 				ASSERT(0);
 		}
+		if(!m_oSubscrTable.SortByColumn(eTableCol, bAsc))
+			return FALSE;
+
 		if(!SelectAll(oPersonArray))
 			return FALSE;
 	}
@@ -242,7 +246,7 @@ BOOL CPersonDoc::Insert(CSubscribers &oNewSubscriber, CSubscriberPhoneNumbers &o
 
 	UpdateAllViews(0);
 
-	return FALSE;
+	return TRUE;
 }
 
 BOOL CPersonDoc::DeleteWhereId(const int iId)
