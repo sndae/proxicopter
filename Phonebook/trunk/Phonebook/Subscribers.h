@@ -13,17 +13,17 @@ struct CSubscribers
 	TCHAR m_szSecondName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	TCHAR m_szThirdName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	TCHAR m_szIDNumb[SUBSCRIBERS_ID_NUMB_LEN];
-	TCHAR m_iCityId;
+	int   m_iCityId;
 	TCHAR m_szAddress[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	
-	CSubscribers(const int iId = DNC, const int iRevNumb = 0, const int iCode = DNC, const int iCityId = 0, const TCHAR *pszFirstName = 0, 
+	CSubscribers(const int iId = DNC, const int iRevNumb = 0, const int iCode = DNC, const int iCityId = DNC, const TCHAR *pszFirstName = 0, 
 				 const TCHAR *pszSecondName = 0, const TCHAR *pszThirdName = 0, const TCHAR *pszIDNumb = 0, const TCHAR *pszAddress = 0)
 	{
 		ZeroMemory(this, sizeof(*this));
 		m_iId = iId;
 		m_iRevNumb = iRevNumb;
 		m_iCode = iCode;
-		m_iCityId = iCityId;	
+		m_iCityId = iCityId;	 
 		if(pszFirstName)_tcscpy(m_szFirstName, pszFirstName);	
 		if(pszSecondName)_tcscpy(m_szSecondName, pszSecondName);	
 		if(pszThirdName)_tcscpy(m_szThirdName, pszThirdName);	

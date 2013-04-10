@@ -61,12 +61,6 @@ public:
 	BOOL SelectAllSubscribersCodes(CSubscribersArray &oSubscribersArray);
 	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
 
-	/* Функции за достъп до таблица "Градове */
-	int	GetSubscrCodeBySubscrId(const int iId);
-	int	GetSubscrIdBySubscrCode(const int iSubscrCode);
-	int	GetPhoneCodeByPhoneId(const int iId);
-	int	GetPhoneIdByPhoneCode(const int iPhoneCode);
-
 private:
 	void DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oPhoneNumb);
 	void DoExchangeТоDatabaseData(const CSubscriberPhoneNumbers &oPhoneNumb);

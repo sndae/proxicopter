@@ -62,6 +62,7 @@ void CPersonDoc::Serialize(CArchive& ar)
 
 BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 {
+	m_oSubscrTable.SelectByContent(CSubscribers());
 	if(eCol == eColPhoneNumberType)
 	{
 		if(!m_oPhoneTypeTable.SortByColumn(CPhoneTypesTable::eColType, bAsc))
@@ -126,7 +127,8 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 			if(!m_oSubscrTable.SelectByContent(CSubscribers(DNC, 0, DNC, oCitiesArr[i]->m_iId)))
 				continue;
 				
-			SelectAll(oPersonArray);			
+			if(!SelectAll(oPersonArray))
+				continue;
 		}
 	}
 	else
@@ -134,7 +136,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 		switch(eCol)
 		{
 			case eColSubscrCode:
-				m_oSubscrTable.SortByColumn(CSubscribersTable::eColCode, bAsc);
+				if(m_oSubscrTable.SortByColumn(CSubscribersTable::eColCode, bAsc);
 				break;
 			case eColFirstName: 
 				m_oSubscrTable.SortByColumn(CSubscribersTable::eColFirstName, bAsc);
@@ -154,7 +156,8 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 			default:
 				ASSERT(0);
 		}
-		SelectAll(oPersonArray);
+		if(!SelectAll(oPersonArray))
+			return FALSE;
 	}
 
 	return TRUE;

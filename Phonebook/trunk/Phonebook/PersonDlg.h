@@ -28,8 +28,8 @@ protected:
 	CSubscriberPhoneNumbers m_oPhoneNumber;
 	CCitiesArray						*m_poCitiesArr;
 	CPhoneTypesArray				*m_poPhoneTypesArr;
-	CSubscribersArray				*m_poSubscribers;
-	CSubscriberPhoneNumbersArray *m_poSubscriberPhoneNumbers;
+	CSubscribersArray				*m_poSubscribersArr;
+	CSubscriberPhoneNumbersArray *m_poSubscrbPhoneNumbsArr;
 	int  m_iPhoneNumbIdx;
 	int  m_iPhoneTypeIdx;
 	eMenuCmd m_eMenuCmd;

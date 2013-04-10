@@ -78,7 +78,7 @@ void CSubscribersTable::DoFieldExchange(CFieldExchange* pFX)
 
 BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 {
-	if(IsOpen())
+ 	if(IsOpen())
 		Close();
 	
 	BOOL bRes = FALSE;

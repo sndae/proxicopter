@@ -14,7 +14,7 @@ struct CPerson
 	int	m_iSubscriberId;
 	int m_iPhoneNumbId;
 	
-	CPerson(const int iId, const int iSubsrId, const int iPhoneNumbId)
+	CPerson(const int iId = DNC, const int iSubsrId = DNC, const int iPhoneNumbId = DNC)
   {
 		m_iId = iId;
 		m_iSubscriberId = iSubsrId;

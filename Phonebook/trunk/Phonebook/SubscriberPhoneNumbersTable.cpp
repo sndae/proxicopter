@@ -261,49 +261,6 @@ BOOL CSubscriberPhoneNumbersTable::SortByColumn(const eColumn eCol, const BOOL b
 	return TRUE;
 }
 
-int	CSubscriberPhoneNumbersTable::GetSubscrCodeBySubscrId(const int iId)
-{
-	CSubscribers oSubscriber;
-	if(!m_oSubscribersTable.SelectWhereId(iId, oSubscriber))
-		return DNC;
-
-	return oSubscriber.m_iCode;
-}
-
-int	CSubscriberPhoneNumbersTable::GetSubscrIdBySubscrCode(const int iSubscrCode)
-{	
-	if(!m_oSubscribersTable.SelectByContent(CSubscribers(DNC, 0, iSubscrCode)))
-		return DNC;
-
-	CSubscribersArray oPtrToSubscrsArray;
-	if(!m_oSubscribersTable.SelectAll(oPtrToSubscrsArray))
-		return DNC;
-
-	return oPtrToSubscrsArray[0]->m_iId;
-}
-
-int	CSubscriberPhoneNumbersTable::GetPhoneCodeByPhoneId(const int iId)
-{
-	CPhoneTypes oPhoneType;
-	if(!m_oPhoneTypesTable.SelectWhereId(iId, oPhoneType))
-		return DNC;
-
-	return oPhoneType.m_iCode;
-}
-
-int	CSubscriberPhoneNumbersTable::GetPhoneIdByPhoneCode(const int iPhoneCode)
-{
-	if(!m_oPhoneTypesTable.SelectByContent(CPhoneTypes(DNC, 0, iPhoneCode)))
-		return DNC;
-
-	CPhoneTypesArray oPtrToPhoneTypesArray;
-	if(!m_oPhoneTypesTable.SelectAll(oPtrToPhoneTypesArray))
-		return DNC;
-
-	return oPtrToPhoneTypesArray[0]->m_iId;
-}
-
-
 BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers, BOOL bClearFilter)
 {
 	if(IsOpen())
@@ -369,8 +326,8 @@ void CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNu
 {
 	oSubscrPhoneNmb.m_iId = m_ID;
 	oSubscrPhoneNmb.m_iRevNumb = m_REV_NUMB;
-	oSubscrPhoneNmb.m_iSubscrId =	GetSubscrCodeBySubscrId(m_SUBSCRIBER_ID);
-	oSubscrPhoneNmb.m_iPhoneId = GetPhoneCodeByPhoneId(m_PHONE_ID);
+	oSubscrPhoneNmb.m_iSubscrId =	m_SUBSCRIBER_ID;
+	oSubscrPhoneNmb.m_iPhoneId = m_PHONE_ID;
 	_tcscpy(oSubscrPhoneNmb.m_szPhoneNumber, m_PHONE_NUMB);
 }
 

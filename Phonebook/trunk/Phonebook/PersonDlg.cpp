@@ -16,8 +16,8 @@ CPersonDlg::CPersonDlg(eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray
 {
 	m_poCitiesArr = &oCitiesArr;
 	m_poPhoneTypesArr = &oPhoneTypesArr;
-	m_poSubscriberPhoneNumbers = &oSubscrPhoneNumbsArr;
-	m_poSubscribers = &oSubscribersArr;
+	m_poSubscrbPhoneNumbsArr = &oSubscrPhoneNumbsArr;
+	m_poSubscribersArr = &oSubscribersArr;
 	m_eMenuCmd = eCmd;
 }
 
@@ -85,21 +85,25 @@ BOOL CPersonDlg::OnInitDialog()
 
 	if((m_eMenuCmd == eCmdInsertNumb) || (m_eMenuCmd == eCmdUpdate))
 	{
+		int iCount = m_poSubscribersArr->GetCount();
+		CSubscribers *poSubscr = m_poSubscribersArr->GetAt(m_oPerson.m_iSubscriberId);
+
 		CString csTempBuff;
-		csTempBuff.Format(_T("%d"), m_poSubscribers[m_oPerson.m_iSubscriberId].m_iCode);
+		csTempBuff.Format(_T("%d"), poSubscr->m_iCode);
 		m_cSubscrCode.SetWindowText(csTempBuff);
 		
-		m_cCities.SetCurSel(m_oPerson.m_tCity.m_iId);
-		m_cFirstName.SetWindowText(m_oPerson.m_tSubscriber.m_szFirstName);
-		m_cSecName.SetWindowText(m_oPerson.m_tSubscriber.m_szSecondName);
-		m_cThirdName.SetWindowText(m_oPerson.m_tSubscriber.m_szThirdName);
-		m_cAddress.SetWindowText(m_oPerson.m_tSubscriber.m_szAddress);
-		m_cSubscrId.SetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb);
+		m_cCities.SetCurSel(m_poCitiesArr->GetAt(poSubscr->m_iCityId)->m_iId);
+		m_cFirstName.SetWindowText(poSubscr->m_szFirstName);
+		m_cSecName.SetWindowText(poSubscr->m_szSecondName);
+		m_cThirdName.SetWindowText(poSubscr->m_szThirdName);
+		m_cAddress.SetWindowText(poSubscr->m_szAddress);
+		m_cSubscrId.SetWindowText(poSubscr->m_szIDNumb);
 
 		if(m_eMenuCmd == eCmdUpdate)
 		{
-			m_cPhoneType.SetCurSel(m_iPhoneTypeIdx);
-			m_cPhoneNumber.SetWindowText(m_oPerson.m_oPhoneNumbsArr[m_iPhoneNumbIdx]->m_szPhoneNumber);
+			CSubscriberPhoneNumbers *poPhoneNumb = m_poSubscrbPhoneNumbsArr->GetAt(m_oPerson.m_iPhoneNumbId); 
+			m_cPhoneType.SetCurSel(poPhoneNumb->m_iPhoneId);
+			m_cPhoneNumber.SetWindowText(poPhoneNumb->m_szPhoneNumber);
 		}
 	}
 
@@ -117,58 +121,36 @@ END_MESSAGE_MAP()
 void CPersonDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
-	m_iPhoneTypeIdx = m_cPhoneType.GetCurSel();	
-	if((m_iPhoneTypeIdx < 0) && (m_eMenuCmd != eCmdFind))
-		return;
+	
+	//if((m_cPhoneType.GetCurSel() < 0) && (m_eMenuCmd != eCmdFind))
+	//	return;
 
 
-	if(m_cCities.GetCurSel() >= 0)
-	{
-		m_oPerson.m_tCity = *m_poCitiesArr->GetAt(m_cCities.GetCurSel());		
-		m_oPerson.m_tSubscriber.m_iCityId = m_cCities.GetCurSel();
-	}
-	else if(m_eMenuCmd != eCmdFind)
-	{
-		return;
-	}
+	//if(m_cCities.GetCurSel() >= 0)
+	//{
+	m_oPhoneNumber.m_iId = m_oPerson.m_iPhoneNumbId;
+	m_oPhoneNumber.m_iPhoneId = (m_cPhoneType.GetCurSel() != -1 ?  m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel())->m_iId : DNC);
+	m_cPhoneNumber.GetWindowText(m_oPhoneNumber.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
+	m_oPhoneNumber.m_iSubscrId = m_oPerson.m_iSubscriberId;
 
-	m_cFirstName.GetWindowText(m_oPerson.m_tSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cSecName.GetWindowText(m_oPerson.m_tSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cThirdName.GetWindowText(m_oPerson.m_tSubscriber.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cAddress.GetWindowText(m_oPerson.m_tSubscriber.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cSubscrId.GetWindowText(m_oPerson.m_tSubscriber.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
+	//}
+	//else if(m_eMenuCmd != eCmdFind)
+	//{
+	//	return;
+	//}
+
+	m_oSubscriber.m_iId = m_oPerson.m_iSubscriberId;
+	
+	m_oSubscriber.m_iCityId = m_poCitiesArr->GetAt(m_cCities.GetCurSel())->m_iId;
+	m_cFirstName.GetWindowText(m_oSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cSecName.GetWindowText(m_oSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cThirdName.GetWindowText(m_oSubscriber.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cAddress.GetWindowText(m_oSubscriber.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_cSubscrId.GetWindowText(m_oSubscriber.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
+	
 	CString csTempBuff;
 	m_cSubscrCode.GetWindowText(csTempBuff);
-	m_oPerson.m_tSubscriber.m_iCode = _ttoi(csTempBuff);
-	if(m_eMenuCmd == eCmdInsertSubscr)
-		m_oPerson.m_tSubscriber.m_iId = DNC;
-
-	CString csPhoneNumb;
-	m_cPhoneNumber.GetWindowText(csPhoneNumb);
-
-	if(m_oPerson.m_oPhoneNumbsArr.GetCount() && (m_eMenuCmd == eCmdUpdate))
-	{
-		_tcscpy(m_oPerson.m_oPhoneNumbsArr[m_iPhoneNumbIdx]->m_szPhoneNumber, csPhoneNumb.GetBuffer());
-		m_oPerson.m_oPhoneNumbsArr[m_iPhoneNumbIdx]->m_iPhoneId = m_iPhoneTypeIdx;
-
-		m_cSubscrCode.GetWindowText(csTempBuff);
-		int iNewSubscrCode = _ttoi(csTempBuff);
-		if(iNewSubscrCode != m_oPerson.m_tSubscriber.m_iCode)
-		{
-			/* Ако е променен кодът на абоната, следва да се актуализират и прилежащите му телефонни номера */
-			m_oPerson.m_tSubscriber.m_iCode = iNewSubscrCode;
-		
-			for(int i = 0; i < m_oPerson.m_oPhoneNumbsArr.GetCount(); i++)
-			{
-				m_oPerson.m_oPhoneNumbsArr[i]->m_iSubscrId = iNewSubscrCode;
-			}
-		}
-	}
-	else
-	{
-		CSubscriberPhoneNumbers *poNewPhoneNumb = new CSubscriberPhoneNumbers(DNC, 0, m_oPerson.m_tSubscriber.m_iId, m_iPhoneTypeIdx, csPhoneNumb);
-		m_oPerson.m_oPhoneNumbsArr.Add(poNewPhoneNumb);
-	}
+	m_oSubscriber.m_iCode = _ttoi(csTempBuff);
 
 	OnOK();
 }
@@ -177,9 +159,6 @@ INT_PTR	 CPersonDlg::DoModal(const CPerson *poPerson)
 {
 	if(poPerson)
 		m_oPerson = *poPerson;
-	else
-		m_oPerson = 0;
 
-	m_oSubscriber = m_po
 	return CDialog::DoModal();
 }

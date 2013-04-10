@@ -95,14 +95,20 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 	else
 	{
 		CCitiesArray oCitiesArr;
-		GetDocument()->SelectAllCities(oCitiesArr);
+		int iCount;
+		if(!GetDocument()->SelectAllCities(oCitiesArr))
+			return;
+
 		CPhoneTypesArray oPhoneTyopesArr;
-		GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr);
+		if(!GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr))
+			return;
 		CSubscriberPhoneNumbersArray oSubscrPhoneNumbsArr;
-		GetDocument()->SelectAllSubscriberPhoneNumbers(oSubscrPhoneNumbsArr);
-		CSubscribersArray oSubscribersArr;
-		GetDocument()->SelectAllSubscribers(oSubscribersArr);
-		
+		if(!GetDocument()->SelectAllSubscriberPhoneNumbers(oSubscrPhoneNumbsArr))
+			return;
+		CSubscribersArray oSubscribersArr;		
+		if(!GetDocument()->SelectAllSubscribers(oSubscribersArr))
+			return;
+		iCount = oSubscribersArr.GetCount();
 		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscribersArr, oSubscrPhoneNumbsArr);	
 		
 		switch(eCmd)
@@ -213,7 +219,7 @@ void CPersonView::UpdateColumnsContent()
 {
   m_PersonsArray.RemoveAndFreeAll();
   /* запълване на листът с редове, спрямо последно наложеният филтър */
-  if(!GetDocument()->SelectAll(m_PersonsArray))
+	if(!GetDocument()->SelectAll(m_PersonsArray, CPersonDoc::eColFirstName))
 		return;
 
 	UpdateColumnsContent(m_PersonsArray);
