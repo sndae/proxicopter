@@ -49,15 +49,15 @@ BOOL CSubscribersDlg::OnInitDialog()
 	if(m_oSubscribers.m_nCode != DNC)
 	{
 		csTembBuff.Format(_T("%d"), m_oSubscribers.m_nCode);
-		m_Code.SetWindowTextW(csTembBuff);
+		m_oCode.SetWindowTextW(csTembBuff);
 	}
 	else
-		m_Code.SetWindowTextW(_T(""));
+		m_oCode.SetWindowTextW(_T(""));
 
-	m_FirstName.SetWindowTextW(m_oSubscribers.m_szFirstName);
-	m_SecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
-	m_ThirdName.SetWindowTextW(m_oSubscribers.m_szThirdName);
-	m_nDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
+	m_oFirstName.SetWindowTextW(m_oSubscribers.m_szFirstName);
+	m_oSecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
+	m_oThirdName.SetWindowTextW(m_oSubscribers.m_szThirdName);
+	m_oIDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
 	if(m_pCitiesArray)
 	{
 		for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
@@ -74,11 +74,11 @@ BOOL CSubscribersDlg::OnInitDialog()
 void CSubscribersDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_CODE, m_Code);
-	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_FIRST_NAME, m_FirstName);
-	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_SECOND_NAME, m_SecondName);
-	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_THIRD_NAME, m_ThirdName);
-	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_IDNUMBER, m_nDNumber);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_CODE, m_oCode);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_FIRST_NAME, m_oFirstName);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_SECOND_NAME, m_oSecondName);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_THIRD_NAME, m_oThirdName);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_IDNUMBER, m_oIDNumber);
 	DDX_Control(pDX, CMB_SUBSCRIBERS_EDIT_CITY_CODE, m_CityCode);
 	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_ADDRESS, m_Address);
 }
@@ -95,16 +95,16 @@ void CSubscribersDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 	CString cTempBuff;
-	m_Code.GetWindowTextW(cTempBuff);
+	m_oCode.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
 		m_oSubscribers.m_nCode = _ttoi(cTempBuff);
 	else
 		m_oSubscribers.m_nCode = DNC;
 
-	m_FirstName.GetWindowTextW(m_oSubscribers.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_SecondName.GetWindowTextW(m_oSubscribers.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_ThirdName.GetWindowTextW(m_oSubscribers.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_nDNumber.GetWindowTextW(m_oSubscribers.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
+	m_oFirstName.GetWindowTextW(m_oSubscribers.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oSecondName.GetWindowTextW(m_oSubscribers.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oThirdName.GetWindowTextW(m_oSubscribers.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oIDNumber.GetWindowTextW(m_oSubscribers.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
 	m_Address.GetWindowTextW(m_oSubscribers.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	
 	m_oSubscribers.m_nCityId = m_CityCode.GetCurSel();

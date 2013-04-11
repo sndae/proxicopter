@@ -21,7 +21,7 @@ CPhoneTypesTable::CPhoneTypesTable(CDatabase* pdb)
 {
 	m_nD = 0;
 	m_REV_NUMB = 0;
-	m_CODE = 0;
+	m_oCode = 0;
 	m_PHONE_TYPE = L"";
 	m_nFields = 4;
 	m_nDefaultType = dynaset;
@@ -61,7 +61,7 @@ void CPhoneTypesTable::DoFieldExchange(CFieldExchange* pFX)
 	// ODBC will try to automatically convert the column value to the requested type
 	RFX_Long(pFX, _T("[ID]"), m_nD);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
-	RFX_Long(pFX, _T("[CODE]"), m_CODE);
+	RFX_Long(pFX, _T("[CODE]"), m_oCode);
 	RFX_Text(pFX, _T("[PHONE_TYPE]"), m_PHONE_TYPE);
 }
 
@@ -90,7 +90,7 @@ BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				oPhoneTypesArray.Add(new CPhoneTypes(int(m_nD), int(m_REV_NUMB), int(m_CODE), m_PHONE_TYPE.GetBuffer()));		 
+				oPhoneTypesArray.Add(new CPhoneTypes(int(m_nD), int(m_REV_NUMB), int(m_oCode), m_PHONE_TYPE.GetBuffer()));		 
 				MoveNext();
 			}
 		}
@@ -313,7 +313,7 @@ void CPhoneTypesTable::DoExchangeТоDatabaseData(const CPhoneTypes &oPhoneType)
 {
 	m_nD = oPhoneType.m_nId;
 	m_REV_NUMB = 0;
-	m_CODE = oPhoneType.m_nCode;
+	m_oCode = oPhoneType.m_nCode;
 	m_PHONE_TYPE = oPhoneType.m_szType;
 }
 
@@ -321,7 +321,7 @@ void CPhoneTypesTable::DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType)
 {
 	oPhoneType.m_nId = m_nD;
 	oPhoneType.m_nRevNumb = m_REV_NUMB;
-	oPhoneType.m_nCode =	m_CODE;
+	oPhoneType.m_nCode =	m_oCode;
 	_tcscpy(oPhoneType.m_szType, m_PHONE_TYPE);
 }
 

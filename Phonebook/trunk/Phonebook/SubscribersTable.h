@@ -32,7 +32,7 @@ public:
 
 	long m_nD;
 	long m_REV_NUMB;
-	long m_CODE;
+	long m_oCode;
 	CStringW m_FIRST_NAME ;
 	CStringW m_SECOND_NAME;
 	CStringW m_THIRD_NAME; 

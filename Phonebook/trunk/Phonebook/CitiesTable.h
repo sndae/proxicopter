@@ -31,9 +31,9 @@ public:
 
   long  m_nD;
   long  m_REV_NUMB;
-  CStringW  m_CODE;
-  CStringW  m_NAME;
-  CStringW  m_AREA;
+  CStringW  m_oCode;
+  CStringW  m_oName;
+  CStringW  m_oArea;
   // Флаг разрешаващ търсенето на DSN:SQLEXPRESS 
   BOOL m_bSQLEn;
 

@@ -21,7 +21,7 @@ CSubscribersTable::CSubscribersTable(CDatabase* pdb)
 {
 	m_nD = 0;
 	m_REV_NUMB = 0;
-	m_CODE = 0;
+	m_oCode = 0;
 	m_FIRST_NAME = L"";
 	m_SECOND_NAME = L"";
 	m_THIRD_NAME = L"";
@@ -67,7 +67,7 @@ void CSubscribersTable::DoFieldExchange(CFieldExchange* pFX)
 	// ODBC will try to automatically convert the column value to the requested type
 	RFX_Long(pFX, _T("[ID]"), m_nD);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
-	RFX_Long(pFX, _T("[CODE]"), m_CODE);
+	RFX_Long(pFX, _T("[CODE]"), m_oCode);
 	RFX_Text(pFX, _T("[FIRST_NAME]"), m_FIRST_NAME);
 	RFX_Text(pFX, _T("[SECOND_NAME]"), m_SECOND_NAME);
 	RFX_Text(pFX, _T("[THIRD_NAME]"), m_THIRD_NAME);
@@ -101,7 +101,7 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				CSubscribers *poSubscribers = new CSubscribers(int(m_nD), int(m_REV_NUMB), m_CODE, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
+				CSubscribers *poSubscribers = new CSubscribers(int(m_nD), int(m_REV_NUMB), m_oCode, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
 																m_THIRD_NAME.GetBuffer(), m_nDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
 				oSubscribersArray.Add(poSubscribers);		 
 				MoveNext();
@@ -384,7 +384,7 @@ void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 {
 	oSubscriber.m_nId = m_nD;
 	oSubscriber.m_nRevNumb = m_REV_NUMB;
-	oSubscriber.m_nCode =	m_CODE;
+	oSubscriber.m_nCode =	m_oCode;
 	_tcscpy(oSubscriber.m_szFirstName,	m_FIRST_NAME);
 	_tcscpy(oSubscriber.m_szSecondName, m_SECOND_NAME);
 	_tcscpy(oSubscriber.m_szThirdName,	m_THIRD_NAME);
@@ -397,7 +397,7 @@ void CSubscribersTable::DoExchangeТоDatabaseData(const CSubscribers &oSubscriber
 {
 	m_nD = oSubscriber.m_nId;
 	m_REV_NUMB = oSubscriber.m_nRevNumb;
-	m_CODE = oSubscriber.m_nCode;
+	m_oCode = oSubscriber.m_nCode;
 	m_FIRST_NAME = oSubscriber.m_szFirstName;	
 	m_SECOND_NAME = oSubscriber.m_szSecondName; 
 	m_THIRD_NAME = oSubscriber.m_szThirdName;	

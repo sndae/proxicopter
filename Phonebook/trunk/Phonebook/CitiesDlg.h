@@ -21,9 +21,9 @@ protected:
 private:
   eMenuCmd m_eMenuCmd;
   CCities m_oCity;
-  CEdit m_Name;
-  CEdit m_Area;
-  CEdit m_Code;
+  CEdit m_oName;
+  CEdit m_oArea;
+  CEdit m_oCode;
 public:
   afx_msg void OnBnClickedCityEditUpdate();
   virtual BOOL OnInitDialog();

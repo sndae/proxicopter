@@ -57,10 +57,10 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 		for(int i = 0; i < m_poSubscrArray->GetSize(); i++)
 		{
 			csTempBuff.Format(_T("%d"), (m_poSubscrArray->GetAt(i))->m_nCode);
-			m_SubscriberCode.InsertString(i, csTempBuff);
+			m_oSubscriberCode.InsertString(i, csTempBuff);
 		}
 		if(m_oSubscriberPhoneNumbers.m_nSubscrId != DNC)
-			m_SubscriberCode.SetCurSel(m_oSubscriberPhoneNumbers.m_nSubscrId);
+			m_oSubscriberCode.SetCurSel(m_oSubscriberPhoneNumbers.m_nSubscrId);
 	}
 
 	if(m_poPhoneTypesArray)
@@ -68,10 +68,10 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 		for(int i = 0; i < m_poPhoneTypesArray->GetSize(); i++)
 		{
 			csTempBuff.Format(_T("%d"), (m_poPhoneTypesArray->GetAt(i))->m_nCode);
-			m_PhoneTypeCode.InsertString(i, csTempBuff);
+			m_oPhoneTypeCode.InsertString(i, csTempBuff);
 		}
 		if(m_oSubscriberPhoneNumbers.m_nPhoneId != DNC)
-			m_PhoneTypeCode.SetCurSel(m_poPhoneTypesArray->GetAt(m_oSubscriberPhoneNumbers.m_nPhoneId)->m_nId);
+			m_oPhoneTypeCode.SetCurSel(m_poPhoneTypesArray->GetAt(m_oSubscriberPhoneNumbers.m_nPhoneId)->m_nId);
 	}
 	
 	return TRUE;
@@ -79,8 +79,8 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 void CSubscriberPhoneNumbersDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, CMB_SUBSCRIBERPHONENUMBERS_EDIT_CODE_SUBSCRIBER, m_SubscriberCode);
-	DDX_Control(pDX, CMB_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE, m_PhoneTypeCode);
+	DDX_Control(pDX, CMB_SUBSCRIBERPHONENUMBERS_EDIT_CODE_SUBSCRIBER, m_oSubscriberCode);
+	DDX_Control(pDX, CMB_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE, m_oPhoneTypeCode);
 	DDX_Control(pDX, EDB_SUBSCRIBERPHONENUMBERS_EDIT_PHONE_NUMBER, m_PhoneNumber);
 }
 
@@ -96,13 +96,13 @@ void CSubscriberPhoneNumbersDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 	CString cTempBuff;
-	m_SubscriberCode.GetWindowTextW(cTempBuff);
+	m_oSubscriberCode.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
 		m_oSubscriberPhoneNumbers.m_nSubscrId = _ttoi(cTempBuff);
 	else
 		m_oSubscriberPhoneNumbers.m_nSubscrId = DNC;
 
-	m_PhoneTypeCode.GetWindowTextW(cTempBuff);
+	m_oPhoneTypeCode.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
 		m_oSubscriberPhoneNumbers.m_nPhoneId = _ttoi(cTempBuff);
 	else

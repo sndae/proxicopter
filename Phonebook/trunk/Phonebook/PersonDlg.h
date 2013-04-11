@@ -13,8 +13,8 @@ public:
 						 CSubscribers &oSubscriber, CSubscriberPhoneNumbers &oSubscrPhoneNumb, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CPersonDlg();
 	CPerson									&GetPerson(){return m_oPerson;};
-	CSubscribers						&GetSubscriber(){return m_oSubscriber;};
-	CSubscriberPhoneNumbers	&GetPhoneNumber(){return m_oPhoneNumber;};
+	CSubscribers						&GetSubscriber(){return m_oSubscriberTab;};
+	CSubscriberPhoneNumbers	&GetPhoneNumber(){return m_oPhoneNumberTab;};
 	INT_PTR	 DoModal(const CPerson *poPerson);
 // Dialog Data
 	enum { IDD = IDD_PERSON_EDIT };
@@ -24,8 +24,8 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
 	CPerson m_oPerson;
-	CSubscribers						m_oSubscriber;
-	CSubscriberPhoneNumbers m_oPhoneNumber;
+	CSubscribers						m_oSubscriberTab;
+	CSubscriberPhoneNumbers m_oPhoneNumberTab;
 	CCitiesArray						*m_poCitiesArr;
 	CPhoneTypesArray				*m_poPhoneTypesArr;
 	int  m_nPhoneNumbIdx;
@@ -33,14 +33,14 @@ protected:
 	eMenuCmd m_eMenuCmd;
 	DECLARE_MESSAGE_MAP()
 
-	CEdit m_cSubscrCode;
-	CComboBox m_cCities;
-	CEdit m_cFirstName;
-	CEdit m_cSecName;
-	CEdit m_cThirdName;
-	CEdit m_cSubscrId;
-	CEdit m_cAddress;
-	CEdit m_cPhoneNumber;
-	CComboBox m_cPhoneType;
+	CEdit m_oSubscrCode;
+	CComboBox m_oCities;
+	CEdit m_oFirstName;
+	CEdit m_oSecName;
+	CEdit m_oThirdName;
+	CEdit m_oSubscrId;
+	CEdit m_oAddress;
+	CEdit m_oPhoneNumber;
+	CComboBox m_oPhoneType;
 	afx_msg void OnBnClickedOk();
 };

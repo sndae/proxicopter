@@ -21,7 +21,7 @@ protected:
 private:
 	eMenuCmd m_eMenuCmd;
 	CPhoneTypes m_oPhoneTypes;
-	CEdit m_Code;
+	CEdit m_oCode;
 	CEdit m_PhoneType;
 public:
 	afx_msg void OnBnClickedCityEditUpdate();

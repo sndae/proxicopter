@@ -21,9 +21,9 @@ CCitiesTable::CCitiesTable(CDatabase* pdb)
 {
   m_nD = 0;
   m_REV_NUMB = 0;
-  m_CODE = L"";
-  m_NAME = L"";
-  m_AREA = L"";
+  m_oCode = L"";
+  m_oName = L"";
+  m_oArea = L"";
   m_nFields = 5;
   m_nDefaultType = dynaset;
 
@@ -62,9 +62,9 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
   // ODBC will try to automatically convert the column value to the requested type
   RFX_Long(pFX, _T("[ID]"), m_nD);
   RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
-  RFX_Text(pFX, _T("[CODE]"), m_CODE);
-  RFX_Text(pFX, _T("[NAME]"), m_NAME);
-  RFX_Text(pFX, _T("[AREA]"), m_AREA);
+  RFX_Text(pFX, _T("[CODE]"), m_oCode);
+  RFX_Text(pFX, _T("[NAME]"), m_oName);
+  RFX_Text(pFX, _T("[AREA]"), m_oArea);
 
 }
 
@@ -93,7 +93,7 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				oCitiesArray.Add(new CCities(int(m_nD), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer()));     
+				oCitiesArray.Add(new CCities(int(m_nD), int(m_REV_NUMB), m_oCode.GetBuffer(), m_oName.GetBuffer(), m_oArea.GetBuffer()));     
 				MoveNext();
 			}
 		}
@@ -320,18 +320,18 @@ void CCitiesTable::DoExchangeТоDatabaseData(const CCities &oCity)
 {
   m_nD = oCity.m_nId;
   m_REV_NUMB = oCity.m_nRevNumb;
-  m_CODE = oCity.m_szCode;
-  m_NAME = oCity.m_szName;
-  m_AREA = oCity.m_szArea; 
+  m_oCode = oCity.m_szCode;
+  m_oName = oCity.m_szName;
+  m_oArea = oCity.m_szArea; 
 }
 
 void CCitiesTable::DoExchangeFromDatabaseData(CCities &oCity)
 {
   oCity.m_nId = m_nD;
   oCity.m_nRevNumb = m_REV_NUMB;
-  _tcscpy(oCity.m_szCode, m_CODE);
-  _tcscpy(oCity.m_szName, m_NAME);
-  _tcscpy(oCity.m_szArea, m_AREA); 
+  _tcscpy(oCity.m_szCode, m_oCode);
+  _tcscpy(oCity.m_szName, m_oName);
+  _tcscpy(oCity.m_szArea, m_oArea); 
 
 }
 /////////////////////////////////////////////////////////////////////////////

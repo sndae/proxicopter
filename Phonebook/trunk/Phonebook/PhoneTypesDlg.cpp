@@ -49,7 +49,7 @@ BOOL CPhoneTypesDlg::OnInitDialog()
 	{
 		CString strTempBuff;
 		strTempBuff.Format(_T("%d"), m_oPhoneTypes.m_nCode);
-		m_Code.SetWindowText(strTempBuff);
+		m_oCode.SetWindowText(strTempBuff);
 	}
 
 	return TRUE;
@@ -59,7 +59,7 @@ void CPhoneTypesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, EDB_PHONETYPES_EDIT_TYPES, m_PhoneType);
-	DDX_Control(pDX, EDB_PHONETYPES_EDIT_CODE, m_Code);
+	DDX_Control(pDX, EDB_PHONETYPES_EDIT_CODE, m_oCode);
 }
 
 
@@ -74,7 +74,7 @@ void CPhoneTypesDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 	CString cTempBuff;
-	m_Code.GetWindowTextW(cTempBuff);
+	m_oCode.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
 		m_oPhoneTypes.m_nCode = _ttoi(cTempBuff);
 	else

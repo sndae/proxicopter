@@ -21,11 +21,11 @@ protected:
 private:
 	eMenuCmd m_eMenuCmd;
 	CSubscribers m_oSubscribers;
-	CEdit m_Code;
-	CEdit m_FirstName;
-	CEdit m_SecondName;
-	CEdit m_ThirdName;
-	CEdit m_nDNumber;
+	CEdit m_oCode;
+	CEdit m_oFirstName;
+	CEdit m_oSecondName;
+	CEdit m_oThirdName;
+	CEdit m_oIDNumber;
 	CComboBox m_CityCode;
 	CCitiesArray *m_pCitiesArray;
 	CEdit m_Address;

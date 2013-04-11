@@ -43,18 +43,18 @@ BOOL CCitiesDlg::OnInitDialog()
       break;
   }
 
-  m_Name.SetWindowTextW(m_oCity.m_szName);
-  m_Area.SetWindowTextW(m_oCity.m_szArea);
-  m_Code.SetWindowTextW(m_oCity.m_szCode);
+  m_oName.SetWindowTextW(m_oCity.m_szName);
+  m_oArea.SetWindowTextW(m_oCity.m_szArea);
+  m_oCode.SetWindowTextW(m_oCity.m_szCode);
 
   return TRUE;  
 }
 void CCitiesDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
-  DDX_Control(pDX, EDB_CITIES_EDIT_NAME, m_Name);
-  DDX_Control(pDX, EDB_CITIES_EDIT_AREA, m_Area);
-  DDX_Control(pDX, EDB_CITIES_EDIT_CODE, m_Code);
+  DDX_Control(pDX, EDB_CITIES_EDIT_NAME, m_oName);
+  DDX_Control(pDX, EDB_CITIES_EDIT_AREA, m_oArea);
+  DDX_Control(pDX, EDB_CITIES_EDIT_CODE, m_oCode);
 }
 
 
@@ -68,9 +68,9 @@ END_MESSAGE_MAP()
 void CCitiesDlg::OnBnClickedOk()
 {
   // TODO: Add your control notification handler code here
-  m_Code.GetWindowTextW(m_oCity.m_szCode, sizeof(m_oCity.m_szCode)/sizeof(m_oCity.m_szCode[0]));
-  m_Name.GetWindowTextW(m_oCity.m_szName, sizeof(m_oCity.m_szName)/sizeof(m_oCity.m_szName[0]));
-  m_Area.GetWindowTextW(m_oCity.m_szArea, sizeof(m_oCity.m_szArea)/sizeof(m_oCity.m_szArea[0]));
+  m_oCode.GetWindowTextW(m_oCity.m_szCode, sizeof(m_oCity.m_szCode)/sizeof(m_oCity.m_szCode[0]));
+  m_oName.GetWindowTextW(m_oCity.m_szName, sizeof(m_oCity.m_szName)/sizeof(m_oCity.m_szName[0]));
+  m_oArea.GetWindowTextW(m_oCity.m_szArea, sizeof(m_oCity.m_szArea)/sizeof(m_oCity.m_szArea[0]));
 
   OnOK();
 }

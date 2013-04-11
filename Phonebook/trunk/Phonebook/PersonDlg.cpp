@@ -16,8 +16,8 @@ CPersonDlg::CPersonDlg(eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray
 {
 	m_poCitiesArr = &oCitiesArr;
 	m_poPhoneTypesArr = &oPhoneTypesArr;
-	m_oPhoneNumber = oSubscrPhoneNumb;
-	m_oSubscriber = oSubscriber;
+	m_oPhoneNumberTab = oSubscrPhoneNumb;
+	m_oSubscriberTab = oSubscriber;
 	m_eMenuCmd = eCmd;
 }
 
@@ -28,15 +28,15 @@ CPersonDlg::~CPersonDlg()
 void CPersonDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, EDB_PERSON_EDIT_SUSCR_CODE,	m_cSubscrCode);
-	DDX_Control(pDX, CMB_PERSON_EDIT_CITY,			  m_cCities);
-	DDX_Control(pDX, EDB_PERSON_EDIT_FIRST_NAME,	m_cFirstName);
-	DDX_Control(pDX, EDB_PERSON_EDIT_SECOND_NAME, m_cSecName);
-	DDX_Control(pDX, EDB_PERSON_EDIT_THIRD_NAME,	m_cThirdName);
-	DDX_Control(pDX, EDB_PERSON_EDIT_SUBSCR_ID,		m_cSubscrId);
-	DDX_Control(pDX, EDB_PERSON_EDIT_ADDRESS,			m_cAddress);
-	DDX_Control(pDX, EDB_PERSON_EDIT_PHONE_NUMB,	m_cPhoneNumber);
-	DDX_Control(pDX, CMB_PERSON_EDIT_PHONE_TYPES, m_cPhoneType);
+	DDX_Control(pDX, EDB_PERSON_EDIT_SUSCR_CODE,	m_oSubscrCode);
+	DDX_Control(pDX, CMB_PERSON_EDIT_CITY,			  m_oCities);
+	DDX_Control(pDX, EDB_PERSON_EDIT_FIRST_NAME,	m_oFirstName);
+	DDX_Control(pDX, EDB_PERSON_EDIT_SECOND_NAME, m_oSecName);
+	DDX_Control(pDX, EDB_PERSON_EDIT_THIRD_NAME,	m_oThirdName);
+	DDX_Control(pDX, EDB_PERSON_EDIT_SUBSCR_ID,		m_oSubscrId);
+	DDX_Control(pDX, EDB_PERSON_EDIT_ADDRESS,			m_oAddress);
+	DDX_Control(pDX, EDB_PERSON_EDIT_PHONE_NUMB,	m_oPhoneNumber);
+	DDX_Control(pDX, CMB_PERSON_EDIT_PHONE_TYPES, m_oPhoneType);
 }
 
 
@@ -55,13 +55,13 @@ BOOL CPersonDlg::OnInitDialog()
 			break;
 		case eCmdInsertNumb: 
 			SetWindowText(MENU_CMD_INSERT_NUMBER); 
-			m_cSubscrCode.EnableWindow(FALSE);
-		  m_cCities.EnableWindow(FALSE);
-			m_cFirstName.EnableWindow(FALSE);
-			m_cSecName.EnableWindow(FALSE);
-			m_cThirdName.EnableWindow(FALSE);
-			m_cSubscrId.EnableWindow(FALSE);
-			m_cAddress.EnableWindow(FALSE);
+			m_oSubscrCode.EnableWindow(FALSE);
+		  m_oCities.EnableWindow(FALSE);
+			m_oFirstName.EnableWindow(FALSE);
+			m_oSecName.EnableWindow(FALSE);
+			m_oThirdName.EnableWindow(FALSE);
+			m_oSubscrId.EnableWindow(FALSE);
+			m_oAddress.EnableWindow(FALSE);
 			break;
 		case eCmdInsertSubscr: 
 			SetWindowText(MENU_CMD_INSERT_SUBSCRIBER); 
@@ -78,41 +78,41 @@ BOOL CPersonDlg::OnInitDialog()
 			break;
 	}
 	for(int i = 0; i < m_poCitiesArr->GetCount(); i++)
-		m_cCities.InsertString(i, m_poCitiesArr->GetAt(i)->m_szName);
+		m_oCities.InsertString(i, m_poCitiesArr->GetAt(i)->m_szName);
 
 	for(int i = 0; i < m_poPhoneTypesArr->GetCount(); i++)
-		m_cPhoneType.InsertString(i, m_poPhoneTypesArr->GetAt(i)->m_szType);
+		m_oPhoneType.InsertString(i, m_poPhoneTypesArr->GetAt(i)->m_szType);
 
 	if((m_eMenuCmd == eCmdInsertNumb) || (m_eMenuCmd == eCmdUpdate))
 	{
 		CString csTempBuff;
-		csTempBuff.Format(_T("%d"), m_oSubscriber.m_nCode);
-		m_cSubscrCode.SetWindowText(csTempBuff);
+		csTempBuff.Format(_T("%d"), m_oSubscriberTab.m_nCode);
+		m_oSubscrCode.SetWindowText(csTempBuff);
 		
 		int iPos = 0;
 		for(iPos = 0; iPos != m_poCitiesArr->GetCount(); iPos++)
 		{
-			if(m_poCitiesArr->GetAt(iPos)->m_nId == m_oSubscriber.m_nCityId)
+			if(m_poCitiesArr->GetAt(iPos)->m_nId == m_oSubscriberTab.m_nCityId)
 				break;
 		}
 
-		m_cCities.SetCurSel(iPos);
-		m_cFirstName.SetWindowText(m_oSubscriber.m_szFirstName);
-		m_cSecName.SetWindowText(m_oSubscriber.m_szSecondName);
-		m_cThirdName.SetWindowText(m_oSubscriber.m_szThirdName);
-		m_cAddress.SetWindowText(m_oSubscriber.m_szAddress);
-		m_cSubscrId.SetWindowText(m_oSubscriber.m_szIDNumb);
+		m_oCities.SetCurSel(iPos);
+		m_oFirstName.SetWindowText(m_oSubscriberTab.m_szFirstName);
+		m_oSecName.SetWindowText(m_oSubscriberTab.m_szSecondName);
+		m_oThirdName.SetWindowText(m_oSubscriberTab.m_szThirdName);
+		m_oAddress.SetWindowText(m_oSubscriberTab.m_szAddress);
+		m_oSubscrId.SetWindowText(m_oSubscriberTab.m_szIDNumb);
 
 		if(m_eMenuCmd == eCmdUpdate)
 		{
 			for(iPos = 0; iPos < m_poPhoneTypesArr->GetCount(); iPos++)
 			{
-				if(m_poPhoneTypesArr->GetAt(iPos)->m_nId == m_oPhoneNumber.m_nPhoneId)
+				if(m_poPhoneTypesArr->GetAt(iPos)->m_nId == m_oPhoneNumberTab.m_nPhoneId)
 					break;
 			}
 			
-			m_cPhoneType.SetCurSel(iPos);
-			m_cPhoneNumber.SetWindowText(m_oPhoneNumber.m_szPhoneNumber);
+			m_oPhoneType.SetCurSel(iPos);
+			m_oPhoneNumber.SetWindowText(m_oPhoneNumberTab.m_szPhoneNumber);
 		}
 	}
 
@@ -131,20 +131,20 @@ void CPersonDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 	
-	//if((m_cPhoneType.GetCurSel() < 0) && (m_eMenuCmd != eCmdFind))
+	//if((m_oPhoneType.GetCurSel() < 0) && (m_eMenuCmd != eCmdFind))
 	//	return;
 
 
-	//if(m_cCities.GetCurSel() >= 0)
+	//if(m_oCities.GetCurSel() >= 0)
 	//{
 	if((m_eMenuCmd != eCmdInsertNumb) && (m_eMenuCmd != eCmdInsert))
-		m_oPhoneNumber.m_nId = m_oPerson.m_nPhoneNumbId;
+		m_oPhoneNumberTab.m_nId = m_oPerson.m_nPhoneNumbId;
 	else
-		m_oPhoneNumber.m_nId = DNC;
+		m_oPhoneNumberTab.m_nId = DNC;
 	
-	m_oPhoneNumber.m_nPhoneId = (m_cPhoneType.GetCurSel() != -1 ?  m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel())->m_nId : DNC);
-	m_cPhoneNumber.GetWindowText(m_oPhoneNumber.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
-	m_oPhoneNumber.m_nSubscrId = m_oPerson.m_nSubscriberId;
+	m_oPhoneNumberTab.m_nPhoneId = (m_oPhoneType.GetCurSel() != -1 ?  m_poPhoneTypesArr->GetAt(m_oPhoneType.GetCurSel())->m_nId : DNC);
+	m_oPhoneNumber.GetWindowText(m_oPhoneNumberTab.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
+	m_oPhoneNumberTab.m_nSubscrId = m_oPerson.m_nSubscriberId;
 
 	//}
 	//else if(m_eMenuCmd != eCmdFind)
@@ -153,20 +153,20 @@ void CPersonDlg::OnBnClickedOk()
 	//}
 
 	if(m_eMenuCmd != eCmdInsert)
-		m_oSubscriber.m_nId = m_oPerson.m_nSubscriberId;
+		m_oSubscriberTab.m_nId = m_oPerson.m_nSubscriberId;
 	else
-		m_oSubscriber.m_nId = DNC;
+		m_oSubscriberTab.m_nId = DNC;
 
-	m_oSubscriber.m_nCityId = m_poCitiesArr->GetAt(m_cCities.GetCurSel())->m_nId;
-	m_cFirstName.GetWindowText(m_oSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cSecName.GetWindowText(m_oSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cThirdName.GetWindowText(m_oSubscriber.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cAddress.GetWindowText(m_oSubscriber.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_cSubscrId.GetWindowText(m_oSubscriber.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
+	m_oSubscriberTab.m_nCityId = m_poCitiesArr->GetAt(m_oCities.GetCurSel())->m_nId;
+	m_oFirstName.GetWindowText(m_oSubscriberTab.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oSecName.GetWindowText(m_oSubscriberTab.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oThirdName.GetWindowText(m_oSubscriberTab.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oAddress.GetWindowText(m_oSubscriberTab.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
+	m_oSubscrId.GetWindowText(m_oSubscriberTab.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
 	
 	CString csTempBuff;
-	m_cSubscrCode.GetWindowText(csTempBuff);
-	m_oSubscriber.m_nCode = _ttoi(csTempBuff);
+	m_oSubscrCode.GetWindowText(csTempBuff);
+	m_oSubscriberTab.m_nCode = _ttoi(csTempBuff);
 
 	OnOK();
 }

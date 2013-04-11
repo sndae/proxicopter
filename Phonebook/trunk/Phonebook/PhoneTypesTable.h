@@ -31,7 +31,7 @@ public:
 
 	long m_nD;
 	long m_REV_NUMB;
-	long m_CODE;
+	long m_oCode;
 	CStringW m_PHONE_TYPE;
 	// Флаг разрешаващ търсенето на DSN:SQLEXPRESS 
 	BOOL m_bSQLEn;

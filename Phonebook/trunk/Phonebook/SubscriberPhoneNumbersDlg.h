@@ -22,8 +22,8 @@ protected:
 private:
 	eMenuCmd m_eMenuCmd;
 	CSubscriberPhoneNumbers m_oSubscriberPhoneNumbers;
-	CComboBox m_SubscriberCode;
-	CComboBox m_PhoneTypeCode;
+	CComboBox m_oSubscriberCode;
+	CComboBox m_oPhoneTypeCode;
 	CEdit  m_PhoneNumber;
 	CSubscribersArray *m_poSubscrArray;
 	CPhoneTypesArray *m_poPhoneTypesArray;
