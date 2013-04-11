@@ -52,9 +52,9 @@ BOOL CCitiesDlg::OnInitDialog()
 void CCitiesDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
-  DDX_Control(pDX, IDC_CITIES_EDIT_NAME, m_Name);
-  DDX_Control(pDX, IDC_CITIES_EDIT_AREA, m_Area);
-  DDX_Control(pDX, IDC_CITIES_EDIT_CODE, m_Code);
+  DDX_Control(pDX, EDB_CITIES_EDIT_NAME, m_Name);
+  DDX_Control(pDX, EDB_CITIES_EDIT_AREA, m_Area);
+  DDX_Control(pDX, EDB_CITIES_EDIT_CODE, m_Code);
 }
 
 

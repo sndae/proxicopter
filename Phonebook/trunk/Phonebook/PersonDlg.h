@@ -28,8 +28,8 @@ protected:
 	CSubscriberPhoneNumbers m_oPhoneNumber;
 	CCitiesArray						*m_poCitiesArr;
 	CPhoneTypesArray				*m_poPhoneTypesArr;
-	int  m_iPhoneNumbIdx;
-	int  m_iPhoneTypeIdx;
+	int  m_nPhoneNumbIdx;
+	int  m_nPhoneTypeIdx;
 	eMenuCmd m_eMenuCmd;
 	DECLARE_MESSAGE_MAP()
 

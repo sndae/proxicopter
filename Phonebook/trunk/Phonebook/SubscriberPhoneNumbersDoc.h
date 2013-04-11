@@ -14,7 +14,7 @@ protected: // create from serialization only
 
 // Attributes
 public:
-	/* »збро€ване имената на колоните и техните номера */
+	// »збро€ване имената на колоните и техните номера 
 	enum	eColumn{eColSubscrCode, eColPhoneCode, eColPhoneNumber, eCOL_NUMB};
 // Operations
 public:

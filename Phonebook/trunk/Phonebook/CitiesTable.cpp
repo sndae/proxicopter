@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(CCitiesTable, CRecordset)
 CCitiesTable::CCitiesTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-  m_ID = 0;
+  m_nD = 0;
   m_REV_NUMB = 0;
   m_CODE = L"";
   m_NAME = L"";
@@ -60,7 +60,7 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
   // Macros such as RFX_Text() and RFX_Int() are dependent on the
   // type of the member variable, not the type of the field in the database.
   // ODBC will try to automatically convert the column value to the requested type
-  RFX_Long(pFX, _T("[ID]"), m_ID);
+  RFX_Long(pFX, _T("[ID]"), m_nD);
   RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
   RFX_Text(pFX, _T("[CODE]"), m_CODE);
   RFX_Text(pFX, _T("[NAME]"), m_NAME);
@@ -80,8 +80,8 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
   }
   catch(CDBException *)
   {
-    /* В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
-       този път със запитване на потребителят. Очаква се че ще се окаже XLS файл */
+    // В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
+    //  този път със запитване на потребителят. Очаква се че ще се окаже XLS файл 
     m_bSQLEn = FALSE;
     bRes = Open(CRecordset::dynaset);
   }
@@ -90,11 +90,10 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 	{
 		if(bRes && !IsBOF())
 		{
-			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				CCities *poCity = new CCities(int(m_ID), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer());
-				oCitiesArray.Add(poCity);     
+				oCitiesArray.Add(new CCities(int(m_nD), int(m_REV_NUMB), m_CODE.GetBuffer(), m_NAME.GetBuffer(), m_AREA.GetBuffer()));     
 				MoveNext();
 			}
 		}
@@ -133,19 +132,19 @@ BOOL CCitiesTable::SelectWhereId(const int iId, CCities &oCity)
 
 BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
 {
-  /* Проверка дали има друг запис със такова име на град */
-  if(SelectByContent(CCities(oCity.m_iId, oCity.m_iRevNumb, oCity.m_szCode)) == TRUE)
+  // Проверка дали има друг запис със такова име на град 
+  if(SelectByContent(CCities(oCity.m_nId, oCity.m_nRevNumb, oCity.m_szCode)) == TRUE)
     return FALSE;
 
-  /* Проверка дали има друг запис със такъва код на град */
-  if(SelectByContent(CCities(oCity.m_iId, oCity.m_iRevNumb, 0, oCity.m_szName)) == TRUE)
+  // Проверка дали има друг запис със такъва код на град 
+  if(SelectByContent(CCities(oCity.m_nId, oCity.m_nRevNumb, 0, oCity.m_szName)) == TRUE)
     return FALSE;
 
   CCities oCurrCity;
   if(SelectWhereId(iId, oCurrCity) == FALSE)
     return FALSE;
   
-  if(oCurrCity.m_iRevNumb != oCity.m_iRevNumb)
+  if(oCurrCity.m_nRevNumb != oCity.m_nRevNumb)
     return FALSE;
 
 	try
@@ -153,7 +152,7 @@ BOOL CCitiesTable::UpdateWhereId(const int iId, const CCities &oCity)
 		MoveFirst();  
 		Edit();
 
-		DoExchangeТоDatabaseData(CCities(oCity.m_iId, oCurrCity.m_iRevNumb + 1, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
+		DoExchangeТоDatabaseData(CCities(oCity.m_nId, oCurrCity.m_nRevNumb + 1, oCity.m_szCode, oCity.m_szName, oCity.m_szArea)); 
 
 		Update();
 	}
@@ -176,11 +175,11 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
   if(!CanAppend())
     return FALSE;
 
-  /* Проверка дали има запис със такова име на град */
+  // Проверка дали има запис със такова име на град 
   if(SelectByContent(CCities(DNC, 0, oCity.m_szCode)) == TRUE)
     return FALSE;
 
-  /* Проверка дали има запис със такъв код на град */
+  // Проверка дали има запис със такъв код на град 
   if(SelectByContent(CCities(DNC, 0, 0, oCity.m_szName)) == TRUE)
     return FALSE;
 
@@ -191,8 +190,8 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
 
 	if(!IsBOF())
 		MoveLast();	 
-  /* буфериране ID на последният ред от раблицата */ 
-  int iLastRowId = m_ID;
+  // буфериране ID на последният ред от раблицата  
+  int iLastRowId = m_nD;
   try
 	{
 		AddNew();
@@ -272,13 +271,13 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
   m_strSort = _T("");
   m_strFilter = _T("");
   CString szColFilter;
-  if(oCity.m_iId != DNC)
+  if(oCity.m_nId != DNC)
   {
-    /* изключване на текущият запис от по-нататъшното филтриране */
-    szColFilter.Format(_T("ID != %d"), oCity.m_iId);
+    // изключване на текущият запис от по-нататъшното филтриране 
+    szColFilter.Format(_T("ID != %d"), oCity.m_nId);
     m_strFilter += szColFilter;
   }
-  /* формиране на низ за филтриране, на база наличните в структурата ненулеви записи */
+  // формиране на низ за филтриране, на база наличните в структурата ненулеви записи 
   if(_tcslen(oCity.m_szCode))
   {
     if(m_strFilter.GetLength())
@@ -319,8 +318,8 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
 
 void CCitiesTable::DoExchangeТоDatabaseData(const CCities &oCity)
 {
-  m_ID = oCity.m_iId;
-  m_REV_NUMB = oCity.m_iRevNumb;
+  m_nD = oCity.m_nId;
+  m_REV_NUMB = oCity.m_nRevNumb;
   m_CODE = oCity.m_szCode;
   m_NAME = oCity.m_szName;
   m_AREA = oCity.m_szArea; 
@@ -328,8 +327,8 @@ void CCitiesTable::DoExchangeТоDatabaseData(const CCities &oCity)
 
 void CCitiesTable::DoExchangeFromDatabaseData(CCities &oCity)
 {
-  oCity.m_iId = m_ID;
-  oCity.m_iRevNumb = m_REV_NUMB;
+  oCity.m_nId = m_nD;
+  oCity.m_nRevNumb = m_REV_NUMB;
   _tcscpy(oCity.m_szCode, m_CODE);
   _tcscpy(oCity.m_szName, m_NAME);
   _tcscpy(oCity.m_szArea, m_AREA); 

@@ -14,8 +14,8 @@ struct CCities
           const TCHAR *pszName = 0, const TCHAR *pszArea = 0)
   {
     ZeroMemory(this, sizeof(*this));
-    m_iId = iId;
-    m_iRevNumb = iRevNumb;
+    m_nId = iId;
+    m_nRevNumb = iRevNumb;
     if(pszCode)_tcscpy(m_szCode, pszCode);
     if(pszName)_tcscpy(m_szName, pszName);
     if(pszArea)_tcscpy(m_szArea, pszArea);    

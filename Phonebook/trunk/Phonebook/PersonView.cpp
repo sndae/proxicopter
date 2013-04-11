@@ -40,7 +40,7 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
     switch(((LPNMHDR)lParam)->code)
     {
       case NM_DBLCLK:
-        /* при двоен клик се отваря за редакция последно избраният ред */
+        // при двоен клик се отваря за редакция последно избраният ред 
         ExecuteCntxMenuCmd(eCmdUpdate); 
         break;
       case NM_RCLICK:        
@@ -48,7 +48,7 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         pSubMenu = oCntxMenu.GetSubMenu(0);
         GetCursorPos(&tCur);
         iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
-        /* изпълнение на команда, избрана от конктекстното меню */
+        // изпълнение на команда, избрана от конктекстното меню 
         switch(iMenuChoice)
         {
 					case ID_OPTIONS_PERSON_EDIT					 :ExecuteCntxMenuCmd(eCmdUpdate); break;
@@ -61,7 +61,7 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         }
         break;
       case LVN_COLUMNCLICK:
-        /* Сортиране по номер на колона */
+        // Сортиране по номер на колона 
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
         m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
 				m_PersonsArray.RemoveAndFreeAll();
@@ -70,8 +70,8 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         
 				break;
       case LVN_ITEMCHANGED:
-        /* Запис на последно избраният ред */
-        m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
+        // Запис на последно избраният ред 
+        m_nCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
         break;
       default:
         break;
@@ -83,19 +83,18 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 
 void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
-	CPerson *poPerson = m_PersonsArray[m_iCurrRowSelected];
+	CPerson *poPerson = m_PersonsArray[m_nCurrRowSelected];
 	if(eCmd == eCmdDelSubscr)
 	{
-		GetDocument()->DeleteWhereId(poPerson->m_iSubscriberId);
+		GetDocument()->DeleteWhereId(poPerson->m_nSubscriberId);
 	}
 	else if(eCmd == eCmdDelNumb)
 	{
-		GetDocument()->DeleteSubscrPhoneNumb(poPerson->m_iPhoneNumbId);
+		GetDocument()->DeleteSubscrPhoneNumb(poPerson->m_nPhoneNumbId);
 	}
 	else
 	{
 		CCitiesArray oCitiesArr;
-		int iCount;
 		if(!GetDocument()->SelectAllCities(oCitiesArr))
 			return;
 
@@ -103,10 +102,10 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		if(!GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr))
 			return;
 		CSubscriberPhoneNumbers oSubscrPhoneNumb;
-		if(!GetDocument()->SelectPhoneNumberWhereId(poPerson->m_iPhoneNumbId, oSubscrPhoneNumb))
+		if(!GetDocument()->SelectPhoneNumberWhereId(poPerson->m_nPhoneNumbId, oSubscrPhoneNumb))
 			return;
 		CSubscribers oSubscriber;		
-		if(!GetDocument()->SelectSubscriberWhereId(poPerson->m_iSubscriberId, oSubscriber))
+		if(!GetDocument()->SelectSubscriberWhereId(poPerson->m_nSubscriberId, oSubscriber))
 			return;
 		
 		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscriber, oSubscrPhoneNumb);	
@@ -164,10 +163,10 @@ void CPersonView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 
 void CPersonView::UpdateSingleRow(CPerson &oUpdPerson)
 {
-  /* Проверка дали ред с такова ID в момента е показан на потребителят */
+  // Проверка дали ред с такова ID в момента е показан на потребителят 
 	for(int i = 0; i < m_PersonsArray.GetCount(); i++)
 	{
-		if(m_PersonsArray[i]->m_iId == oUpdPerson.m_iId)
+		if(m_PersonsArray[i]->m_nId == oUpdPerson.m_nId)
 		{      
 			*m_PersonsArray[i] = oUpdPerson;
 			InsertNewRow(oUpdPerson);
@@ -198,7 +197,7 @@ void CPersonView::OnInitialUpdate()
 	oListCtrl.InsertColumn(CPersonDoc::eColPhoneNumber,    _T("Телефонен номер"), LVCFMT_LEFT);
 	oListCtrl.InsertColumn(CPersonDoc::eColPhoneNumberType,_T("Тип телефон"), LVCFMT_LEFT);
 
-	/* Оразмеряване на колонита спрямо дължината на имената им */
+	// Оразмеряване на колонита спрямо дължината на имената им 
 	oListCtrl.SetColumnWidth(CPersonDoc::eColSubscrCode,     LVSCW_AUTOSIZE_USEHEADER);
 	oListCtrl.SetColumnWidth(CPersonDoc::eColFirstName,      LVSCW_AUTOSIZE_USEHEADER);
 	oListCtrl.SetColumnWidth(CPersonDoc::eColSecondName,     LVSCW_AUTOSIZE_USEHEADER);
@@ -210,15 +209,15 @@ void CPersonView::OnInitialUpdate()
 
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
-	/* запълване редовете на листът */
+	// запълване редовете на листът 
 	UpdateColumnsContent();
-	m_iCurrRowSelected = 0;
+	m_nCurrRowSelected = 0;
 }
 
 void CPersonView::UpdateColumnsContent()
 {
   m_PersonsArray.RemoveAndFreeAll();
-  /* запълване на листът с редове, спрямо последно наложеният филтър */
+  // запълване на листът с редове, спрямо последно наложеният филтър 
 	if(!GetDocument()->SelectAll(m_PersonsArray, CPersonDoc::eColFirstName))
 		return;
 
@@ -239,19 +238,19 @@ void CPersonView::InsertNewRow(CPerson &oPerson)
 {
 	CListCtrl& oListCtrl = GetListCtrl();
 	CSubscribers oSubscriber;
-	if(!GetDocument()->SelectSubscriberWhereId(oPerson.m_iSubscriberId, oSubscriber))
+	if(!GetDocument()->SelectSubscriberWhereId(oPerson.m_nSubscriberId, oSubscriber))
 		return;
 
 	CCities oCity;
-	if(!GetDocument()->SelectCityWhereId(oSubscriber.m_iCityId, oCity))
+	if(!GetDocument()->SelectCityWhereId(oSubscriber.m_nCityId, oCity))
 		return;
 
 	CSubscriberPhoneNumbers oPhoneNumber;
-	if(!GetDocument()->SelectPhoneNumberWhereId(oPerson.m_iPhoneNumbId, oPhoneNumber))
+	if(!GetDocument()->SelectPhoneNumberWhereId(oPerson.m_nPhoneNumbId, oPhoneNumber))
 		return;
 
 	CString csTempBuff;
-	csTempBuff.Format(_T("%d"), oSubscriber.m_iCode);
+	csTempBuff.Format(_T("%d"), oSubscriber.m_nCode);
 	int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColCity,				oCity.m_szName);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColFirstName,		oSubscriber.m_szFirstName);
@@ -261,12 +260,12 @@ void CPersonView::InsertNewRow(CPerson &oPerson)
   oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColAddress,			oSubscriber.m_szAddress);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColPhoneNumber, oPhoneNumber.m_szPhoneNumber);
 	CPhoneTypes oPhoneType;
-	if(GetDocument()->SelectPhoneTypeWhereId(oPhoneNumber.m_iPhoneId, oPhoneType))
+	if(GetDocument()->SelectPhoneTypeWhereId(oPhoneNumber.m_nPhoneId, oPhoneType))
 		oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColPhoneNumberType, oPhoneType.m_szType); 
 	
-	/* Оразмеряване на колоната спрямо дължината на името й */
+	// Оразмеряване на колоната спрямо дължината на името й 
   oListCtrl.SetColumnWidth(CPersonDoc::eColSubscrCode, LVSCW_AUTOSIZE_USEHEADER);
-  /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+  // Оразмеряване на колоната спрямо макс. дължина на неин запис 
   oListCtrl.SetColumnWidth(CPersonDoc::eColCity,			 LVSCW_AUTOSIZE);
   oListCtrl.SetColumnWidth(CPersonDoc::eColFirstName,  LVSCW_AUTOSIZE);
   oListCtrl.SetColumnWidth(CPersonDoc::eColSecondName, LVSCW_AUTOSIZE);

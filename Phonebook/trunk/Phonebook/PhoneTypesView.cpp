@@ -57,15 +57,15 @@ void CPhoneTypesView::OnInitialUpdate()
 	oListCtrl.InsertColumn(CPhoneTypesDoc::eColCode, _T("Код"), LVCFMT_LEFT);
 	oListCtrl.InsertColumn(CPhoneTypesDoc::eColType, _T("Тип телефон"), LVCFMT_LEFT);
 	
-	/* Оразмеряване на колонита спрямо дължината на имената им */
+	// Оразмеряване на колонита спрямо дължината на имената им 
 	oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
 	oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColType, LVSCW_AUTOSIZE_USEHEADER);
 
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
-	/* запълване редовете на листът */
+	// запълване редовете на листът 
 	UpdateColumnsContent();
-	m_iCurrRowSelected = 0;
+	m_nCurrRowSelected = 0;
 }
 
 BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
@@ -81,7 +81,7 @@ BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, 
 		switch(((LPNMHDR)lParam)->code)
 		{
 			case NM_DBLCLK:
-				/* при двоен клик се отваря за редакция последно избраният ред */
+				// при двоен клик се отваря за редакция последно избраният ред 
 				ExecuteCntxMenuCmd(eCmdUpdate); 
 				break;
 			case NM_RCLICK:
@@ -89,7 +89,7 @@ BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, 
 				pSubMenu = oCntxMenu.GetSubMenu(0);
 				GetCursorPos(&tCur);
 				iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
-				/* изпълнение на команда, избрана от конктекстното меню */
+				// изпълнение на команда, избрана от конктекстното меню 
 				switch(iMenuChoice)
 				{
 					case ID_OPTIONS_EDIT:	 ExecuteCntxMenuCmd(eCmdUpdate); break;
@@ -100,15 +100,15 @@ BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, 
 				}
 				break;
 			case LVN_COLUMNCLICK:
-				/* Сортиране по номер на колона */
+				// Сортиране по номер на колона 
 				iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
 				m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
 				GetDocument()->SortByColumn((CPhoneTypesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
 				UpdateColumnsContent();
 				break;
 			case LVN_ITEMCHANGED:
-				/* Запис на последно избраният ред */
-				m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
+				// Запис на последно избраният ред 
+				m_nCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
 				break;
 			default:
 				break;
@@ -121,7 +121,7 @@ BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, 
 void CPhoneTypesView::UpdateColumnsContent()
 {
 	m_PhoneTypesArray.RemoveAndFreeAll();
-	/* запълване на листът с редове, спрямо последно наложеният филтър */
+	// запълване на листът с редове, спрямо последно наложеният филтър 
 	if(GetDocument()->SelectAll(m_PhoneTypesArray) == TRUE)
 	{
 		CListCtrl& oListCtrl = GetListCtrl();
@@ -130,7 +130,7 @@ void CPhoneTypesView::UpdateColumnsContent()
 		{
 			i--;
 			CString csTempBuff;
-			csTempBuff.Format(_T("%d"),	m_PhoneTypesArray[i]->m_iCode);
+			csTempBuff.Format(_T("%d"),	m_PhoneTypesArray[i]->m_nCode);
 			int iRowIdx = oListCtrl.InsertItem(CPhoneTypesDoc::eColCode, csTempBuff);
 			SetRowData(iRowIdx, *m_PhoneTypesArray[i]);
 		}
@@ -141,11 +141,11 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
 	CPhoneTypes oPhoneTypes;
 	if(m_PhoneTypesArray.GetCount())
-		oPhoneTypes = *m_PhoneTypesArray[m_iCurrRowSelected];
+		oPhoneTypes = *m_PhoneTypesArray[m_nCurrRowSelected];
 
 	if(eCmd == eCmdDelete)
 	{
-		GetDocument()->DeleteWhereId(oPhoneTypes.m_iId);
+		GetDocument()->DeleteWhereId(oPhoneTypes.m_nId);
 	}
 	else
 	{
@@ -158,7 +158,7 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		{
 		case eCmdUpdate:
 			oPhoneType = oEditDlg.GetCityData();
-			if(GetDocument()->UpdateWhereId(oPhoneType.m_iId, oPhoneType) == FALSE)
+			if(GetDocument()->UpdateWhereId(oPhoneType.m_nId, oPhoneType) == FALSE)
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			
 			break;
@@ -187,7 +187,7 @@ void CPhoneTypesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 	}
 	else
 	{
-		UpdateSingleRow(((CPhoneTypes*)lHint)->m_iId);
+		UpdateSingleRow(((CPhoneTypes*)lHint)->m_nId);
 	}
 }
 
@@ -195,8 +195,8 @@ void CPhoneTypesView::UpdateSingleRow(int iRecId)
 {
 	for(int i = 0; i < m_PhoneTypesArray.GetCount(); i++)
 	{
-		/* Проверка дали ред с такова ID в момента е показан на потребителят */
-		if(m_PhoneTypesArray[i]->m_iId == iRecId)
+		// Проверка дали ред с такова ID в момента е показан на потребителят 
+		if(m_PhoneTypesArray[i]->m_nId == iRecId)
 		{
 			CPhoneTypes *poUpdatedPhoneType = new CPhoneTypes;
 			if(!GetDocument()->SelectWhereId(iRecId, *poUpdatedPhoneType))
@@ -215,13 +215,13 @@ void CPhoneTypesView::SetRowData(int iRowIdx, CPhoneTypes &oPhoneType)
 {
 	CListCtrl& oListCtrl = GetListCtrl();
 	CString csTempBuff;
-	csTempBuff.Format(_T("%d"),	oPhoneType.m_iCode);
+	csTempBuff.Format(_T("%d"),	oPhoneType.m_nCode);
 	oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColCode, csTempBuff);
 	oListCtrl.SetItemText(iRowIdx, CPhoneTypesDoc::eColType, oPhoneType.m_szType);
 
-	/* Оразмеряване на колоната спрямо дължината на името й */
+	// Оразмеряване на колоната спрямо дължината на името й 
 	oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-	/* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+	// Оразмеряване на колоната спрямо макс. дължина на неин запис 
 	oListCtrl.SetColumnWidth(CPhoneTypesDoc::eColType, LVSCW_AUTOSIZE);
 }
 

@@ -70,7 +70,7 @@ BOOL CPhoneBookApp::InitInstance()
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 	LoadStdProfileSettings(4);	// Load standard INI file options (including MRU)
 
-	/* Създаване на инстанции на наличните типове докоменти */
+	// Създаване на инстанции на наличните типове докоменти 
 	m_poPersonDoc = new CPersonDoc;
 	m_poCitiesDoc = new CCitiesDoc;
 	m_poPhoneTypesDoc = new CPhoneTypesDoc;
@@ -100,7 +100,7 @@ BOOL CPhoneBookApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 
-	/* Добавяне новосъздадената инстанция на CitiesDoc към темплейта */
+	// Добавяне новосъздадената инстанция на CitiesDoc към темплейта 
 	pDocTemplate->AddDocument(m_poCitiesDoc);
 	AddDocTemplate(pDocTemplate);
 
@@ -112,7 +112,7 @@ BOOL CPhoneBookApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 
-	/* Добавяне новосъздадената инстанция на CPhoneTypesDoc към темплейта */
+	// Добавяне новосъздадената инстанция на CPhoneTypesDoc към темплейта 
 	pDocTemplate->AddDocument(m_poPhoneTypesDoc);
 	AddDocTemplate(pDocTemplate);
 
@@ -124,7 +124,7 @@ BOOL CPhoneBookApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 
-	/* Добавяне новосъздадената инстанция на CSubscribersDoc към темплейта */
+	// Добавяне новосъздадената инстанция на CSubscribersDoc към темплейта 
 	pDocTemplate->AddDocument(m_poSubscribersDoc);
 	AddDocTemplate(pDocTemplate);
 
@@ -136,7 +136,7 @@ BOOL CPhoneBookApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 
-	/* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
+	// Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта 
 	pDocTemplate->AddDocument(m_poSubscrPhnNmbDoc);
 	AddDocTemplate(pDocTemplate);
 
@@ -148,7 +148,7 @@ BOOL CPhoneBookApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 
-	/* Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта */
+	// Добавяне новосъздадената инстанция на CSubscriberPhoneNumbersDoc към темплейта 
 	pDocTemplate->AddDocument(m_poPersonDoc);
 	AddDocTemplate(pDocTemplate);
 
@@ -219,7 +219,7 @@ void CPhoneBookApp::OnAppAbout()
 
 void CPhoneBookApp::OnFileNew()
 {
-	/* Създаване на свързан списък от указатели към съществуващите CDocTemplate обекти */
+	// Създаване на свързан списък от указатели към съществуващите CDocTemplate обекти 
 	CPtrList oTemplateList;
 	
 	POSITION pDocTemplPos = AfxGetApp()->m_pDocManager->GetFirstDocTemplatePosition();
@@ -233,18 +233,18 @@ void CPhoneBookApp::OnFileNew()
 	if(IDOK != dlg.DoModal())
 		return;
 
-	/* Взимане на CDocTemplate-a, който трябва да се ползва за създаване на желаният от потребиителят документ */
+	// Взимане на CDocTemplate-a, който трябва да се ползва за създаване на желаният от потребиителят документ 
 	CDocTemplate *pSelectedDocTemplate = dlg.GetSelectedDoc();
 	if(!pSelectedDocTemplate)
 		return;
 
-	/* Във всеки CDocTemplate трябва да се съдържа само една единствена инстанция на 
-		 CDocument - тази която е създадена и добавена във InitInstance */
+	// Във всеки CDocTemplate трябва да се съдържа само една единствена инстанция на 
+	// CDocument - тази която е създадена и добавена във InitInstance 
 	POSITION oDocPos = pSelectedDocTemplate->GetFirstDocPosition();
 	ASSERT(oDocPos != 0);
 	CDocument* poSelectedDoc =	pSelectedDocTemplate->GetNextDoc(oDocPos);
 
-	/* Създаване на рамка за новото CView и инициализирането му */
+	// Създаване на рамка за новото CView и инициализирането му 
 	CFrameWnd* pFrame = pSelectedDocTemplate->CreateNewFrame(poSelectedDoc, NULL);
 	pSelectedDocTemplate->InitialUpdateFrame(pFrame, poSelectedDoc);
 }

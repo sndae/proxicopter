@@ -74,7 +74,7 @@ BOOL CSubscribersDoc::UpdateWhereId(const int iId, const CSubscribers &oSubscrib
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0, (LPARAM)&oSubscriber);
 		
@@ -88,7 +88,7 @@ BOOL CSubscribersDoc::Insert(const CSubscribers &oSubscriber)
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0);
 	
@@ -101,7 +101,7 @@ BOOL CSubscribersDoc::DeleteWhereId(const int iId)
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0);
 	
@@ -110,7 +110,7 @@ BOOL CSubscribersDoc::DeleteWhereId(const int iId)
 
 BOOL CSubscribersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
-	/* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
+	// номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
 	int iTableCol = (int)eCol + (int)CSubscribersTable::eColCode ;
 	return m_oSubscribersTable.SortByColumn((CSubscribersTable::eColumn)iTableCol , bAsc);
 }
@@ -118,8 +118,8 @@ BOOL CSubscribersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oSubscriber)
 {
 	CSubscribers oModCity = oSubscriber;
-	/* търсенето да включи всички записи */ 
-	oModCity.m_iId = DNC;
+	// търсенето да включи всички записи  
+	oModCity.m_nId = DNC;
 	return m_oSubscribersTable.SelectByContent(oModCity);
 }
 
@@ -144,7 +144,7 @@ int CSubscribersDoc::GetCityIdByCode(TCHAR *pszCityCode)
 	if(!m_oCitiesTable.SelectAll(oCitiesArr))	
 		return DNC;
 
-	return oCitiesArr[0]->m_iId;
+	return oCitiesArr[0]->m_nId;
 }
 // CSubscribersDoc diagnostics
 

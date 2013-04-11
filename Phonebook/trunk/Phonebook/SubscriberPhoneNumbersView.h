@@ -16,12 +16,12 @@ public:
 	CSubscriberPhoneNumbersDoc* GetDocument() const;
 
 private:
-	/* Текущият избран ред от списъка */
-	int	 m_iCurrRowSelected;
- /* Масив указващ начина на сортиране на всяка една от колоните */
+	// Текущият избран ред от списъка 
+	int	 m_nCurrRowSelected;
+ // Масив указващ начина на сортиране на всяка една от колоните 
 	BOOL	m_abAscSorting[CSubscriberPhoneNumbersDoc::eCOL_NUMB];
-	/* Масив от указатели към данни за всеки ред от листът. Необходим е, тъй като ID и rev_numb на всеки 
-		 ред, не се визуализират. Т.е. те трябва да се съхваняват, с цел използване в случай на редакция */
+	// Масив от указатели към данни за всеки ред от листът. Необходим е, тъй като ID и rev_numb на всеки 
+	// ред, не се визуализират. Т.е. те трябва да се съхваняват, с цел използване в случай на редакция 
 	CSubscriberPhoneNumbersArray m_SubscriberPhoneNumbersArray;
 // Operations
 public:

@@ -28,15 +28,15 @@ CPersonDlg::~CPersonDlg()
 void CPersonDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_PERSON_EDIT_SUSCR_CODE,	m_cSubscrCode);
-	DDX_Control(pDX, IDC_PERSON_EDIT_CITY,			  m_cCities);
-	DDX_Control(pDX, IDC_PERSON_EDIT_FIRST_NAME,	m_cFirstName);
-	DDX_Control(pDX, IDC_PERSON_EDIT_SECOND_NAME, m_cSecName);
-	DDX_Control(pDX, IDC_PERSON_EDIT_THIRD_NAME,	m_cThirdName);
-	DDX_Control(pDX, IDC_PERSON_EDIT_SUBSCR_ID,		m_cSubscrId);
-	DDX_Control(pDX, IDC_PERSON_EDIT_ADDRESS,			m_cAddress);
-	DDX_Control(pDX, IDC_PERSON_EDIT_PHONE_NUMB,	m_cPhoneNumber);
-	DDX_Control(pDX, IDC_PERSON_EDIT_PHONE_TYPES, m_cPhoneType);
+	DDX_Control(pDX, EDB_PERSON_EDIT_SUSCR_CODE,	m_cSubscrCode);
+	DDX_Control(pDX, CMB_PERSON_EDIT_CITY,			  m_cCities);
+	DDX_Control(pDX, EDB_PERSON_EDIT_FIRST_NAME,	m_cFirstName);
+	DDX_Control(pDX, EDB_PERSON_EDIT_SECOND_NAME, m_cSecName);
+	DDX_Control(pDX, EDB_PERSON_EDIT_THIRD_NAME,	m_cThirdName);
+	DDX_Control(pDX, EDB_PERSON_EDIT_SUBSCR_ID,		m_cSubscrId);
+	DDX_Control(pDX, EDB_PERSON_EDIT_ADDRESS,			m_cAddress);
+	DDX_Control(pDX, EDB_PERSON_EDIT_PHONE_NUMB,	m_cPhoneNumber);
+	DDX_Control(pDX, CMB_PERSON_EDIT_PHONE_TYPES, m_cPhoneType);
 }
 
 
@@ -86,13 +86,13 @@ BOOL CPersonDlg::OnInitDialog()
 	if((m_eMenuCmd == eCmdInsertNumb) || (m_eMenuCmd == eCmdUpdate))
 	{
 		CString csTempBuff;
-		csTempBuff.Format(_T("%d"), m_oSubscriber.m_iCode);
+		csTempBuff.Format(_T("%d"), m_oSubscriber.m_nCode);
 		m_cSubscrCode.SetWindowText(csTempBuff);
 		
 		int iPos = 0;
 		for(iPos = 0; iPos != m_poCitiesArr->GetCount(); iPos++)
 		{
-			if(m_poCitiesArr->GetAt(iPos)->m_iId == m_oSubscriber.m_iCityId)
+			if(m_poCitiesArr->GetAt(iPos)->m_nId == m_oSubscriber.m_nCityId)
 				break;
 		}
 
@@ -107,7 +107,7 @@ BOOL CPersonDlg::OnInitDialog()
 		{
 			for(iPos = 0; iPos < m_poPhoneTypesArr->GetCount(); iPos++)
 			{
-				if(m_poPhoneTypesArr->GetAt(iPos)->m_iId == m_oPhoneNumber.m_iPhoneId)
+				if(m_poPhoneTypesArr->GetAt(iPos)->m_nId == m_oPhoneNumber.m_nPhoneId)
 					break;
 			}
 			
@@ -138,13 +138,13 @@ void CPersonDlg::OnBnClickedOk()
 	//if(m_cCities.GetCurSel() >= 0)
 	//{
 	if((m_eMenuCmd != eCmdInsertNumb) && (m_eMenuCmd != eCmdInsert))
-		m_oPhoneNumber.m_iId = m_oPerson.m_iPhoneNumbId;
+		m_oPhoneNumber.m_nId = m_oPerson.m_nPhoneNumbId;
 	else
-		m_oPhoneNumber.m_iId = DNC;
+		m_oPhoneNumber.m_nId = DNC;
 	
-	m_oPhoneNumber.m_iPhoneId = (m_cPhoneType.GetCurSel() != -1 ?  m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel())->m_iId : DNC);
+	m_oPhoneNumber.m_nPhoneId = (m_cPhoneType.GetCurSel() != -1 ?  m_poPhoneTypesArr->GetAt(m_cPhoneType.GetCurSel())->m_nId : DNC);
 	m_cPhoneNumber.GetWindowText(m_oPhoneNumber.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
-	m_oPhoneNumber.m_iSubscrId = m_oPerson.m_iSubscriberId;
+	m_oPhoneNumber.m_nSubscrId = m_oPerson.m_nSubscriberId;
 
 	//}
 	//else if(m_eMenuCmd != eCmdFind)
@@ -153,11 +153,11 @@ void CPersonDlg::OnBnClickedOk()
 	//}
 
 	if(m_eMenuCmd != eCmdInsert)
-		m_oSubscriber.m_iId = m_oPerson.m_iSubscriberId;
+		m_oSubscriber.m_nId = m_oPerson.m_nSubscriberId;
 	else
-		m_oSubscriber.m_iId = DNC;
+		m_oSubscriber.m_nId = DNC;
 
-	m_oSubscriber.m_iCityId = m_poCitiesArr->GetAt(m_cCities.GetCurSel())->m_iId;
+	m_oSubscriber.m_nCityId = m_poCitiesArr->GetAt(m_cCities.GetCurSel())->m_nId;
 	m_cFirstName.GetWindowText(m_oSubscriber.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cSecName.GetWindowText(m_oSubscriber.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_cThirdName.GetWindowText(m_oSubscriber.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
@@ -166,7 +166,7 @@ void CPersonDlg::OnBnClickedOk()
 	
 	CString csTempBuff;
 	m_cSubscrCode.GetWindowText(csTempBuff);
-	m_oSubscriber.m_iCode = _ttoi(csTempBuff);
+	m_oSubscriber.m_nCode = _ttoi(csTempBuff);
 
 	OnOK();
 }

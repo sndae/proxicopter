@@ -33,8 +33,8 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 		case eCmdFind:	 
 			SetWindowText(MENU_CMD_FIND); 
 			ZeroMemory(&m_oSubscriberPhoneNumbers, sizeof(m_oSubscriberPhoneNumbers)); 
-			m_oSubscriberPhoneNumbers.m_iSubscrId = DNC;
-			m_oSubscriberPhoneNumbers.m_iPhoneId = DNC;
+			m_oSubscriberPhoneNumbers.m_nSubscrId = DNC;
+			m_oSubscriberPhoneNumbers.m_nPhoneId = DNC;
 			break;
 		case eCmdUpdate: 
 			SetWindowText(MENU_CMD_UPDATE); 
@@ -42,8 +42,8 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 		case eCmdInsert: 
 			SetWindowText(MENU_CMD_INSERT); 
 			ZeroMemory(&m_oSubscriberPhoneNumbers, sizeof(m_oSubscriberPhoneNumbers)); 
-			m_oSubscriberPhoneNumbers.m_iSubscrId = DNC;
-			m_oSubscriberPhoneNumbers.m_iPhoneId = DNC;
+			m_oSubscriberPhoneNumbers.m_nSubscrId = DNC;
+			m_oSubscriberPhoneNumbers.m_nPhoneId = DNC;
 			break;
 		default: 
 			ASSERT(0);
@@ -56,22 +56,22 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 	{
 		for(int i = 0; i < m_poSubscrArray->GetSize(); i++)
 		{
-			csTempBuff.Format(_T("%d"), (m_poSubscrArray->GetAt(i))->m_iCode);
+			csTempBuff.Format(_T("%d"), (m_poSubscrArray->GetAt(i))->m_nCode);
 			m_SubscriberCode.InsertString(i, csTempBuff);
 		}
-		if(m_oSubscriberPhoneNumbers.m_iSubscrId != DNC)
-			m_SubscriberCode.SetCurSel(m_oSubscriberPhoneNumbers.m_iSubscrId);
+		if(m_oSubscriberPhoneNumbers.m_nSubscrId != DNC)
+			m_SubscriberCode.SetCurSel(m_oSubscriberPhoneNumbers.m_nSubscrId);
 	}
 
 	if(m_poPhoneTypesArray)
 	{
 		for(int i = 0; i < m_poPhoneTypesArray->GetSize(); i++)
 		{
-			csTempBuff.Format(_T("%d"), (m_poPhoneTypesArray->GetAt(i))->m_iCode);
+			csTempBuff.Format(_T("%d"), (m_poPhoneTypesArray->GetAt(i))->m_nCode);
 			m_PhoneTypeCode.InsertString(i, csTempBuff);
 		}
-		if(m_oSubscriberPhoneNumbers.m_iPhoneId != DNC)
-			m_PhoneTypeCode.SetCurSel(m_poPhoneTypesArray->GetAt(m_oSubscriberPhoneNumbers.m_iPhoneId)->m_iId);
+		if(m_oSubscriberPhoneNumbers.m_nPhoneId != DNC)
+			m_PhoneTypeCode.SetCurSel(m_poPhoneTypesArray->GetAt(m_oSubscriberPhoneNumbers.m_nPhoneId)->m_nId);
 	}
 	
 	return TRUE;
@@ -79,9 +79,9 @@ BOOL CSubscriberPhoneNumbersDlg::OnInitDialog()
 void CSubscriberPhoneNumbersDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_SUBSCRIBER, m_SubscriberCode);
-	DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE, m_PhoneTypeCode);
-	DDX_Control(pDX, IDC_SUBSCRIBERPHONENUMBERS_EDIT_PHONE_NUMBER, m_PhoneNumber);
+	DDX_Control(pDX, CMB_SUBSCRIBERPHONENUMBERS_EDIT_CODE_SUBSCRIBER, m_SubscriberCode);
+	DDX_Control(pDX, CMB_SUBSCRIBERPHONENUMBERS_EDIT_CODE_PHONE, m_PhoneTypeCode);
+	DDX_Control(pDX, EDB_SUBSCRIBERPHONENUMBERS_EDIT_PHONE_NUMBER, m_PhoneNumber);
 }
 
 
@@ -98,15 +98,15 @@ void CSubscriberPhoneNumbersDlg::OnBnClickedOk()
 	CString cTempBuff;
 	m_SubscriberCode.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
-		m_oSubscriberPhoneNumbers.m_iSubscrId = _ttoi(cTempBuff);
+		m_oSubscriberPhoneNumbers.m_nSubscrId = _ttoi(cTempBuff);
 	else
-		m_oSubscriberPhoneNumbers.m_iSubscrId = DNC;
+		m_oSubscriberPhoneNumbers.m_nSubscrId = DNC;
 
 	m_PhoneTypeCode.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
-		m_oSubscriberPhoneNumbers.m_iPhoneId = _ttoi(cTempBuff);
+		m_oSubscriberPhoneNumbers.m_nPhoneId = _ttoi(cTempBuff);
 	else
-		m_oSubscriberPhoneNumbers.m_iPhoneId = DNC;	
+		m_oSubscriberPhoneNumbers.m_nPhoneId = DNC;	
 
 	m_PhoneNumber.GetWindowTextW(m_oSubscriberPhoneNumbers.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
 	

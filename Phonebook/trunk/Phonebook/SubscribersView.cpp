@@ -62,7 +62,7 @@ void CSubscribersView::OnInitialUpdate()
 	oListCtrl.InsertColumn(CSubscribersDoc::eColCityCode, _T("Код на град"), LVCFMT_LEFT);
 	oListCtrl.InsertColumn(CSubscribersDoc::eColAddress, _T("Адрес"), LVCFMT_LEFT);
 
-	/* Оразмеряване на колонита спрямо дължината на имената им */
+	// Оразмеряване на колонита спрямо дължината на имената им 
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode,  LVSCW_AUTOSIZE_USEHEADER);
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName, LVSCW_AUTOSIZE_USEHEADER);
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName, LVSCW_AUTOSIZE_USEHEADER);
@@ -73,9 +73,9 @@ void CSubscribersView::OnInitialUpdate()
 
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
-	/* запълване редовете на листът */
+	// запълване редовете на листът 
 	UpdateColumnsContent();
-	m_iCurrRowSelected = 0;
+	m_nCurrRowSelected = 0;
 }
 
 BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
@@ -91,7 +91,7 @@ BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam,
 		switch(((LPNMHDR)lParam)->code)
 		{
 			case NM_DBLCLK:
-				/* при двоен клик се отваря за редакция последно избраният ред */
+				// при двоен клик се отваря за редакция последно избраният ред 
 				ExecuteCntxMenuCmd(eCmdUpdate); 
 				break;
 			case NM_RCLICK:
@@ -99,7 +99,7 @@ BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam,
 				pSubMenu = oCntxMenu.GetSubMenu(0);
 				GetCursorPos(&tCur);
 				iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
-				/* изпълнение на команда, избрана от конктекстното меню */
+				// изпълнение на команда, избрана от конктекстното меню 
 				switch(iMenuChoice)
 				{
 					case ID_OPTIONS_EDIT:	ExecuteCntxMenuCmd(eCmdUpdate); break;
@@ -110,15 +110,15 @@ BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam,
 				}
 				break;
 			case LVN_COLUMNCLICK:
-				/* Сортиране по номер на колона */
+				// Сортиране по номер на колона 
 				iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
 				m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
 				GetDocument()->SortByColumn((CSubscribersDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
 				UpdateColumnsContent();
 				break;
 			case LVN_ITEMCHANGED:
-				/* Запис на последно избраният ред */
-				m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
+				// Запис на последно избраният ред 
+				m_nCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
 				break;
 			default:
 				break;
@@ -131,7 +131,7 @@ BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam,
 void CSubscribersView::UpdateColumnsContent()
 {
 	m_SubscribersArray.RemoveAndFreeAll();
-	/* запълване на листът с редове, спрямо последно наложеният филтър */
+	// запълване на листът с редове, спрямо последно наложеният филтър 
 	if(GetDocument()->SelectAll(m_SubscribersArray) == TRUE)
 	{
 		CListCtrl& oListCtrl = GetListCtrl();	 
@@ -141,7 +141,7 @@ void CSubscribersView::UpdateColumnsContent()
 		{
 			i--;
 			CString csTempBuff;
-			csTempBuff.Format(_T("%d"),	m_SubscribersArray[i]->m_iCode);
+			csTempBuff.Format(_T("%d"),	m_SubscribersArray[i]->m_nCode);
 			int iRowIdx = oListCtrl.InsertItem(CSubscribersDoc::eColCode, csTempBuff);
 			SetRowData(iRowIdx, *m_SubscribersArray[i]);
 		}
@@ -152,11 +152,11 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
 	CSubscribers oSubscribers;
 	if(m_SubscribersArray.GetCount())
-		oSubscribers = *m_SubscribersArray[m_iCurrRowSelected];
+		oSubscribers = *m_SubscribersArray[m_nCurrRowSelected];
 
 	if(eCmd == eCmdDelete)
 	{
-		GetDocument()->DeleteWhereId(oSubscribers.m_iId);
+		GetDocument()->DeleteWhereId(oSubscribers.m_nId);
 	}
 	else
 	{
@@ -172,7 +172,7 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		{
 		case eCmdUpdate:
 			oCity = oEditDlg.GetCityData();
-			if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+			if(GetDocument()->UpdateWhereId(oCity.m_nId, oCity) == FALSE)
 				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
 			
 			break;
@@ -201,7 +201,7 @@ void CSubscribersView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 	}
 	else
 	{
-		UpdateSingleRow(((CSubscribers*)lHint)->m_iId);
+		UpdateSingleRow(((CSubscribers*)lHint)->m_nId);
 	}
 }
 
@@ -209,8 +209,8 @@ void CSubscribersView::UpdateSingleRow(int iRecId)
 {
 	for(int i = 0; i < m_SubscribersArray.GetCount(); i++)
 	{
-		/* Проверка дали ред с такова ID в момента е показан на потребителят */
-		if(m_SubscribersArray[i]->m_iId == iRecId)
+		// Проверка дали ред с такова ID в момента е показан на потребителят 
+		if(m_SubscribersArray[i]->m_nId == iRecId)
 		{			
 			CSubscribers *poUpdatedSubscriber = new CSubscribers;
 			if(!GetDocument()->SelectWhereId(iRecId, *poUpdatedSubscriber))
@@ -229,21 +229,21 @@ void CSubscribersView::SetRowData(int iRowIdx, CSubscribers &oSubscriber)
 {
 	CListCtrl& oListCtrl = GetListCtrl();
 	CString csTempBuff;
-	csTempBuff.Format(_T("%d"),	oSubscriber.m_iCode);
+	csTempBuff.Format(_T("%d"),	oSubscriber.m_nCode);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCode, csTempBuff);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColFirstName, oSubscriber.m_szFirstName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColSecondName,oSubscriber.m_szSecondName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColThirdName, oSubscriber.m_szThirdName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColIDNumb, oSubscriber.m_szIDNumb);
 	CCities oCity;
-	if(GetDocument()->SelectCityWhereId(oSubscriber.m_iCityId, oCity))
+	if(GetDocument()->SelectCityWhereId(oSubscriber.m_nCityId, oCity))
 		oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCityCode, oCity.m_szCode);
 
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColAddress, oSubscriber.m_szAddress);	
 
-	/* Оразмеряване на колоната спрямо дължината на името й */
+	// Оразмеряване на колоната спрямо дължината на името й 
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-	/* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+	// Оразмеряване на колоната спрямо макс. дължина на неин запис 
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName, LVSCW_AUTOSIZE);
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName, LVSCW_AUTOSIZE);
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName, LVSCW_AUTOSIZE);

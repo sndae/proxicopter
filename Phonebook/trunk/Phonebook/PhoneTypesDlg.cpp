@@ -30,7 +30,7 @@ BOOL CPhoneTypesDlg::OnInitDialog()
 		case eCmdFind:	 
 			SetWindowText(MENU_CMD_FIND); 
 			ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
-			m_oPhoneTypes.m_iCode = DNC;
+			m_oPhoneTypes.m_nCode = DNC;
 			break;
 		case eCmdUpdate: 
 			SetWindowText(MENU_CMD_UPDATE); 
@@ -39,17 +39,18 @@ BOOL CPhoneTypesDlg::OnInitDialog()
 			SetWindowText(MENU_CMD_INSERT); 
 			ZeroMemory(&m_oPhoneTypes, sizeof(m_oPhoneTypes)); 
 			break;
-		case eCmdDelete: 
-			SetWindowText(MENU_CMD_DELETE); 
-			m_Code.EnableWindow(FALSE); 
-			m_PhoneType.EnableWindow(FALSE);
-			break;
 		default: 
 			ASSERT(0);
 			break;
 	}
 
 	m_PhoneType.SetWindowTextW(m_oPhoneTypes.m_szType);
+	if(m_oPhoneTypes.m_nCode != DNC)
+	{
+		CString strTempBuff;
+		strTempBuff.Format(_T("%d"), m_oPhoneTypes.m_nCode);
+		m_Code.SetWindowText(strTempBuff);
+	}
 
 	return TRUE;
 }
@@ -57,8 +58,8 @@ BOOL CPhoneTypesDlg::OnInitDialog()
 void CPhoneTypesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_PHONETYPES_EDIT_TYPES, m_PhoneType);
-	DDX_Control(pDX, IDC_PHONETYPES_EDIT_CODE, m_Code);
+	DDX_Control(pDX, EDB_PHONETYPES_EDIT_TYPES, m_PhoneType);
+	DDX_Control(pDX, EDB_PHONETYPES_EDIT_CODE, m_Code);
 }
 
 
@@ -75,9 +76,9 @@ void CPhoneTypesDlg::OnBnClickedOk()
 	CString cTempBuff;
 	m_Code.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
-		m_oPhoneTypes.m_iCode = _ttoi(cTempBuff);
+		m_oPhoneTypes.m_nCode = _ttoi(cTempBuff);
 	else
-		m_oPhoneTypes.m_iCode = DNC;
+		m_oPhoneTypes.m_nCode = DNC;
 
 	m_PhoneType.GetWindowTextW(m_oPhoneTypes.m_szType, sizeof(m_oPhoneTypes.m_szType)/sizeof(m_oPhoneTypes.m_szType[0]));
 

@@ -8,26 +8,26 @@
 struct CSubscriberPhoneNumbers
 {
 	TABLE_HEADER;
-	int	 m_iSubscrId;
-	int	 m_iPhoneId;
+	int	 m_nSubscrId;
+	int	 m_nPhoneId;
 	TCHAR m_szPhoneNumber[SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN];
 	
 	CSubscriberPhoneNumbers(const int iId = DNC, const int iRevNumb = 0, const int iSubscrId = DNC, const int iPhoneId = DNC, const TCHAR *pszPhoneNumb = 0)
 	{
 		ZeroMemory(this, sizeof(*this));
-		m_iId = iId;
-		m_iRevNumb = iRevNumb;
-		m_iSubscrId = iSubscrId;
-		m_iPhoneId = iPhoneId;
+		m_nId = iId;
+		m_nRevNumb = iRevNumb;
+		m_nSubscrId = iSubscrId;
+		m_nPhoneId = iPhoneId;
 		if(pszPhoneNumb)_tcscpy(m_szPhoneNumber, pszPhoneNumb);
 	}
 	
 	CSubscriberPhoneNumbers & operator=(const CSubscriberPhoneNumbers &op)
 	{
-		m_iId = op.m_iId;
-		m_iRevNumb = op.m_iRevNumb;
-		m_iSubscrId = op.m_iSubscrId;
-		m_iPhoneId = op.m_iPhoneId;
+		m_nId = op.m_nId;
+		m_nRevNumb = op.m_nRevNumb;
+		m_nSubscrId = op.m_nSubscrId;
+		m_nPhoneId = op.m_nPhoneId;
 		_tcscpy(m_szPhoneNumber, op.m_szPhoneNumber);	
 
 		return *this;
@@ -35,8 +35,8 @@ struct CSubscriberPhoneNumbers
 
 	BOOL operator==(CSubscriberPhoneNumbers op)
 	{
-		if((m_iSubscrId != op.m_iSubscrId) ||
-			(m_iPhoneId != op.m_iPhoneId) ||
+		if((m_nSubscrId != op.m_nSubscrId) ||
+			(m_nPhoneId != op.m_nPhoneId) ||
 			_tcscmp(m_szPhoneNumber, op.m_szPhoneNumber))
 			return FALSE;
 

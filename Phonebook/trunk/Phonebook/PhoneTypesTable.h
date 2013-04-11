@@ -15,7 +15,7 @@ public:
 
 	//Enumerators
 public:
-	/* Изброяване имената на полетата и техните номера */
+	// Изброяване имената на полетата и техните номера 
 	enum	eColumn{cColIdx = 0, eColRevNumb, eColCode, eColType, eCOL_NUMB};
 
 
@@ -29,11 +29,11 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	long m_ID;
+	long m_nD;
 	long m_REV_NUMB;
 	long m_CODE;
 	CStringW m_PHONE_TYPE;
-	/* Флаг разрешаващ търсенето на DSN:SQLEXPRESS */
+	// Флаг разрешаващ търсенето на DSN:SQLEXPRESS 
 	BOOL m_bSQLEn;
 
 // Overrides

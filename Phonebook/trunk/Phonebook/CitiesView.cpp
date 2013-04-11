@@ -57,16 +57,16 @@ void CCitiesView::OnInitialUpdate()
   oListCtrl.InsertColumn(CCitiesDoc::eColName, _T("Име"), LVCFMT_LEFT);
   oListCtrl.InsertColumn(CCitiesDoc::eColArea, _T("Област"), LVCFMT_LEFT);
   
-  /* Оразмеряване на колонита спрямо дължината на имената им */
+  // Оразмеряване на колонита спрямо дължината на имената им 
   oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
   oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE_USEHEADER);
   oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE_USEHEADER);
 
   memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
-  /* запълване редовете на листът */
+  // запълване редовете на листът 
   UpdateColumnsContent();
-  m_iCurrRowSelected = 0;
+  m_nCurrRowSelected = 0;
 }
 
 BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
@@ -82,7 +82,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
     switch(((LPNMHDR)lParam)->code)
     {
       case NM_DBLCLK:
-        /* при двоен клик се отваря за редакция последно избраният ред */
+        // при двоен клик се отваря за редакция последно избраният ред 
         ExecuteCntxMenuCmd(eCmdUpdate); 
         break;
       case NM_RCLICK:        
@@ -90,7 +90,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         pSubMenu = oCntxMenu.GetSubMenu(0);
         GetCursorPos(&tCur);
         iMenuChoice = pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, tCur.x, tCur.y, this);
-        /* изпълнение на команда, избрана от конктекстното меню */
+        // изпълнение на команда, избрана от конктекстното меню 
         switch(iMenuChoice)
         {
           case ID_OPTIONS_EDIT:   ExecuteCntxMenuCmd(eCmdUpdate); break;
@@ -101,15 +101,15 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         }
         break;
       case LVN_COLUMNCLICK:
-        /* Сортиране по номер на колона */
+        // Сортиране по номер на колона 
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
         m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
         GetDocument()->SortByColumn((CCitiesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
         UpdateColumnsContent();
         break;
       case LVN_ITEMCHANGED:
-        /* Запис на последно избраният ред */
-        m_iCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
+        // Запис на последно избраният ред 
+        m_nCurrRowSelected = ((LPNMLISTVIEW)lParam)->iItem;
         break;
       default:
         break;
@@ -122,7 +122,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 void CCitiesView::UpdateColumnsContent()
 {
   m_CitiesArray.RemoveAndFreeAll();
-  /* запълване на листът с редове, спрямо последно наложеният филтър */
+  // запълване на листът с редове, спрямо последно наложеният филтър 
   if(GetDocument()->SelectAll(m_CitiesArray) == TRUE)
   {
     CListCtrl& oListCtrl = GetListCtrl();   
@@ -140,11 +140,11 @@ void CCitiesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
   CCities oCities;
   if(m_CitiesArray.GetCount())
-    oCities = *m_CitiesArray[m_iCurrRowSelected];
+    oCities = *m_CitiesArray[m_nCurrRowSelected];
 
   if(eCmd == eCmdDelete)
   {
-    GetDocument()->DeleteWhereId(oCities.m_iId);
+    GetDocument()->DeleteWhereId(oCities.m_nId);
   }
   else
   {
@@ -157,7 +157,7 @@ void CCitiesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
     {
     case eCmdUpdate:
       oCity = oEditDlg.GetCityData();
-      if(GetDocument()->UpdateWhereId(oCity.m_iId, oCity) == FALSE)
+      if(GetDocument()->UpdateWhereId(oCity.m_nId, oCity) == FALSE)
         MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
       
       break;
@@ -186,7 +186,7 @@ void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
   }
   else
   {
-    UpdateSingleRow(((CCities*)lHint)->m_iId);
+    UpdateSingleRow(((CCities*)lHint)->m_nId);
   }
 }
 
@@ -194,8 +194,8 @@ void CCitiesView::UpdateSingleRow(int iRecId)
 {
   for(int i = 0; i < m_CitiesArray.GetCount(); i++)
   {
-    /* Проверка дали ред с такова ID в момента е показан на потребителят */
-    if(m_CitiesArray[i]->m_iId == iRecId)
+    // Проверка дали ред с такова ID в момента е показан на потребителят 
+    if(m_CitiesArray[i]->m_nId == iRecId)
     {      
       CCities *poUpdatedCity = new CCities;
       if(!GetDocument()->SelectWhereId(iRecId, *poUpdatedCity))
@@ -218,9 +218,9 @@ void CCitiesView::SetRowData(int iRowIdx, CCities &oCity)
   oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColName, oCity.m_szName);
   oListCtrl.SetItemText(iRowIdx, CCitiesDoc::eColArea, oCity.m_szArea);
 
-  /* Оразмеряване на колоната спрямо дължината на името й */
+  // Оразмеряване на колоната спрямо дължината на името й 
   oListCtrl.SetColumnWidth(CCitiesDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
-  /* Оразмеряване на колоната спрямо макс. дължина на неин запис */
+  // Оразмеряване на колоната спрямо макс. дължина на неин запис 
   oListCtrl.SetColumnWidth(CCitiesDoc::eColName, LVSCW_AUTOSIZE);
   oListCtrl.SetColumnWidth(CCitiesDoc::eColArea, LVSCW_AUTOSIZE);
 }

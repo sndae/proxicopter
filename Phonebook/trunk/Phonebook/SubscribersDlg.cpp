@@ -31,7 +31,7 @@ BOOL CSubscribersDlg::OnInitDialog()
 		case eCmdFind:	 
 			SetWindowText(MENU_CMD_FIND); 
 			ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
-			m_oSubscribers.m_iCode = DNC;
+			m_oSubscribers.m_nCode = DNC;
 			break;
 		case eCmdUpdate: 
 			SetWindowText(MENU_CMD_UPDATE); 
@@ -39,16 +39,16 @@ BOOL CSubscribersDlg::OnInitDialog()
 		case eCmdInsert: 
 			SetWindowText(MENU_CMD_INSERT); 
 			ZeroMemory(&m_oSubscribers, sizeof(m_oSubscribers)); 
-			m_oSubscribers.m_iCode = DNC;
+			m_oSubscribers.m_nCode = DNC;
 			break;
 		default: 
 			ASSERT(0);
 			break;
 	}
 	CString csTembBuff;
-	if(m_oSubscribers.m_iCode != DNC)
+	if(m_oSubscribers.m_nCode != DNC)
 	{
-		csTembBuff.Format(_T("%d"), m_oSubscribers.m_iCode);
+		csTembBuff.Format(_T("%d"), m_oSubscribers.m_nCode);
 		m_Code.SetWindowTextW(csTembBuff);
 	}
 	else
@@ -57,14 +57,14 @@ BOOL CSubscribersDlg::OnInitDialog()
 	m_FirstName.SetWindowTextW(m_oSubscribers.m_szFirstName);
 	m_SecondName.SetWindowTextW(m_oSubscribers.m_szSecondName);
 	m_ThirdName.SetWindowTextW(m_oSubscribers.m_szThirdName);
-	m_IDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
+	m_nDNumber.SetWindowTextW(m_oSubscribers.m_szIDNumb);
 	if(m_pCitiesArray)
 	{
 		for(int i = 0; i < m_pCitiesArray->GetSize(); i++)
 			m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
 	}
-	if(m_oSubscribers.m_iCityId != DNC)
-		m_CityCode.SetWindowTextW(m_pCitiesArray->GetAt(m_oSubscribers.m_iCityId)->m_szCode);
+	if(m_oSubscribers.m_nCityId != DNC)
+		m_CityCode.SetWindowTextW(m_pCitiesArray->GetAt(m_oSubscribers.m_nCityId)->m_szCode);
 	
 	m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
 
@@ -74,13 +74,13 @@ BOOL CSubscribersDlg::OnInitDialog()
 void CSubscribersDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_CODE, m_Code);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_FIRST_NAME, m_FirstName);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_SECOND_NAME, m_SecondName);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_THIRD_NAME, m_ThirdName);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_IDNUMBER, m_IDNumber);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_CITY_CODE, m_CityCode);
-	DDX_Control(pDX, IDC_SUBSCRIBERS_EDIT_ADDRESS, m_Address);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_CODE, m_Code);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_FIRST_NAME, m_FirstName);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_SECOND_NAME, m_SecondName);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_THIRD_NAME, m_ThirdName);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_IDNUMBER, m_nDNumber);
+	DDX_Control(pDX, CMB_SUBSCRIBERS_EDIT_CITY_CODE, m_CityCode);
+	DDX_Control(pDX, EDB_SUBSCRIBERS_EDIT_ADDRESS, m_Address);
 }
 
 
@@ -97,16 +97,16 @@ void CSubscribersDlg::OnBnClickedOk()
 	CString cTempBuff;
 	m_Code.GetWindowTextW(cTempBuff);
 	if(cTempBuff.GetLength())
-		m_oSubscribers.m_iCode = _ttoi(cTempBuff);
+		m_oSubscribers.m_nCode = _ttoi(cTempBuff);
 	else
-		m_oSubscribers.m_iCode = DNC;
+		m_oSubscribers.m_nCode = DNC;
 
 	m_FirstName.GetWindowTextW(m_oSubscribers.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_SecondName.GetWindowTextW(m_oSubscribers.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_ThirdName.GetWindowTextW(m_oSubscribers.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
-	m_IDNumber.GetWindowTextW(m_oSubscribers.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
+	m_nDNumber.GetWindowTextW(m_oSubscribers.m_szIDNumb, SUBSCRIBERS_ID_NUMB_LEN);
 	m_Address.GetWindowTextW(m_oSubscribers.m_szAddress, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	
-	m_oSubscribers.m_iCityId = m_CityCode.GetCurSel();
+	m_oSubscribers.m_nCityId = m_CityCode.GetCurSel();
 	OnOK();
 }

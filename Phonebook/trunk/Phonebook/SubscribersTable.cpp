@@ -19,13 +19,13 @@ IMPLEMENT_DYNAMIC(CSubscribersTable, CRecordset)
 CSubscribersTable::CSubscribersTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-	m_ID = 0;
+	m_nD = 0;
 	m_REV_NUMB = 0;
 	m_CODE = 0;
 	m_FIRST_NAME = L"";
 	m_SECOND_NAME = L"";
 	m_THIRD_NAME = L"";
-	m_IDENT_NUMB = L"";
+	m_nDENT_NUMB = L"";
 	m_CITY_ID = 0;
 	m_CITY_ADDR	= L"";
 	
@@ -65,13 +65,13 @@ void CSubscribersTable::DoFieldExchange(CFieldExchange* pFX)
 	// Macros such as RFX_Text() and RFX_Int() are dependent on the
 	// type of the member variable, not the type of the field in the database.
 	// ODBC will try to automatically convert the column value to the requested type
-	RFX_Long(pFX, _T("[ID]"), m_ID);
+	RFX_Long(pFX, _T("[ID]"), m_nD);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
 	RFX_Long(pFX, _T("[CODE]"), m_CODE);
 	RFX_Text(pFX, _T("[FIRST_NAME]"), m_FIRST_NAME);
 	RFX_Text(pFX, _T("[SECOND_NAME]"), m_SECOND_NAME);
 	RFX_Text(pFX, _T("[THIRD_NAME]"), m_THIRD_NAME);
-	RFX_Text(pFX, _T("[IDENT_NUMB]"), m_IDENT_NUMB);
+	RFX_Text(pFX, _T("[IDENT_NUMB]"), m_nDENT_NUMB);
 	RFX_Long(pFX, _T("[CITY_ID]"), m_CITY_ID);
 	RFX_Text(pFX, _T("[CITY_ADDR]"), m_CITY_ADDR);
 }
@@ -88,8 +88,8 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 	}
 	catch(CDBException *)
 	{
-		/* В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
-			 този път със запитване на потребителят. Очаква се че ще се окаже XLS файл */
+		// В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
+		// този път със запитване на потребителят. Очаква се че ще се окаже XLS файл 
 		m_bSQLEn = FALSE;
 		bRes = Open(CRecordset::dynaset);
 	}
@@ -98,11 +98,11 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 	{
 		if(bRes && !IsBOF())
 		{
-			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				CSubscribers *poSubscribers = new CSubscribers(int(m_ID), int(m_REV_NUMB), m_CODE, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
-																m_THIRD_NAME.GetBuffer(), m_IDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
+				CSubscribers *poSubscribers = new CSubscribers(int(m_nD), int(m_REV_NUMB), m_CODE, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
+																m_THIRD_NAME.GetBuffer(), m_nDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
 				oSubscribersArray.Add(poSubscribers);		 
 				MoveNext();
 			}
@@ -143,19 +143,19 @@ BOOL CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
 
 BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscribers)
 {
-	/* Проверка дали има друг абонат със такъв код */
-	if(SelectByContent(CSubscribers(oSubscribers.m_iId, 0, oSubscribers.m_iCode)) == TRUE)
+	// Проверка дали има друг абонат със такъв код 
+	if(SelectByContent(CSubscribers(oSubscribers.m_nId, 0, oSubscribers.m_nCode)) == TRUE)
 		return FALSE;
 
-	/* Проверка дали има запис със такова ЕГН на абонат */
-	if(SelectByContent(CSubscribers(oSubscribers.m_iId, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
+	// Проверка дали има запис със такова ЕГН на абонат 
+	if(SelectByContent(CSubscribers(oSubscribers.m_nId, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
 		return FALSE;
 
 	CSubscribers oCurrSubscriber;
 	if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
 		return FALSE;
 	
-	if(oCurrSubscriber.m_iRevNumb != oSubscribers.m_iRevNumb)
+	if(oCurrSubscriber.m_nRevNumb != oSubscribers.m_nRevNumb)
 		return FALSE;
 
 	try
@@ -164,7 +164,7 @@ BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscr
 		Edit();
 
 		CSubscribers oSubscrCopy = oSubscribers;
-		oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
+		oSubscrCopy.m_nRevNumb = oCurrSubscriber.m_nRevNumb + 1;
 		
 		DoExchangeТоDatabaseData(oSubscrCopy);
 
@@ -189,11 +189,11 @@ BOOL CSubscribersTable::Insert(CSubscribers &oSubscribers)
 	if(!CanAppend())
 		return FALSE;
 
-	/* Проверка дали има запис с такъв код на абонат */
-	if(SelectByContent(CSubscribers(DNC, 0, oSubscribers.m_iCode)) == TRUE)
+	// Проверка дали има запис с такъв код на абонат 
+	if(SelectByContent(CSubscribers(DNC, 0, oSubscribers.m_nCode)) == TRUE)
 		return FALSE;
 
-	/* Проверка дали има запис със такова ЕГН на абонат */
+	// Проверка дали има запис със такова ЕГН на абонат 
 	if(SelectByContent(CSubscribers(DNC, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
 		return FALSE;
 
@@ -206,12 +206,12 @@ BOOL CSubscribersTable::Insert(CSubscribers &oSubscribers)
 	{
 		if(!IsBOF())
 			MoveLast();	
-		/* буфериране ID на последният ред от раблицата */ 
-		int iLastRowId = m_ID;
+		// буфериране ID на последният ред от раблицата  
+		int iLastRowId = m_nD;
 		AddNew();
 
-		oSubscribers.m_iId = iLastRowId + 1;
-		oSubscribers.m_iRevNumb = 0;
+		oSubscribers.m_nId = iLastRowId + 1;
+		oSubscribers.m_nRevNumb = 0;
 
 		DoExchangeТоDatabaseData(oSubscribers);
 
@@ -302,19 +302,19 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 	m_strSort = _T("");
 	m_strFilter = _T("");
 	CString szColFilter;
-	if(oSubscribers.m_iId != DNC)
+	if(oSubscribers.m_nId != DNC)
 	{
-		/* изключване на текущият запис от по-нататъшното филтриране */
-		szColFilter.Format(_T("ID != %d"), oSubscribers.m_iId);
+		// изключване на текущият запис от по-нататъшното филтриране 
+		szColFilter.Format(_T("ID != %d"), oSubscribers.m_nId);
 		m_strFilter += szColFilter;
 	}
-	/* формиране на низ за филтриране, на база наличните в структурата ненулеви записи */
-	if(oSubscribers.m_iCode != DNC)
+	// формиране на низ за филтриране, на база наличните в структурата ненулеви записи 
+	if(oSubscribers.m_nCode != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("CODE = %d"), oSubscribers.m_iCode);
+		szColFilter.Format(_T("CODE = %d"), oSubscribers.m_nCode);
 		m_strFilter += szColFilter;
 	}
 	if(_tcslen(oSubscribers.m_szFirstName))
@@ -349,12 +349,12 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 		szColFilter.Format(_T("IDENT_NUMB = '%s'"), oSubscribers.m_szIDNumb);
 		m_strFilter += szColFilter;
 	}
-	if(oSubscribers.m_iCityId != DNC)
+	if(oSubscribers.m_nCityId != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("CITY_ID = %d"), oSubscribers.m_iCityId);
+		szColFilter.Format(_T("CITY_ID = %d"), oSubscribers.m_nCityId);
 		m_strFilter += szColFilter;
 	}
 	if(_tcslen(oSubscribers.m_szAddress))
@@ -382,27 +382,27 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 
 void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 {
-	oSubscriber.m_iId = m_ID;
-	oSubscriber.m_iRevNumb = m_REV_NUMB;
-	oSubscriber.m_iCode =	m_CODE;
+	oSubscriber.m_nId = m_nD;
+	oSubscriber.m_nRevNumb = m_REV_NUMB;
+	oSubscriber.m_nCode =	m_CODE;
 	_tcscpy(oSubscriber.m_szFirstName,	m_FIRST_NAME);
 	_tcscpy(oSubscriber.m_szSecondName, m_SECOND_NAME);
 	_tcscpy(oSubscriber.m_szThirdName,	m_THIRD_NAME);
-	_tcscpy(oSubscriber.m_szIDNumb,		 m_IDENT_NUMB);
-	oSubscriber.m_iCityId = m_CITY_ID;
+	_tcscpy(oSubscriber.m_szIDNumb,		 m_nDENT_NUMB);
+	oSubscriber.m_nCityId = m_CITY_ID;
 	_tcscpy(oSubscriber.m_szAddress, m_CITY_ADDR);
 }
 
 void CSubscribersTable::DoExchangeТоDatabaseData(const CSubscribers &oSubscriber)
 {
-	m_ID = oSubscriber.m_iId;
-	m_REV_NUMB = oSubscriber.m_iRevNumb;
-	m_CODE = oSubscriber.m_iCode;
+	m_nD = oSubscriber.m_nId;
+	m_REV_NUMB = oSubscriber.m_nRevNumb;
+	m_CODE = oSubscriber.m_nCode;
 	m_FIRST_NAME = oSubscriber.m_szFirstName;	
 	m_SECOND_NAME = oSubscriber.m_szSecondName; 
 	m_THIRD_NAME = oSubscriber.m_szThirdName;	
-	m_IDENT_NUMB = oSubscriber.m_szIDNumb;	 
-	m_CITY_ID = oSubscriber.m_iCityId;		 
+	m_nDENT_NUMB = oSubscriber.m_szIDNumb;	 
+	m_CITY_ID = oSubscriber.m_nCityId;		 
 	m_CITY_ADDR	= oSubscriber.m_szAddress; 
 
 }

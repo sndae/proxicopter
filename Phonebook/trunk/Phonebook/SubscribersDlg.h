@@ -25,7 +25,7 @@ private:
 	CEdit m_FirstName;
 	CEdit m_SecondName;
 	CEdit m_ThirdName;
-	CEdit m_IDNumber;
+	CEdit m_nDNumber;
 	CComboBox m_CityCode;
 	CCitiesArray *m_pCitiesArray;
 	CEdit m_Address;

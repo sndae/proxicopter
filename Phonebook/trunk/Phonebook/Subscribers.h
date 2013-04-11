@@ -8,22 +8,22 @@
 struct CSubscribers
 {
 	TABLE_HEADER;
-	int	 m_iCode;
+	int	 m_nCode;
 	TCHAR m_szFirstName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	TCHAR m_szSecondName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	TCHAR m_szThirdName[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	TCHAR m_szIDNumb[SUBSCRIBERS_ID_NUMB_LEN];
-	int   m_iCityId;
+	int   m_nCityId;
 	TCHAR m_szAddress[SUBSCRIBERS_TABLE_STRING_MAX_LEN];
 	
 	CSubscribers(const int iId = DNC, const int iRevNumb = 0, const int iCode = DNC, const int iCityId = DNC, const TCHAR *pszFirstName = 0, 
 				 const TCHAR *pszSecondName = 0, const TCHAR *pszThirdName = 0, const TCHAR *pszIDNumb = 0, const TCHAR *pszAddress = 0)
 	{
 		ZeroMemory(this, sizeof(*this));
-		m_iId = iId;
-		m_iRevNumb = iRevNumb;
-		m_iCode = iCode;
-		m_iCityId = iCityId;	 
+		m_nId = iId;
+		m_nRevNumb = iRevNumb;
+		m_nCode = iCode;
+		m_nCityId = iCityId;	 
 		if(pszFirstName)_tcscpy(m_szFirstName, pszFirstName);	
 		if(pszSecondName)_tcscpy(m_szSecondName, pszSecondName);	
 		if(pszThirdName)_tcscpy(m_szThirdName, pszThirdName);	
@@ -37,7 +37,7 @@ struct CSubscribers
 			 _tcscmp(m_szSecondName, op.m_szSecondName) ||
 			 _tcscmp(m_szThirdName, op.m_szThirdName) ||
 			 _tcscmp(m_szIDNumb, op.m_szIDNumb) ||
-			 m_iCityId != op.m_iCityId ||
+			 m_nCityId != op.m_nCityId ||
 			 _tcscmp(m_szAddress, op.m_szAddress))
 			 return FALSE;
 

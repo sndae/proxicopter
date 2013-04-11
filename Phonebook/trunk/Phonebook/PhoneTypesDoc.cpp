@@ -75,7 +75,7 @@ BOOL CPhoneTypesDoc::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneType)
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0, (LPARAM)&oPhoneType);
 		
@@ -88,7 +88,7 @@ BOOL CPhoneTypesDoc::Insert(const CPhoneTypes &oPhoneType)
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0);
 	
@@ -101,7 +101,7 @@ BOOL CPhoneTypesDoc::DeleteWhereId(const int iId)
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0);
 	
@@ -110,7 +110,7 @@ BOOL CPhoneTypesDoc::DeleteWhereId(const int iId)
 
 BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
-	/* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
+	// номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
 	int iTableCol = (int)eCol + (int)CPhoneTypesTable::eColCode ;
 	return m_oPhoneTypesTable.SortByColumn((CPhoneTypesTable::eColumn)iTableCol , bAsc);
 }
@@ -118,8 +118,8 @@ BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oPhoneType)
 {
 	CPhoneTypes oModCity = oPhoneType;
-	/* търсенето да включи всички записи */ 
-	oModCity.m_iId = DNC;
+	// търсенето да включи всички записи  
+	oModCity.m_nId = DNC;
 	return m_oPhoneTypesTable.SelectByContent(oModCity);
 }
 

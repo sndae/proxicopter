@@ -24,18 +24,18 @@ CNewDocDlg::~CNewDocDlg()
 void CNewDocDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
-  DDX_Control(pDX, IDC_NEWDOCLIST_CTRL, m_cListCtrl);
+  DDX_Control(pDX, LSB_NEWDOC_LIST, m_cListCtrl);
 }
 
 BOOL CNewDocDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
   
-  if(!m_poTemplateList)
-    return TRUE;
-  
-  InitIcons();
-  InitItems();
+  if(m_poTemplateList)
+	{  
+		InitIcons();
+		InitItems();
+	}
 
   return TRUE;
 }
@@ -48,29 +48,29 @@ void CNewDocDlg::InitItems()
 	LVITEM lvi;
 
 	POSITION oPos = m_poTemplateList->GetTailPosition();
-  CString  csClassName;
+  CString  strClassName;
 	int iCntr = 0;
   while(oPos)
   {
-   ((CDocTemplate*)m_poTemplateList->GetAt(oPos))->GetDocString(csClassName, CDocTemplate::fileNewName);
+   ((CDocTemplate*)m_poTemplateList->GetAt(oPos))->GetDocString(strClassName, CDocTemplate::fileNewName);
  
 		// Вмъкване на първият обект
 		lvi.mask =  LVIF_IMAGE | LVIF_TEXT;
 
 		lvi.iItem = iCntr;
 		lvi.iSubItem = 0;
-    lvi.pszText = (LPTSTR)(LPCTSTR)(csClassName.GetBuffer());
+    lvi.pszText = (LPTSTR)(LPCTSTR)(strClassName.GetBuffer());
 		lvi.iImage = iCntr;		// Налични са 8 изображения в листа с иконите
 		m_cListCtrl.InsertItem(&lvi);
 #if 0
 		// Вмъкване на подобкет 1
 		lvi.iSubItem = 1;
-		lvi.pszText = (LPTSTR)(LPCTSTR)(csClassName.GetBuffer());
+		lvi.pszText = (LPTSTR)(LPCTSTR)(strClassName.GetBuffer());
 		m_cListCtrl.SetItem(&lvi);
 
 		// Вмъкване на подобект 2
 		lvi.iSubItem = 2;
-		lvi.pszText = (LPTSTR)(LPCTSTR)(csClassName.GetBuffer());
+		lvi.pszText = (LPTSTR)(LPCTSTR)(strClassName.GetBuffer());
 		m_cListCtrl.SetItem(&lvi);
 #endif
 		iCntr++;
@@ -109,8 +109,8 @@ CDocTemplate *CNewDocDlg::GetSelectedDoc()
 }
 
 BEGIN_MESSAGE_MAP(CNewDocDlg, CDialog)
-  ON_NOTIFY(NM_CLICK, IDC_NEWDOCLIST_CTRL, &CNewDocDlg::OnNMClickNewdoclistCtrl)
-  ON_NOTIFY(NM_DBLCLK, IDC_NEWDOCLIST_CTRL, &CNewDocDlg::OnNMDblclkListCtrl)
+  ON_NOTIFY(NM_CLICK, LSB_NEWDOC_LIST, &CNewDocDlg::OnNMClickNewdoclistCtrl)
+  ON_NOTIFY(NM_DBLCLK, LSB_NEWDOC_LIST, &CNewDocDlg::OnNMDblclkListCtrl)
 END_MESSAGE_MAP()
 
 void CNewDocDlg::OnNMClickNewdoclistCtrl(NMHDR *pNMHDR, LRESULT *pResult)

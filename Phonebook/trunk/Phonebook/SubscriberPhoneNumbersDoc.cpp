@@ -74,7 +74,7 @@ BOOL CSubscriberPhoneNumbersDoc::UpdateWhereId(const int iId, const CSubscriberP
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0, (LPARAM)&oSubscriber);
 		
@@ -87,7 +87,7 @@ BOOL CSubscriberPhoneNumbersDoc::Insert(const CSubscriberPhoneNumbers &oSubscrib
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0);
 	
@@ -100,7 +100,7 @@ BOOL CSubscriberPhoneNumbersDoc::DeleteWhereId(const int iId)
 	if(!bRes)
 		return FALSE;
 
-	/* индициране за извършени промени по съдържанието на таблицата */
+	// индициране за извършени промени по съдържанието на таблицата 
 	
 	UpdateAllViews(0);
 	
@@ -109,7 +109,7 @@ BOOL CSubscriberPhoneNumbersDoc::DeleteWhereId(const int iId)
 
 BOOL CSubscriberPhoneNumbersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
 {
-	/* номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата */
+	// номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
 	int iTableCol = (int)eCol + (int)CSubscriberPhoneNumbersTable::eColSubscrCode ;
 	return m_oSubscriberPhoneNumbersTable.SortByColumn((CSubscriberPhoneNumbersTable::eColumn)iTableCol , bAsc);
 }
@@ -117,8 +117,8 @@ BOOL CSubscriberPhoneNumbersDoc::SortByColumn(const eColumn eCol, const BOOL bAs
 BOOL CSubscriberPhoneNumbersDoc::SelectByContent(const CSubscriberPhoneNumbers &oSubscriber)
 {
 	CSubscriberPhoneNumbers oModCity = oSubscriber;
-	/* търсенето да включи всички записи */ 
-	oModCity.m_iId = DNC;
+	// търсенето да включи всички записи  
+	oModCity.m_nId = DNC;
 	return m_oSubscriberPhoneNumbersTable.SelectByContent(oModCity);
 }
 

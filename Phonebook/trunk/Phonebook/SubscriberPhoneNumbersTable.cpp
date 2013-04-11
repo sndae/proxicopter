@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(CSubscriberPhoneNumbersTable, CRecordset)
 CSubscriberPhoneNumbersTable::CSubscriberPhoneNumbersTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-	m_ID = 0;
+	m_nD = 0;
 	m_REV_NUMB = 0;
 	m_PHONE_ID = 0;
 	m_SUBSCRIBER_ID = 0;
@@ -61,7 +61,7 @@ void CSubscriberPhoneNumbersTable::DoFieldExchange(CFieldExchange* pFX)
 	// Macros such as RFX_Text() and RFX_Int() are dependent on the
 	// type of the member variable, not the type of the field in the database.
 	// ODBC will try to automatically convert the column value to the requested type
-	RFX_Long(pFX, _T("[ID]"), m_ID);
+	RFX_Long(pFX, _T("[ID]"), m_nD);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
 	RFX_Long(pFX, _T("[SUBSCRIBER_ID]"), m_SUBSCRIBER_ID);
 	RFX_Long(pFX, _T("[PHONE_ID]"), m_PHONE_ID);
@@ -80,8 +80,8 @@ BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubs
 	}
 	catch(CDBException *)
 	{
-		/* В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
-			 този път със запитване на потребителят. Очаква се че ще се окаже XLS файл */
+		// В случай на неуспех при отваряне на връзката по подразбиране се прави нов опит, 
+		//този път със запитване на потребителят. Очаква се че ще се окаже XLS файл 
 		m_bSQLEn = FALSE;
 		bRes = Open(CRecordset::dynaset);
 	}
@@ -90,11 +90,10 @@ BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubs
 	{
 		if(bRes && !IsBOF())
 		{
-			/* запъвлване на масива с указатели към данни на редове от таблицата */
+			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				CSubscriberPhoneNumbers *poSubscrPhoneNmbPhoneNumbers = new CSubscriberPhoneNumbers(int(m_ID), int(m_REV_NUMB), m_SUBSCRIBER_ID, m_PHONE_ID, m_PHONE_NUMB);
-				oSubscrPhoneNmbPhoneNumbersArray.Add(poSubscrPhoneNmbPhoneNumbers);		 
+				oSubscrPhoneNmbPhoneNumbersArray.Add(new CSubscriberPhoneNumbers(int(m_nD), int(m_REV_NUMB), m_SUBSCRIBER_ID, m_PHONE_ID, m_PHONE_NUMB));		 
 				MoveNext();
 			}
 		}
@@ -138,7 +137,7 @@ BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscribe
 	if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
 		return FALSE;
 	
-	if(oCurrSubscriber.m_iRevNumb != oSubscrPhoneNmbPhoneNumbers.m_iRevNumb)
+	if(oCurrSubscriber.m_nRevNumb != oSubscrPhoneNmbPhoneNumbers.m_nRevNumb)
 		return FALSE;
 
 	try
@@ -147,7 +146,7 @@ BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscribe
 		Edit();
 
 		CSubscriberPhoneNumbers oSubscrCopy = oSubscrPhoneNmbPhoneNumbers;
-		oSubscrCopy.m_iRevNumb = oCurrSubscriber.m_iRevNumb + 1;
+		oSubscrCopy.m_nRevNumb = oCurrSubscriber.m_nRevNumb + 1;
 		
 		DoExchangeТоDatabaseData(oSubscrCopy);
 
@@ -179,16 +178,16 @@ BOOL CSubscriberPhoneNumbersTable::Insert(const CSubscriberPhoneNumbers &oSubscr
 	if(!IsBOF())
 		MoveLast();	
 
-	/* буфериране ID на последният ред от раблицата */ 
-	int iLastRowId = m_ID;
+	// буфериране ID на последният ред от раблицата  
+	int iLastRowId = m_nD;
 	
 	try
 	{
 		AddNew();
 
 		CSubscriberPhoneNumbers oSubscrCopy = oSubscrPhoneNmbPhoneNumbers;
-		oSubscrCopy.m_iId = iLastRowId + 1;
-		oSubscrCopy.m_iRevNumb = 0;
+		oSubscrCopy.m_nId = iLastRowId + 1;
+		oSubscrCopy.m_nRevNumb = 0;
 
 		DoExchangeТоDatabaseData(oSubscrCopy);
 
@@ -273,27 +272,27 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 	}
 
 	CString szColFilter;
-	if(oSubscrPhoneNmbPhoneNumbers.m_iId != DNC)
+	if(oSubscrPhoneNmbPhoneNumbers.m_nId != DNC)
 	{
-		/* изключване на текущият запис от по-нататъшното филтриране */
-		szColFilter.Format(_T("ID != %d"), oSubscrPhoneNmbPhoneNumbers.m_iId);
+		// изключване на текущият запис от по-нататъшното филтриране 
+		szColFilter.Format(_T("ID != %d"), oSubscrPhoneNmbPhoneNumbers.m_nId);
 		m_strFilter += szColFilter;
 	}
-	/* формиране на низ за филтриране, на база наличните в структурата ненулеви записи */
-	if(oSubscrPhoneNmbPhoneNumbers.m_iPhoneId != DNC)
+	// формиране на низ за филтриране, на база наличните в структурата ненулеви записи 
+	if(oSubscrPhoneNmbPhoneNumbers.m_nPhoneId != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("PHONE_ID = %d"), oSubscrPhoneNmbPhoneNumbers.m_iPhoneId);
+		szColFilter.Format(_T("PHONE_ID = %d"), oSubscrPhoneNmbPhoneNumbers.m_nPhoneId);
 		m_strFilter += szColFilter;
 	}
-	if(oSubscrPhoneNmbPhoneNumbers.m_iSubscrId != DNC)
+	if(oSubscrPhoneNmbPhoneNumbers.m_nSubscrId != DNC)
 	{
 		if(m_strFilter.GetLength())
 			m_strFilter += _T(" AND ");
 
-		szColFilter.Format(_T("SUBSCRIBER_ID = %d"), oSubscrPhoneNmbPhoneNumbers.m_iSubscrId);
+		szColFilter.Format(_T("SUBSCRIBER_ID = %d"), oSubscrPhoneNmbPhoneNumbers.m_nSubscrId);
 		m_strFilter += szColFilter;
 	}
 	if(_tcslen(oSubscrPhoneNmbPhoneNumbers.m_szPhoneNumber))
@@ -324,19 +323,19 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 
 void CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscrPhoneNmb)
 {
-	oSubscrPhoneNmb.m_iId = m_ID;
-	oSubscrPhoneNmb.m_iRevNumb = m_REV_NUMB;
-	oSubscrPhoneNmb.m_iSubscrId =	m_SUBSCRIBER_ID;
-	oSubscrPhoneNmb.m_iPhoneId = m_PHONE_ID;
+	oSubscrPhoneNmb.m_nId = m_nD;
+	oSubscrPhoneNmb.m_nRevNumb = m_REV_NUMB;
+	oSubscrPhoneNmb.m_nSubscrId =	m_SUBSCRIBER_ID;
+	oSubscrPhoneNmb.m_nPhoneId = m_PHONE_ID;
 	_tcscpy(oSubscrPhoneNmb.m_szPhoneNumber, m_PHONE_NUMB);
 }
 
 void CSubscriberPhoneNumbersTable::DoExchangeТоDatabaseData(const CSubscriberPhoneNumbers &oSubscrPhoneNmb)
 {
-	m_ID = oSubscrPhoneNmb.m_iId;
-	m_REV_NUMB = oSubscrPhoneNmb.m_iRevNumb;
-	m_SUBSCRIBER_ID = oSubscrPhoneNmb.m_iSubscrId;
-	m_PHONE_ID = oSubscrPhoneNmb.m_iPhoneId;
+	m_nD = oSubscrPhoneNmb.m_nId;
+	m_REV_NUMB = oSubscrPhoneNmb.m_nRevNumb;
+	m_SUBSCRIBER_ID = oSubscrPhoneNmb.m_nSubscrId;
+	m_PHONE_ID = oSubscrPhoneNmb.m_nPhoneId;
 	m_PHONE_NUMB = oSubscrPhoneNmb.m_szPhoneNumber;	
 }
 

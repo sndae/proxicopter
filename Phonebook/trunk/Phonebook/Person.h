@@ -10,21 +10,21 @@
 
 struct CPerson
 {
-	int	m_iId;
-	int	m_iSubscriberId;
-	int m_iPhoneNumbId;
+	int	m_nId;
+	int	m_nSubscriberId;
+	int m_nPhoneNumbId;
 	
 	CPerson(const int iId = DNC, const int iSubsrId = DNC, const int iPhoneNumbId = DNC)
   {
-		m_iId = iId;
-		m_iSubscriberId = iSubsrId;
-		m_iPhoneNumbId = iPhoneNumbId;		
+		m_nId = iId;
+		m_nSubscriberId = iSubsrId;
+		m_nPhoneNumbId = iPhoneNumbId;		
   }
 	CPerson & operator=(const CPerson &op)
 	{
-		m_iId = op.m_iId;
-		m_iSubscriberId = op.m_iSubscriberId;
-		m_iPhoneNumbId = op.m_iPhoneNumbId;		
+		m_nId = op.m_nId;
+		m_nSubscriberId = op.m_nSubscriberId;
+		m_nPhoneNumbId = op.m_nPhoneNumbId;		
 
 		return *this;
 	}
