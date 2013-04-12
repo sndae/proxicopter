@@ -66,7 +66,7 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
 				m_PersonsArray.RemoveAndFreeAll();
 				if(GetDocument()->SelectAll(m_PersonsArray, (CPersonDoc::eColumn)iNumb, m_abAscSorting[iNumb]))
-	        UpdateColumnsContent(m_PersonsArray);
+	        RecreateColumnsContent(m_PersonsArray);
         
 				break;
       case LVN_ITEMCHANGED:
@@ -140,7 +140,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 			if(!GetDocument()->SelectByContent(oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при търсене.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
 			
-			UpdateColumnsContent();
+			RecreateColumnsContent();
 							
 			break;
 		default:
@@ -153,7 +153,7 @@ void CPersonView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
 	if(lHint == 0)
 	{
-		UpdateColumnsContent();
+		RecreateColumnsContent();
 	}
 	else
 	{
@@ -169,7 +169,17 @@ void CPersonView::UpdateSingleRow(CPerson &oUpdPerson)
 		if(m_PersonsArray[i]->m_nId == oUpdPerson.m_nId)
 		{      
 			*m_PersonsArray[i] = oUpdPerson;
-			InsertNewRow(oUpdPerson);
+			CSubscribers oSubscriber;
+			if(!GetDocument()->SelectSubscriberWhereId(oUpdPerson.m_nSubscriberId, oSubscriber))
+				break;
+			CSubscriberPhoneNumbers oPhoneNumber;
+			if(!GetDocument()->SelectPhoneNumberWhereId(oUpdPerson.m_nPhoneNumbId, oPhoneNumber))
+				break;
+			CCities oCity;
+			if(!GetDocument()->SelectCityWhereId(oSubscriber.m_nCityId, oCity))
+				break;
+
+			UpdateRow(i, oSubscriber, oCity, oPhoneNumber);
 			break;
 		}
 	}
@@ -210,21 +220,21 @@ void CPersonView::OnInitialUpdate()
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
 	// запълване редовете на листът 
-	UpdateColumnsContent();
+	RecreateColumnsContent();
 	m_nCurrRowSelected = 0;
 }
 
-void CPersonView::UpdateColumnsContent()
+void CPersonView::RecreateColumnsContent()
 {
   m_PersonsArray.RemoveAndFreeAll();
   // запълване на листът с редове, спрямо последно наложеният филтър 
 	if(!GetDocument()->SelectAll(m_PersonsArray, CPersonDoc::eColFirstName))
 		return;
 
-	UpdateColumnsContent(m_PersonsArray);
+	RecreateColumnsContent(m_PersonsArray);
 }
 
-void CPersonView::UpdateColumnsContent(CPersonArray &oPersonsArr)
+void CPersonView::RecreateColumnsContent(CPersonArray &oPersonsArr)
 {
 	CListCtrl& oListCtrl = GetListCtrl();   
   oListCtrl.DeleteAllItems();
@@ -251,7 +261,18 @@ void CPersonView::InsertNewRow(CPerson &oPerson)
 
 	CString csTempBuff;
 	csTempBuff.Format(_T("%d"), oSubscriber.m_nCode);
-	int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);
+	int iRowIdx = oListCtrl.InsertItem(CPersonDoc::eColSubscrCode, csTempBuff);	
+
+	UpdateRow(iRowIdx, oSubscriber, oCity, oPhoneNumber);
+}
+
+void CPersonView::UpdateRow(int iRowIdx, CSubscribers &oSubscriber, CCities &oCity, CSubscriberPhoneNumbers &oPhoneNumber)
+{
+	CString csTempBuff;
+	CListCtrl& oListCtrl = GetListCtrl();
+
+	csTempBuff.Format(_T("%d"), oSubscriber.m_nCode);
+	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColSubscrCode,	csTempBuff);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColCity,				oCity.m_szName);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColFirstName,		oSubscriber.m_szFirstName);
 	oListCtrl.SetItemText(iRowIdx, CPersonDoc::eColSecondName,	oSubscriber.m_szSecondName);
@@ -274,7 +295,7 @@ void CPersonView::InsertNewRow(CPerson &oPerson)
   oListCtrl.SetColumnWidth(CPersonDoc::eColAddress,    LVSCW_AUTOSIZE);
   oListCtrl.SetColumnWidth(CPersonDoc::eColPhoneNumber,     LVSCW_AUTOSIZE);
   oListCtrl.SetColumnWidth(CPersonDoc::eColPhoneNumberType, LVSCW_AUTOSIZE);
-
+	
 }
 
 CPersonDoc* CPersonView::GetDocument() const // non-debug version is inline

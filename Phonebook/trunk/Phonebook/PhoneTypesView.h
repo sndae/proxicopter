@@ -36,7 +36,7 @@ protected:
 // Implementation
 public:
 	virtual ~CPhoneTypesView();
-	void UpdateColumnsContent();
+	void RecreateColumnsContent();
 	void UpdateSingleRow(int iRecId);
 	void SetRowData(int iRowIdx, CPhoneTypes &oPhoneType);
 #ifdef _DEBUG

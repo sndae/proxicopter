@@ -65,7 +65,7 @@ void CCitiesView::OnInitialUpdate()
   memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
   // запълване редовете на листът 
-  UpdateColumnsContent();
+  RecreateColumnsContent();
   m_nCurrRowSelected = 0;
 }
 
@@ -105,7 +105,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
         iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
         m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
         GetDocument()->SortByColumn((CCitiesDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
-        UpdateColumnsContent();
+        RecreateColumnsContent();
         break;
       case LVN_ITEMCHANGED:
         // Запис на последно избраният ред 
@@ -119,7 +119,7 @@ BOOL CCitiesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
   return CListView::OnChildNotify(message, wParam, lParam, pResult);
 }
 
-void CCitiesView::UpdateColumnsContent()
+void CCitiesView::RecreateColumnsContent()
 {
   m_CitiesArray.RemoveAndFreeAll();
   // запълване на листът с редове, спрямо последно наложеният филтър 
@@ -169,7 +169,7 @@ void CCitiesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
     case eCmdFind:
       oCity = oEditDlg.GetCityData();
       GetDocument()->SelectByContent(oCity);
-      UpdateColumnsContent();
+      RecreateColumnsContent();
       break;
     default:
       ASSERT(0);
@@ -182,7 +182,7 @@ void CCitiesView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
   if(lHint == 0)
   {
-    UpdateColumnsContent();
+    RecreateColumnsContent();
   }
   else
   {

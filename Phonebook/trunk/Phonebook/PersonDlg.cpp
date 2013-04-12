@@ -129,14 +129,6 @@ END_MESSAGE_MAP()
 
 void CPersonDlg::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
-	
-	//if((m_oPhoneType.GetCurSel() < 0) && (m_eMenuCmd != eCmdFind))
-	//	return;
-
-
-	//if(m_oCities.GetCurSel() >= 0)
-	//{
 	if((m_eMenuCmd != eCmdInsertNumb) && (m_eMenuCmd != eCmdInsert))
 		m_oPhoneNumberTab.m_nId = m_oPerson.m_nPhoneNumbId;
 	else
@@ -146,18 +138,13 @@ void CPersonDlg::OnBnClickedOk()
 	m_oPhoneNumber.GetWindowText(m_oPhoneNumberTab.m_szPhoneNumber, SUBSCRIBERPHONENUMBERS_TABLE_STRING_MAX_LEN);
 	m_oPhoneNumberTab.m_nSubscrId = m_oPerson.m_nSubscriberId;
 
-	//}
-	//else if(m_eMenuCmd != eCmdFind)
-	//{
-	//	return;
-	//}
-
 	if(m_eMenuCmd != eCmdInsert)
 		m_oSubscriberTab.m_nId = m_oPerson.m_nSubscriberId;
 	else
 		m_oSubscriberTab.m_nId = DNC;
 
-	m_oSubscriberTab.m_nCityId = m_poCitiesArr->GetAt(m_oCities.GetCurSel())->m_nId;
+	m_oSubscriberTab.m_nCityId = m_oCities.GetCurSel() != -1 ? m_poCitiesArr->GetAt(m_oCities.GetCurSel())->m_nId : DNC;
+
 	m_oFirstName.GetWindowText(m_oSubscriberTab.m_szFirstName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_oSecName.GetWindowText(m_oSubscriberTab.m_szSecondName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);
 	m_oThirdName.GetWindowText(m_oSubscriberTab.m_szThirdName, SUBSCRIBERS_TABLE_STRING_MAX_LEN);

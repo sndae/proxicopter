@@ -74,7 +74,7 @@ void CSubscribersView::OnInitialUpdate()
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
 	// запълване редовете на листът 
-	UpdateColumnsContent();
+	RecreateColumnsContent();
 	m_nCurrRowSelected = 0;
 }
 
@@ -114,7 +114,7 @@ BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam,
 				iNumb = ((LPNMLISTVIEW)lParam)->iSubItem;
 				m_abAscSorting[iNumb] = !m_abAscSorting[iNumb];
 				GetDocument()->SortByColumn((CSubscribersDoc::eColumn)iNumb, m_abAscSorting[iNumb]);
-				UpdateColumnsContent();
+				RecreateColumnsContent();
 				break;
 			case LVN_ITEMCHANGED:
 				// Запис на последно избраният ред 
@@ -128,7 +128,7 @@ BOOL CSubscribersView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam,
 	return CListView::OnChildNotify(message, wParam, lParam, pResult);
 }
 
-void CSubscribersView::UpdateColumnsContent()
+void CSubscribersView::RecreateColumnsContent()
 {
 	m_SubscribersArray.RemoveAndFreeAll();
 	// запълване на листът с редове, спрямо последно наложеният филтър 
@@ -184,7 +184,7 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		case eCmdFind:
 			oCity = oEditDlg.GetCityData();
 			GetDocument()->SelectByContent(oCity);
-			UpdateColumnsContent();
+			RecreateColumnsContent();
 			break;
 		default:
 			ASSERT(0);
@@ -197,7 +197,7 @@ void CSubscribersView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 {
 	if(lHint == 0)
 	{
-		UpdateColumnsContent();
+		RecreateColumnsContent();
 	}
 	else
 	{

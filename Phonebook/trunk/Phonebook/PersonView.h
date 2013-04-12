@@ -29,10 +29,11 @@ protected:
 public:
 	virtual ~CPersonView();
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	void UpdateColumnsContent();
-	void UpdateColumnsContent(CPersonArray &oPersonsArr);
+	void RecreateColumnsContent();
+	void RecreateColumnsContent(CPersonArray &oPersonsArr);
 	void UpdateSingleRow(CPerson &oUpdPerson);
 	void InsertNewRow(CPerson &oPerson);
+	void UpdateRow(int iRowIdx, CSubscribers &oSubscriber, CCities &oCity, CSubscriberPhoneNumbers &oPhoneNumb);
   void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 	CPersonDoc* GetDocument() const;
 

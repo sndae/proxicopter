@@ -35,7 +35,7 @@ protected:
 // Implementation
 public:
 	virtual ~CSubscriberPhoneNumbersView();
-	void UpdateColumnsContent();
+	void RecreateColumnsContent();
 	void UpdateSingleRow(int iRecId);
 	void SetRowData(int iRowIdx, CSubscriberPhoneNumbers &oSubscriber);
 #ifdef _DEBUG

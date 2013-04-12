@@ -35,7 +35,7 @@ protected:
 // Implementation
 public:
 	virtual ~CCitiesView();
-  void UpdateColumnsContent();
+  void RecreateColumnsContent();
   void UpdateSingleRow(int iRecId);
   void SetRowData(int iRowIdx, CCities &oCity);
 #ifdef _DEBUG
