@@ -108,11 +108,11 @@ BOOL CPhoneTypesDoc::DeleteWhereId(const int iId)
 	return bRes;
 }
 
-BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CPhoneTypesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
 	// номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
 	int iTableCol = (int)eCol + (int)CPhoneTypesTable::eColCode ;
-	return m_oPhoneTypesTable.SortByColumn((CPhoneTypesTable::eColumn)iTableCol , bAsc);
+	return m_oPhoneTypesTable.SortByColumn((CPhoneTypesTable::eColumn)iTableCol , bAsc, bResetFilter);
 }
 
 BOOL CPhoneTypesDoc::SelectByContent(const CPhoneTypes &oPhoneType)

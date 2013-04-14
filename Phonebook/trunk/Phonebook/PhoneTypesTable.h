@@ -29,7 +29,7 @@ public:
 // (Note: You must use an ODBC driver version that is version 3.5 or greater
 // to support both Unicode and these conversions).
 
-	long m_nD;
+	long m_nID;
 	long m_REV_NUMB;
 	long m_oCode;
 	CStringW m_PHONE_TYPE;
@@ -48,7 +48,7 @@ public:
 	BOOL UpdateWhereId(const int iId, const CPhoneTypes &oPhoneType);
 	BOOL Insert(const CPhoneTypes &oPhoneType);
 	BOOL DeleteWhereId(const int iId);
-	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
 	BOOL SelectByContent(const CPhoneTypes &oPhoneType);
 private:
 	void DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType);

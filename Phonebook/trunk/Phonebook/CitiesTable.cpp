@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(CCitiesTable, CRecordset)
 CCitiesTable::CCitiesTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-  m_nD = 0;
+  m_nID = 0;
   m_REV_NUMB = 0;
   m_oCode = L"";
   m_oName = L"";
@@ -60,7 +60,7 @@ void CCitiesTable::DoFieldExchange(CFieldExchange* pFX)
   // Macros such as RFX_Text() and RFX_Int() are dependent on the
   // type of the member variable, not the type of the field in the database.
   // ODBC will try to automatically convert the column value to the requested type
-  RFX_Long(pFX, _T("[ID]"), m_nD);
+  RFX_Long(pFX, _T("[ID]"), m_nID);
   RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
   RFX_Text(pFX, _T("[CODE]"), m_oCode);
   RFX_Text(pFX, _T("[NAME]"), m_oName);
@@ -93,7 +93,7 @@ BOOL CCitiesTable::SelectAll(CCitiesArray &oCitiesArray)
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				oCitiesArray.Add(new CCities(int(m_nD), int(m_REV_NUMB), m_oCode.GetBuffer(), m_oName.GetBuffer(), m_oArea.GetBuffer()));     
+				oCitiesArray.Add(new CCities(int(m_nID), int(m_REV_NUMB), m_oCode.GetBuffer(), m_oName.GetBuffer(), m_oArea.GetBuffer()));     
 				MoveNext();
 			}
 		}
@@ -191,7 +191,7 @@ BOOL CCitiesTable::Insert(const CCities &oCity)
 	if(!IsBOF())
 		MoveLast();	 
   // буфериране ID на последният ред от раблицата  
-  int iLastRowId = m_nD;
+  int iLastRowId = m_nID;
   try
 	{
 		AddNew();
@@ -231,12 +231,14 @@ BOOL CCitiesTable::DeleteWhereId(const int iId)
   return TRUE;
 }
 
-BOOL CCitiesTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CCitiesTable::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
   if(IsOpen())
     Close(); 
 
-  m_strFilter = _T("");
+	if(bResetFilter)
+		m_strFilter = _T("");
+
   switch(eCol)
   {
   case eColCode:    
@@ -318,7 +320,7 @@ BOOL CCitiesTable::SelectByContent(const CCities &oCity)
 
 void CCitiesTable::DoExchangeТоDatabaseData(const CCities &oCity)
 {
-  m_nD = oCity.m_nId;
+  m_nID = oCity.m_nId;
   m_REV_NUMB = oCity.m_nRevNumb;
   m_oCode = oCity.m_szCode;
   m_oName = oCity.m_szName;
@@ -327,7 +329,7 @@ void CCitiesTable::DoExchangeТоDatabaseData(const CCities &oCity)
 
 void CCitiesTable::DoExchangeFromDatabaseData(CCities &oCity)
 {
-  oCity.m_nId = m_nD;
+  oCity.m_nId = m_nID;
   oCity.m_nRevNumb = m_REV_NUMB;
   _tcscpy(oCity.m_szCode, m_oCode);
   _tcscpy(oCity.m_szName, m_oName);

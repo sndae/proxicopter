@@ -60,12 +60,14 @@ void CPersonDoc::Serialize(CArchive& ar)
   }
 }
 
-BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
+BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc, const BOOL bResetFilter)
 {
-	m_oSubscrTable.SelectByContent(CSubscribers());
+	if(bResetFilter)
+		m_oSubscrTable.SelectByContent(CSubscribers());
+	
 	if(eCol == eColPhoneNumberType)
 	{
-		if(!m_oPhoneTypeTable.SortByColumn(CPhoneTypesTable::eColType, bAsc))
+		if(!m_oPhoneTypeTable.SortByColumn(CPhoneTypesTable::eColType, bAsc, bResetFilter))
 			return FALSE;
 		
 		CPhoneTypesArray oPhoneTypesArr;
@@ -93,7 +95,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 	}
 	else if(eCol == eColPhoneNumber)
 	{
-		if(!m_oSubscrPhoneNumbsTable.SortByColumn(CSubscriberPhoneNumbersTable::eColPhoneNumber, bAsc))
+		if(!m_oSubscrPhoneNumbsTable.SortByColumn(CSubscriberPhoneNumbersTable::eColPhoneNumber, bAsc, bResetFilter))
 			return FALSE;
 
 		CSubscriberPhoneNumbersArray oPhoneNumbersArr;
@@ -115,7 +117,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 	}
 	else if(eCol == eColCity)
 	{
-		if(!m_oCityTable.SortByColumn(CCitiesTable::eColName, bAsc))
+		if(!m_oCityTable.SortByColumn(CCitiesTable::eColName, bAsc, bResetFilter))
 			return FALSE;
 
 		CCitiesArray oCitiesArr;
@@ -157,7 +159,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 			default:
 				ASSERT(0);
 		}
-		if(!m_oSubscrTable.SortByColumn(eTableCol, bAsc))
+		if(!m_oSubscrTable.SortByColumn(eTableCol, bAsc, bResetFilter))
 			return FALSE;
 
 		if(!SelectAll(oPersonArray))
@@ -167,7 +169,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc)
 	return TRUE;
 }
 
-BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter)
+BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 {
 	CSubscribersArray oSubscrArr;
 	if(!m_oSubscrTable.SelectAll(oSubscrArr))

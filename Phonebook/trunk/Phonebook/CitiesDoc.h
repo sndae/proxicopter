@@ -32,7 +32,7 @@ public:
   BOOL UpdateWhereId(const int iId, const CCities &oCity);
   BOOL Insert(const CCities &oCity);
   BOOL DeleteWhereId(const int iId);
-  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
   BOOL SelectByContent(const CCities &oCity);
 
 #ifdef _DEBUG

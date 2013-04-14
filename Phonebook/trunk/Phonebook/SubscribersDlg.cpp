@@ -64,8 +64,16 @@ BOOL CSubscribersDlg::OnInitDialog()
 			m_CityCode.InsertString(i, (m_pCitiesArray->GetAt(i))->m_szCode);
 	}
 	if(m_oSubscribers.m_nCityId != DNC)
-		m_CityCode.SetWindowTextW(m_pCitiesArray->GetAt(m_oSubscribers.m_nCityId)->m_szCode);
-	
+	{
+		for(int i = 0; i < m_pCitiesArray->GetCount(); i++)
+		{
+			if(m_pCitiesArray->GetAt(i)->m_nId == m_oSubscribers.m_nCityId)
+			{
+				m_CityCode.SetWindowTextW(m_pCitiesArray->GetAt(i)->m_szCode);
+				break;
+			}
+		}
+	}
 	m_Address.SetWindowTextW(m_oSubscribers.m_szAddress);
 
 	return TRUE;

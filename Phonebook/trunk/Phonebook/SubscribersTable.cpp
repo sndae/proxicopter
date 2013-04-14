@@ -19,13 +19,13 @@ IMPLEMENT_DYNAMIC(CSubscribersTable, CRecordset)
 CSubscribersTable::CSubscribersTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-	m_nD = 0;
+	m_nID = 0;
 	m_REV_NUMB = 0;
 	m_oCode = 0;
 	m_FIRST_NAME = L"";
 	m_SECOND_NAME = L"";
 	m_THIRD_NAME = L"";
-	m_nDENT_NUMB = L"";
+	m_nIDENT_NUMB = L"";
 	m_CITY_ID = 0;
 	m_CITY_ADDR	= L"";
 	
@@ -65,13 +65,13 @@ void CSubscribersTable::DoFieldExchange(CFieldExchange* pFX)
 	// Macros such as RFX_Text() and RFX_Int() are dependent on the
 	// type of the member variable, not the type of the field in the database.
 	// ODBC will try to automatically convert the column value to the requested type
-	RFX_Long(pFX, _T("[ID]"), m_nD);
+	RFX_Long(pFX, _T("[ID]"), m_nID);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
 	RFX_Long(pFX, _T("[CODE]"), m_oCode);
 	RFX_Text(pFX, _T("[FIRST_NAME]"), m_FIRST_NAME);
 	RFX_Text(pFX, _T("[SECOND_NAME]"), m_SECOND_NAME);
 	RFX_Text(pFX, _T("[THIRD_NAME]"), m_THIRD_NAME);
-	RFX_Text(pFX, _T("[IDENT_NUMB]"), m_nDENT_NUMB);
+	RFX_Text(pFX, _T("[IDENT_NUMB]"), m_nIDENT_NUMB);
 	RFX_Long(pFX, _T("[CITY_ID]"), m_CITY_ID);
 	RFX_Text(pFX, _T("[CITY_ADDR]"), m_CITY_ADDR);
 }
@@ -101,8 +101,8 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				CSubscribers *poSubscribers = new CSubscribers(int(m_nD), int(m_REV_NUMB), m_oCode, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
-																m_THIRD_NAME.GetBuffer(), m_nDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
+				CSubscribers *poSubscribers = new CSubscribers(int(m_nID), int(m_REV_NUMB), m_oCode, m_CITY_ID, m_FIRST_NAME.GetBuffer(), m_SECOND_NAME.GetBuffer(), 
+																m_THIRD_NAME.GetBuffer(), m_nIDENT_NUMB.GetBuffer(), m_CITY_ADDR.GetBuffer());
 				oSubscribersArray.Add(poSubscribers);		 
 				MoveNext();
 			}
@@ -207,7 +207,10 @@ BOOL CSubscribersTable::Insert(CSubscribers &oSubscribers)
 		if(!IsBOF())
 			MoveLast();	
 		// буфериране ID на последният ред от раблицата  
-		int iLastRowId = m_nD;
+		int iLastRowId = DNC;
+		if(!IsBOF())
+			iLastRowId = m_nID;
+		
 		AddNew();
 
 		oSubscribers.m_nId = iLastRowId + 1;
@@ -250,12 +253,13 @@ BOOL CSubscribersTable::DeleteWhereId(const int iId)
 	return TRUE;
 }
 
-BOOL CSubscribersTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CSubscribersTable::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
 	if(IsOpen())
 		Close(); 
 
-	m_strFilter = _T("");
+	if(bResetFilter)
+		m_strFilter = _T("");
 	switch(eCol)
 	{
 	case eColCode:		
@@ -382,26 +386,26 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 
 void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 {
-	oSubscriber.m_nId = m_nD;
+	oSubscriber.m_nId = m_nID;
 	oSubscriber.m_nRevNumb = m_REV_NUMB;
 	oSubscriber.m_nCode =	m_oCode;
 	_tcscpy(oSubscriber.m_szFirstName,	m_FIRST_NAME);
 	_tcscpy(oSubscriber.m_szSecondName, m_SECOND_NAME);
 	_tcscpy(oSubscriber.m_szThirdName,	m_THIRD_NAME);
-	_tcscpy(oSubscriber.m_szIDNumb,		 m_nDENT_NUMB);
+	_tcscpy(oSubscriber.m_szIDNumb,		 m_nIDENT_NUMB);
 	oSubscriber.m_nCityId = m_CITY_ID;
 	_tcscpy(oSubscriber.m_szAddress, m_CITY_ADDR);
 }
 
 void CSubscribersTable::DoExchangeТоDatabaseData(const CSubscribers &oSubscriber)
 {
-	m_nD = oSubscriber.m_nId;
+	m_nID = oSubscriber.m_nId;
 	m_REV_NUMB = oSubscriber.m_nRevNumb;
 	m_oCode = oSubscriber.m_nCode;
 	m_FIRST_NAME = oSubscriber.m_szFirstName;	
 	m_SECOND_NAME = oSubscriber.m_szSecondName; 
 	m_THIRD_NAME = oSubscriber.m_szThirdName;	
-	m_nDENT_NUMB = oSubscriber.m_szIDNumb;	 
+	m_nIDENT_NUMB = oSubscriber.m_szIDNumb;	 
 	m_CITY_ID = oSubscriber.m_nCityId;		 
 	m_CITY_ADDR	= oSubscriber.m_szAddress; 
 

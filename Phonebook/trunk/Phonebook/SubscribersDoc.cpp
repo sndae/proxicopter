@@ -108,11 +108,11 @@ BOOL CSubscribersDoc::DeleteWhereId(const int iId)
 	return bRes;
 }
 
-BOOL CSubscribersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CSubscribersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
 	// номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
 	int iTableCol = (int)eCol + (int)CSubscribersTable::eColCode ;
-	return m_oSubscribersTable.SortByColumn((CSubscribersTable::eColumn)iTableCol , bAsc);
+	return m_oSubscribersTable.SortByColumn((CSubscribersTable::eColumn)iTableCol , bAsc, bResetFilter);
 }
 
 BOOL CSubscribersDoc::SelectByContent(const CSubscribers &oSubscriber)

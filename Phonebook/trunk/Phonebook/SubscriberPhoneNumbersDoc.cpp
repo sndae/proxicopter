@@ -107,11 +107,11 @@ BOOL CSubscriberPhoneNumbersDoc::DeleteWhereId(const int iId)
 	return bRes;
 }
 
-BOOL CSubscriberPhoneNumbersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CSubscriberPhoneNumbersDoc::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
 	// номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
 	int iTableCol = (int)eCol + (int)CSubscriberPhoneNumbersTable::eColSubscrCode ;
-	return m_oSubscriberPhoneNumbersTable.SortByColumn((CSubscriberPhoneNumbersTable::eColumn)iTableCol , bAsc);
+	return m_oSubscriberPhoneNumbersTable.SortByColumn((CSubscriberPhoneNumbersTable::eColumn)iTableCol , bAsc, bResetFilter);
 }
 
 BOOL CSubscriberPhoneNumbersDoc::SelectByContent(const CSubscriberPhoneNumbers &oSubscriber)

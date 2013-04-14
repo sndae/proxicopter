@@ -83,15 +83,17 @@ BOOL CPersonView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRES
 
 void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 {
-	CPerson *poPerson = m_PersonsArray[m_nCurrRowSelected];
-	if(eCmd == eCmdDelSubscr)
+	CPerson *poPerson = m_PersonsArray.GetCount() > m_nCurrRowSelected ? m_PersonsArray[m_nCurrRowSelected] : 0;
+	if((eCmd == eCmdDelSubscr) && (poPerson))
 	{
-		GetDocument()->DeleteWhereId(poPerson->m_nSubscriberId);
+		if(!GetDocument()->DeleteWhereId(poPerson->m_nSubscriberId))
+			MessageBox(_T("Грешка при изтриване"), 0, MB_OK|MB_ICONWARNING);
 	}
-	else if(eCmd == eCmdDelNumb)
+	else if((eCmd == eCmdDelNumb) && (poPerson))
 	{
-		GetDocument()->DeleteSubscrPhoneNumb(poPerson->m_nPhoneNumbId);
-	}
+		if(!GetDocument()->DeleteSubscrPhoneNumb(poPerson->m_nPhoneNumbId))
+			MessageBox(_T("Грешка при изтриване"), 0, MB_OK|MB_ICONWARNING);
+	}	
 	else
 	{
 		CCitiesArray oCitiesArr;
@@ -101,13 +103,18 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		CPhoneTypesArray oPhoneTyopesArr;
 		if(!GetDocument()->SelectAllPhoneTypes(oPhoneTyopesArr))
 			return;
+
 		CSubscriberPhoneNumbers oSubscrPhoneNumb;
-		if(!GetDocument()->SelectPhoneNumberWhereId(poPerson->m_nPhoneNumbId, oSubscrPhoneNumb))
-			return;
-		CSubscribers oSubscriber;		
-		if(!GetDocument()->SelectSubscriberWhereId(poPerson->m_nSubscriberId, oSubscriber))
-			return;
-		
+		CSubscribers oSubscriber;	
+		if(poPerson)
+		{
+			if(!GetDocument()->SelectPhoneNumberWhereId(poPerson->m_nPhoneNumbId, oSubscrPhoneNumb))
+				return;
+				
+			if(!GetDocument()->SelectSubscriberWhereId(poPerson->m_nSubscriberId, oSubscriber))
+				return;
+		}
+
 		CPersonDlg oEditDlg(eCmd, oCitiesArr, oPhoneTyopesArr, oSubscriber, oSubscrPhoneNumb);	
 		
 		switch(eCmd)
@@ -140,7 +147,7 @@ void CPersonView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 			if(!GetDocument()->SelectByContent(oEditDlg.GetSubscriber(), oEditDlg.GetPhoneNumber()))
 				MessageBox(_T("Грешка при търсене.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING);
 			
-			RecreateColumnsContent();
+			RecreateColumnsContent(FALSE);
 							
 			break;
 		default:
@@ -163,7 +170,8 @@ void CPersonView::OnUpdate(CView *pSender, LPARAM lHint, CObject *pHint)
 
 void CPersonView::UpdateSingleRow(CPerson &oUpdPerson)
 {
-  // Проверка дали ред с такова ID в момента е показан на потребителят 
+	// Проверка дали ред с такова ID в момента е показан на потребителят 
+
 	for(int i = 0; i < m_PersonsArray.GetCount(); i++)
 	{
 		if(m_PersonsArray[i]->m_nId == oUpdPerson.m_nId)
@@ -224,11 +232,11 @@ void CPersonView::OnInitialUpdate()
 	m_nCurrRowSelected = 0;
 }
 
-void CPersonView::RecreateColumnsContent()
+void CPersonView::RecreateColumnsContent(const BOOL bResetFilter)
 {
-  m_PersonsArray.RemoveAndFreeAll();
-  // запълване на листът с редове, спрямо последно наложеният филтър 
-	if(!GetDocument()->SelectAll(m_PersonsArray, CPersonDoc::eColFirstName))
+	m_PersonsArray.RemoveAndFreeAll();
+	// запълване на листът с редове, спрямо последно наложеният филтър 
+	if(!GetDocument()->SelectAll(m_PersonsArray, CPersonDoc::eColFirstName, TRUE, bResetFilter))
 		return;
 
 	RecreateColumnsContent(m_PersonsArray);
@@ -237,9 +245,9 @@ void CPersonView::RecreateColumnsContent()
 void CPersonView::RecreateColumnsContent(CPersonArray &oPersonsArr)
 {
 	CListCtrl& oListCtrl = GetListCtrl();   
-  oListCtrl.DeleteAllItems();
+	oListCtrl.DeleteAllItems();
 	for(int i = oPersonsArr.GetCount() - 1; i != -1; i--)
-  {
+	{
 		InsertNewRow(*oPersonsArr[i]);
 	}  
 }

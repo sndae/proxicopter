@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(CSubscriberPhoneNumbersTable, CRecordset)
 CSubscriberPhoneNumbersTable::CSubscriberPhoneNumbersTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-	m_nD = 0;
+	m_nID = 0;
 	m_REV_NUMB = 0;
 	m_PHONE_ID = 0;
 	m_SUBSCRIBER_ID = 0;
@@ -61,7 +61,7 @@ void CSubscriberPhoneNumbersTable::DoFieldExchange(CFieldExchange* pFX)
 	// Macros such as RFX_Text() and RFX_Int() are dependent on the
 	// type of the member variable, not the type of the field in the database.
 	// ODBC will try to automatically convert the column value to the requested type
-	RFX_Long(pFX, _T("[ID]"), m_nD);
+	RFX_Long(pFX, _T("[ID]"), m_nID);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
 	RFX_Long(pFX, _T("[SUBSCRIBER_ID]"), m_SUBSCRIBER_ID);
 	RFX_Long(pFX, _T("[PHONE_ID]"), m_PHONE_ID);
@@ -93,7 +93,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubs
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				oSubscrPhoneNmbPhoneNumbersArray.Add(new CSubscriberPhoneNumbers(int(m_nD), int(m_REV_NUMB), m_SUBSCRIBER_ID, m_PHONE_ID, m_PHONE_NUMB));		 
+				oSubscrPhoneNmbPhoneNumbersArray.Add(new CSubscriberPhoneNumbers(int(m_nID), int(m_REV_NUMB), m_SUBSCRIBER_ID, m_PHONE_ID, m_PHONE_NUMB));		 
 				MoveNext();
 			}
 		}
@@ -167,19 +167,21 @@ BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscribe
 
 BOOL CSubscriberPhoneNumbersTable::Insert(const CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers)
 {
-	if(!CanAppend())
-		return FALSE;
+	if(IsOpen())
+		Close(); 
 
-	Close();
 	m_strFilter = _T("");
 	m_strSort = _T("");
 	Open(CRecordset::dynaset);
+
+	if(!CanAppend())
+		return FALSE;
 
 	if(!IsBOF())
 		MoveLast();	
 
 	// буфериране ID на последният ред от раблицата  
-	int iLastRowId = m_nD;
+	int iLastRowId = m_nID;
 	
 	try
 	{
@@ -227,12 +229,14 @@ BOOL CSubscriberPhoneNumbersTable::DeleteWhereId(const int iId)
 	return TRUE;
 }
 
-BOOL CSubscriberPhoneNumbersTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CSubscriberPhoneNumbersTable::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
 	if(IsOpen())
 		Close(); 
 
-	m_strFilter = _T("");
+	if(bResetFilter)
+		m_strFilter = _T("");
+
 	switch(eCol)
 	{
 	case eColPhoneCode:		
@@ -323,7 +327,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 
 void CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscrPhoneNmb)
 {
-	oSubscrPhoneNmb.m_nId = m_nD;
+	oSubscrPhoneNmb.m_nId = m_nID;
 	oSubscrPhoneNmb.m_nRevNumb = m_REV_NUMB;
 	oSubscrPhoneNmb.m_nSubscrId =	m_SUBSCRIBER_ID;
 	oSubscrPhoneNmb.m_nPhoneId = m_PHONE_ID;
@@ -332,7 +336,7 @@ void CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNu
 
 void CSubscriberPhoneNumbersTable::DoExchangeТоDatabaseData(const CSubscriberPhoneNumbers &oSubscrPhoneNmb)
 {
-	m_nD = oSubscrPhoneNmb.m_nId;
+	m_nID = oSubscrPhoneNmb.m_nId;
 	m_REV_NUMB = oSubscrPhoneNmb.m_nRevNumb;
 	m_SUBSCRIBER_ID = oSubscrPhoneNmb.m_nSubscrId;
 	m_PHONE_ID = oSubscrPhoneNmb.m_nPhoneId;

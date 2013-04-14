@@ -108,11 +108,11 @@ BOOL CCitiesDoc::DeleteWhereId(const int iId)
   return bRes;
 }
 
-BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CCitiesDoc::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
   // номерът на избраната колона се превежда в такъв, с начало първата потребителска колона от таблицата 
   int iTableCol = (int)eCol + (int)CCitiesTable::eColCode ;
-  return m_oCityTable.SortByColumn((CCitiesTable::eColumn)iTableCol , bAsc);
+  return m_oCityTable.SortByColumn((CCitiesTable::eColumn)iTableCol , bAsc, bResetFilter);
 }
 
 BOOL CCitiesDoc::SelectByContent(const CCities &oCity)

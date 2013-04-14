@@ -156,7 +156,8 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 
 	if(eCmd == eCmdDelete)
 	{
-		GetDocument()->DeleteWhereId(oSubscribers.m_nId);
+		if(!GetDocument()->DeleteWhereId(oSubscribers.m_nId))
+			MessageBox(_T("Грешка при изтриване"), 0, MB_OK|MB_ICONWARNING);
 	}
 	else
 	{

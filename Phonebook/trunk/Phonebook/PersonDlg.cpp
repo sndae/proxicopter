@@ -56,7 +56,7 @@ BOOL CPersonDlg::OnInitDialog()
 		case eCmdInsertNumb: 
 			SetWindowText(MENU_CMD_INSERT_NUMBER); 
 			m_oSubscrCode.EnableWindow(FALSE);
-		  m_oCities.EnableWindow(FALSE);
+			m_oCities.EnableWindow(FALSE);
 			m_oFirstName.EnableWindow(FALSE);
 			m_oSecName.EnableWindow(FALSE);
 			m_oThirdName.EnableWindow(FALSE);
@@ -86,9 +86,12 @@ BOOL CPersonDlg::OnInitDialog()
 	if((m_eMenuCmd == eCmdInsertNumb) || (m_eMenuCmd == eCmdUpdate))
 	{
 		CString csTempBuff;
-		csTempBuff.Format(_T("%d"), m_oSubscriberTab.m_nCode);
-		m_oSubscrCode.SetWindowText(csTempBuff);
-		
+		if(m_oSubscriberTab.m_nCode != DNC)
+		{
+			csTempBuff.Format(_T("%d"), m_oSubscriberTab.m_nCode);
+			m_oSubscrCode.SetWindowText(csTempBuff);
+		}
+
 		int iPos = 0;
 		for(iPos = 0; iPos != m_poCitiesArr->GetCount(); iPos++)
 		{
@@ -153,7 +156,10 @@ void CPersonDlg::OnBnClickedOk()
 	
 	CString csTempBuff;
 	m_oSubscrCode.GetWindowText(csTempBuff);
-	m_oSubscriberTab.m_nCode = _ttoi(csTempBuff);
+	if(csTempBuff.GetLength())
+		m_oSubscriberTab.m_nCode = _ttoi(csTempBuff);
+	else
+		m_oSubscriberTab.m_nCode = DNC;
 
 	OnOK();
 }

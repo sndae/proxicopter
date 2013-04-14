@@ -32,7 +32,7 @@ public:
 	BOOL UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTypes);
 	BOOL Insert(const CPhoneTypes &oPhoneTypes);
 	BOOL DeleteWhereId(const int iId);
-	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc);
+	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
 	BOOL SelectByContent(const CPhoneTypes &oPhoneTypes);
 #ifdef _DEBUG
 	virtual void AssertValid() const;

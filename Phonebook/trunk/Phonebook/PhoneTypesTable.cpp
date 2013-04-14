@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(CPhoneTypesTable, CRecordset)
 CPhoneTypesTable::CPhoneTypesTable(CDatabase* pdb)
 	: CRecordset(pdb)
 {
-	m_nD = 0;
+	m_nID = 0;
 	m_REV_NUMB = 0;
 	m_oCode = 0;
 	m_PHONE_TYPE = L"";
@@ -59,7 +59,7 @@ void CPhoneTypesTable::DoFieldExchange(CFieldExchange* pFX)
 	// Macros such as RFX_Text() and RFX_Int() are dependent on the
 	// type of the member variable, not the type of the field in the database.
 	// ODBC will try to automatically convert the column value to the requested type
-	RFX_Long(pFX, _T("[ID]"), m_nD);
+	RFX_Long(pFX, _T("[ID]"), m_nID);
 	RFX_Long(pFX, _T("[REV_NUMB]"), m_REV_NUMB);
 	RFX_Long(pFX, _T("[CODE]"), m_oCode);
 	RFX_Text(pFX, _T("[PHONE_TYPE]"), m_PHONE_TYPE);
@@ -90,7 +90,7 @@ BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 			// запъвлване на масива с указатели към данни на редове от таблицата 
 			while(!IsEOF())
 			{
-				oPhoneTypesArray.Add(new CPhoneTypes(int(m_nD), int(m_REV_NUMB), int(m_oCode), m_PHONE_TYPE.GetBuffer()));		 
+				oPhoneTypesArray.Add(new CPhoneTypes(int(m_nID), int(m_REV_NUMB), int(m_oCode), m_PHONE_TYPE.GetBuffer()));		 
 				MoveNext();
 			}
 		}
@@ -191,7 +191,7 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
 		if(!IsBOF())
 			MoveLast();	
 		// буфериране ID на последният ред от раблицата  
-		int iLastRowId = m_nD;
+		int iLastRowId = m_nID;
 		AddNew();
 
 		DoExchangeТоDatabaseData(CPhoneTypes(iLastRowId + 1, 0, oPhoneTypes.m_nCode, oPhoneTypes.m_szType));
@@ -232,12 +232,14 @@ BOOL CPhoneTypesTable::DeleteWhereId(const int iId)
 	return TRUE;
 }
 
-BOOL CPhoneTypesTable::SortByColumn(const eColumn eCol, const BOOL bAsc)
+BOOL CPhoneTypesTable::SortByColumn(const eColumn eCol, const BOOL bAsc, const BOOL bResetFilter)
 {
 	if(IsOpen())
 		Close(); 
 
-	m_strFilter = _T("");
+	if(bResetFilter)
+		m_strFilter = _T("");
+
 	switch(eCol)
 	{
 	case eColCode:
@@ -311,7 +313,7 @@ BOOL CPhoneTypesTable::SelectByContent(const CPhoneTypes &oPhoneTypes)
 
 void CPhoneTypesTable::DoExchangeТоDatabaseData(const CPhoneTypes &oPhoneType)
 {
-	m_nD = oPhoneType.m_nId;
+	m_nID = oPhoneType.m_nId;
 	m_REV_NUMB = 0;
 	m_oCode = oPhoneType.m_nCode;
 	m_PHONE_TYPE = oPhoneType.m_szType;
@@ -319,7 +321,7 @@ void CPhoneTypesTable::DoExchangeТоDatabaseData(const CPhoneTypes &oPhoneType)
 
 void CPhoneTypesTable::DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType)
 {
-	oPhoneType.m_nId = m_nD;
+	oPhoneType.m_nId = m_nID;
 	oPhoneType.m_nRevNumb = m_REV_NUMB;
 	oPhoneType.m_nCode =	m_oCode;
 	_tcscpy(oPhoneType.m_szType, m_PHONE_TYPE);

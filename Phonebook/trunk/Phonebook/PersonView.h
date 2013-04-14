@@ -29,7 +29,7 @@ protected:
 public:
 	virtual ~CPersonView();
   virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	void RecreateColumnsContent();
+	void RecreateColumnsContent(const BOOL bResetFilter = TRUE);
 	void RecreateColumnsContent(CPersonArray &oPersonsArr);
 	void UpdateSingleRow(CPerson &oUpdPerson);
 	void InsertNewRow(CPerson &oPerson);

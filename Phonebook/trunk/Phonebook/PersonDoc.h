@@ -26,10 +26,10 @@ public:
 
 // Implementation
 public:
-	BOOL SelectAll(CPersonArray &oPersonArray, BOOL bApplyFilter = FALSE);
+	BOOL SelectAll(CPersonArray &oPersonArray);
 public:
 	virtual ~CPersonDoc();
-	BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc = TRUE);
+	BOOL SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
 	BOOL SelectByContent(CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb);
 	BOOL UpdateWhereId(const CPerson &oPerson, CSubscribers &oUpdSubscriber, CSubscriberPhoneNumbers &oUpdPhoneNumb);
 	BOOL Insert(CSubscribers &oNewSubscriber, CSubscriberPhoneNumbers &oNewPhoneNumb);
