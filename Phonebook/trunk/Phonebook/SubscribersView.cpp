@@ -54,22 +54,22 @@ void CSubscribersView::OnInitialUpdate()
 	CListCtrl& oListCtrl = GetListCtrl();
 	oListCtrl.SetExtendedStyle( oListCtrl.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT );
 
-	oListCtrl.InsertColumn(CSubscribersDoc::eColCode, _T("Код на абонат"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscribersDoc::eColFirstName, _T("Име"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscribersDoc::eColSecondName, _T("Презиме"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscribersDoc::eColThirdName, _T("Фамилия"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscribersDoc::eColIDNumb, _T("ЕГН"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscribersDoc::eColCityCode, _T("Код на град"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscribersDoc::eColAddress, _T("Адрес"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColCode,		_T("Код на абонат"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColFirstName,	_T("Име"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColSecondName,	_T("Презиме"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColThirdName,	_T("Фамилия"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColIDNumb,		_T("ЕГН"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColCityCode,	_T("Код на град"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscribersDoc::eColAddress,	_T("Адрес"), LVCFMT_LEFT);
 
 	// Оразмеряване на колонита спрямо дължината на имената им 
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode,  LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName, LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName, LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName, LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColIDNumb, LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode,			LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName,	LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName,	LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName,	LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColIDNumb,	LVSCW_AUTOSIZE_USEHEADER);
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCityCode, LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColAddress, LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColAddress,	LVSCW_AUTOSIZE_USEHEADER);
 
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
@@ -132,7 +132,7 @@ void CSubscribersView::RecreateColumnsContent()
 {
 	m_SubscribersArray.RemoveAndFreeAll();
 	// запълване на листът с редове, спрямо последно наложеният филтър 
-	if(GetDocument()->SelectAll(m_SubscribersArray) == TRUE)
+	if(GetDocument()->SelectAll(m_SubscribersArray))
 	{
 		CListCtrl& oListCtrl = GetListCtrl();	 
 		oListCtrl.DeleteAllItems();
@@ -157,34 +157,38 @@ void CSubscribersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 	if(eCmd == eCmdDelete)
 	{
 		if(!GetDocument()->DeleteWhereId(oSubscribers.m_nId))
-			MessageBox(_T("Грешка при изтриване"), 0, MB_OK|MB_ICONWARNING);
+			CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 	}
 	else
 	{
 		CCitiesArray oCitiesArray;
 		GetDocument()->SelectAllCityCodes(oCitiesArray);
-		CSubscribersDlg oEditDlg(oSubscribers, eCmd, &oCitiesArray);
+		CCities oCity;
+		GetDocument()->SelectCityWhereId(oSubscribers.m_nCityId, oCity);
+		CSubscribersDlg oEditDlg(oSubscribers, eCmd, oCity, &oCitiesArray);
 		
 		if(oEditDlg.DoModal() != IDOK)
 			return;
 
-		CSubscribers oCity;
+		CSubscribers oSubscriber;
 		switch(eCmd)
 		{
 		case eCmdUpdate:
-			oCity = oEditDlg.GetCityData();
-			if(GetDocument()->UpdateWhereId(oCity.m_nId, oCity) == FALSE)
-				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+			oSubscriber = oEditDlg.GetSubscriberData();
+			if(!GetDocument()->UpdateWhereId(oSubscriber.m_nId, oSubscriber))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 			
 			break;
 		case eCmdInsert:
-			oCity = oEditDlg.GetCityData();
-			if(GetDocument()->Insert(oCity) == FALSE)
-				MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+			oSubscriber = oEditDlg.GetSubscriberData();
+			if(!GetDocument()->Insert(oSubscriber))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 			break;
 		case eCmdFind:
-			oCity = oEditDlg.GetCityData();
-			GetDocument()->SelectByContent(oCity);
+			oSubscriber = oEditDlg.GetSubscriberData();
+			if(!GetDocument()->SelectByContent(oSubscriber))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWReadFailed);
+
 			RecreateColumnsContent();
 			break;
 		default:
@@ -235,7 +239,7 @@ void CSubscribersView::SetRowData(int iRowIdx, CSubscribers &oSubscriber)
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColFirstName, oSubscriber.m_szFirstName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColSecondName,oSubscriber.m_szSecondName);
 	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColThirdName, oSubscriber.m_szThirdName);
-	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColIDNumb, oSubscriber.m_szIDNumb);
+	oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColIDNumb,	oSubscriber.m_szIDNumb);
 	CCities oCity;
 	if(GetDocument()->SelectCityWhereId(oSubscriber.m_nCityId, oCity))
 		oListCtrl.SetItemText(iRowIdx, CSubscribersDoc::eColCityCode, oCity.m_szCode);
@@ -245,12 +249,12 @@ void CSubscribersView::SetRowData(int iRowIdx, CSubscribers &oSubscriber)
 	// Оразмеряване на колоната спрямо дължината на името й 
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCode, LVSCW_AUTOSIZE_USEHEADER);
 	// Оразмеряване на колоната спрямо макс. дължина на неин запис 
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName, LVSCW_AUTOSIZE);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName, LVSCW_AUTOSIZE);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName, LVSCW_AUTOSIZE);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColIDNumb, LVSCW_AUTOSIZE);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColFirstName,	LVSCW_AUTOSIZE);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColSecondName,	LVSCW_AUTOSIZE);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColThirdName,	LVSCW_AUTOSIZE);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColIDNumb,	LVSCW_AUTOSIZE);
 	oListCtrl.SetColumnWidth(CSubscribersDoc::eColCityCode, LVSCW_AUTOSIZE);
-	oListCtrl.SetColumnWidth(CSubscribersDoc::eColAddress, LVSCW_AUTOSIZE);
+	oListCtrl.SetColumnWidth(CSubscribersDoc::eColAddress,	LVSCW_AUTOSIZE);
 }
 
 // CSubscribersView diagnostics

@@ -8,32 +8,32 @@
 class CCitiesDoc : public CDocument
 {
 public:
-  CCitiesDoc();
+	CCitiesDoc();
 protected: // create from serialization only
-  DECLARE_DYNCREATE(CCitiesDoc)
+	DECLARE_DYNCREATE(CCitiesDoc)
 
 // Attributes
 public:
-  // »збро€ване имената на колоните и техните номера 
-  enum  eColumn{eColCode = 0, eColName, eColArea, eCOL_NUMB};
+	// »збро€ване имената на колоните и техните номера 
+	enum	eColumn{eColCode = 0, eColName, eColArea, eCOL_NUMB};
 // Operations
 public:
 
 // Overrides
 public:
-  virtual BOOL OnNewDocument();
-  virtual void Serialize(CArchive& ar);
+	virtual BOOL OnNewDocument();
+	virtual void Serialize(CArchive& ar);
 
 // Implementation
 public:
 	virtual ~CCitiesDoc();
-  BOOL SelectAll(CCitiesArray &oCitiesArray);
-  BOOL SelectWhereId(const int iId, CCities &oCity);
-  BOOL UpdateWhereId(const int iId, const CCities &oCity);
-  BOOL Insert(const CCities &oCity);
-  BOOL DeleteWhereId(const int iId);
-  BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
-  BOOL SelectByContent(const CCities &oCity);
+	BOOL SelectAll(CCitiesArray &oCitiesArray);
+	BOOL SelectWhereId(const int iId, CCities &oCity);
+	BOOL UpdateWhereId(const int iId, const CCities &oCity);
+	BOOL Insert(const CCities &oCity);
+	BOOL DeleteWhereId(const int iId);
+	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
+	BOOL SelectByContent(const CCities &oCity);
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -41,10 +41,10 @@ public:
 #endif
 
 protected:
-  CCitiesTable m_oCityTable;
+	CCitiesTable m_oCityTable;
 // Generated message map functions
 protected:
-  DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 };
 
 

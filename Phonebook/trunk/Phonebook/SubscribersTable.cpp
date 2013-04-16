@@ -48,7 +48,7 @@ CString CSubscribersTable::GetDefaultConnect()
 	if(m_bSQLEn)
 		return _T("DSN=SQLExpress;Trusted_Connection=Yes;APP=Microsoft\x00ae Visual Studio\x00ae 2008;WSID=PROXIMUS-PC;DATABASE=phonebook");
 	else
-		return _T("");
+		return EMPTY_STRING;
 }
 
 CString CSubscribersTable::GetDefaultSQL()
@@ -76,7 +76,7 @@ void CSubscribersTable::DoFieldExchange(CFieldExchange* pFX)
 	RFX_Text(pFX, _T("[CITY_ADDR]"), m_CITY_ADDR);
 }
 
-BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
+BOOL const CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 {
  	if(IsOpen())
 		Close();
@@ -116,7 +116,7 @@ BOOL CSubscribersTable::SelectAll(CSubscribersArray &oSubscribersArray)
 	return TRUE;
 }
 
-BOOL CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
+BOOL const CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
 {
 	if(IsOpen())
 		Close(); 
@@ -144,15 +144,15 @@ BOOL CSubscribersTable::SelectWhereId(const int iId, CSubscribers &oSubscribers)
 BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscribers)
 {
 	// Проверка дали има друг абонат със такъв код 
-	if(SelectByContent(CSubscribers(oSubscribers.m_nId, 0, oSubscribers.m_nCode)) == TRUE)
+	if(SelectByContent(CSubscribers(oSubscribers.m_nId, 0, oSubscribers.m_nCode)))
 		return FALSE;
 
 	// Проверка дали има запис със такова ЕГН на абонат 
-	if(SelectByContent(CSubscribers(oSubscribers.m_nId, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
+	if(SelectByContent(CSubscribers(oSubscribers.m_nId, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)))
 		return FALSE;
 
 	CSubscribers oCurrSubscriber;
-	if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
+	if(!SelectWhereId(iId, oCurrSubscriber))
 		return FALSE;
 	
 	if(oCurrSubscriber.m_nRevNumb != oSubscribers.m_nRevNumb)
@@ -172,14 +172,14 @@ BOOL CSubscribersTable::UpdateWhereId(const int iId, const CSubscribers &oSubscr
 	}
 	catch(CDBException *)
 	{
-		m_strFilter = _T("");
-		m_strSort = _T("");
+		m_strFilter = EMPTY_STRING;
+		m_strSort = EMPTY_STRING;
 
 		return FALSE;
 	}
 
-	m_strFilter = _T("");
-	m_strSort = _T("");
+	m_strFilter = EMPTY_STRING;
+	m_strSort = EMPTY_STRING;
 
 	return TRUE;
 }
@@ -190,16 +190,16 @@ BOOL CSubscribersTable::Insert(CSubscribers &oSubscribers)
 		return FALSE;
 
 	// Проверка дали има запис с такъв код на абонат 
-	if(SelectByContent(CSubscribers(DNC, 0, oSubscribers.m_nCode)) == TRUE)
+	if(SelectByContent(CSubscribers(DNC, 0, oSubscribers.m_nCode)))
 		return FALSE;
 
 	// Проверка дали има запис със такова ЕГН на абонат 
-	if(SelectByContent(CSubscribers(DNC, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)) == TRUE)
+	if(SelectByContent(CSubscribers(DNC, 0, DNC, 0, 0, 0, 0, oSubscribers.m_szIDNumb)))
 		return FALSE;
 
 	Close();
-	m_strFilter = _T("");
-	m_strSort = _T("");
+	m_strFilter = EMPTY_STRING;
+	m_strSort = EMPTY_STRING;
 	Open(CRecordset::dynaset);
 
 	try
@@ -230,9 +230,9 @@ BOOL CSubscribersTable::Insert(CSubscribers &oSubscribers)
 BOOL CSubscribersTable::DeleteWhereId(const int iId)
 {
 	CSubscribers oSubscribers;
-	if(SelectWhereId(iId, oSubscribers) == FALSE)
+	if(SelectWhereId(iId, oSubscribers))
 	{
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 		return FALSE;
 	}
 	
@@ -245,11 +245,11 @@ BOOL CSubscribersTable::DeleteWhereId(const int iId)
 	}
 	catch(CDBException *)
 	{
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 		return FALSE;
 	}
 	
-	m_strFilter = _T("");
+	m_strFilter = EMPTY_STRING;
 	return TRUE;
 }
 
@@ -259,7 +259,7 @@ BOOL CSubscribersTable::SortByColumn(const eColumn eCol, const BOOL bAsc, const 
 		Close(); 
 
 	if(bResetFilter)
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 	switch(eCol)
 	{
 	case eColCode:		
@@ -303,8 +303,8 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 	if(IsOpen())
 		Close(); 
 
-	m_strSort = _T("");
-	m_strFilter = _T("");
+	m_strSort = EMPTY_STRING;
+	m_strFilter = EMPTY_STRING;
 	CString szColFilter;
 	if(oSubscribers.m_nId != DNC)
 	{
@@ -384,7 +384,7 @@ BOOL CSubscribersTable::SelectByContent(const CSubscribers &oSubscribers)
 	return TRUE;
 }
 
-void CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
+void const CSubscribersTable::DoExchangeFromDatabaseData(CSubscribers &oSubscriber)
 {
 	oSubscriber.m_nId = m_nID;
 	oSubscriber.m_nRevNumb = m_REV_NUMB;

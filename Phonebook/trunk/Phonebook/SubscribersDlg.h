@@ -9,7 +9,7 @@ class CSubscribersDlg : public CDialog
 	DECLARE_DYNAMIC(CSubscribersDlg)
 
 public:
-	CSubscribersDlg(const CSubscribers &oSubscribers, eMenuCmd eCmd, CCitiesArray *pCitiesArray = 0, CWnd* pParent = NULL);	 // standard constructor
+	CSubscribersDlg(const CSubscribers &oSubscribers, eMenuCmd eCmd, CCities oCity, CCitiesArray *pCitiesArray = 0, CWnd* pParent = NULL);	 
 	virtual ~CSubscribersDlg();
 
 	// Dialog Data
@@ -21,6 +21,7 @@ protected:
 private:
 	eMenuCmd m_eMenuCmd;
 	CSubscribers m_oSubscribers;
+	CCities m_oCity;
 	CEdit m_oCode;
 	CEdit m_oFirstName;
 	CEdit m_oSecondName;
@@ -32,6 +33,6 @@ private:
 public:
 	afx_msg void OnBnClickedCityEditUpdate();
 	virtual BOOL OnInitDialog();
-	CSubscribers GetCityData(){return m_oSubscribers;};
+	CSubscribers GetSubscriberData(){return m_oSubscribers;};
 	afx_msg void OnBnClickedOk();
 };

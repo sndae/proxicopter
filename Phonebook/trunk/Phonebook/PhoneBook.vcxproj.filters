@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Cities">
+      <UniqueIdentifier>{2ef3537d-67a1-477c-88ae-8ce03e892e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PhoneTypes">
+      <UniqueIdentifier>{9b022a99-08e2-42a0-b4b6-cea225238ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Subscribers">
+      <UniqueIdentifier>{2a8e67f7-0c2b-403d-8642-deac5c964f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Person">
+      <UniqueIdentifier>{0a01745a-21e6-4ae0-8bbf-84f5d80593f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Cities">
+      <UniqueIdentifier>{c619fcd1-66e1-487f-b350-94f603ff0191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PhoneTypes">
+      <UniqueIdentifier>{acb698a0-4bc8-483d-945c-7cbdaf766ea4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Subscribers">
+      <UniqueIdentifier>{40555d6b-5e36-41f9-8fa8-537921517808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SubscriberPhoneNumbers">
+      <UniqueIdentifier>{24be8418-1e8c-4211-86ab-2beaf8d4cb07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Person">
+      <UniqueIdentifier>{e8814efb-bf70-4fc0-912c-67aa08fa0a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Source Files\SubscriberPhoneNumbers">
+      <UniqueIdentifier>{c45de485-d1ba-4dda-b62b-d4ff80c88a08}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ChildFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewDocDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhoneBook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CitiesDlg.cpp">
+      <Filter>Source Files\Cities</Filter>
+    </ClCompile>
+    <ClCompile Include="CitiesDoc.cpp">
+      <Filter>Source Files\Cities</Filter>
+    </ClCompile>
+    <ClCompile Include="CitiesTable.cpp">
+      <Filter>Source Files\Cities</Filter>
+    </ClCompile>
+    <ClCompile Include="CitiesView.cpp">
+      <Filter>Source Files\Cities</Filter>
+    </ClCompile>
+    <ClCompile Include="PhoneTypesDlg.cpp">
+      <Filter>Source Files\PhoneTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="PhoneTypesDoc.cpp">
+      <Filter>Source Files\PhoneTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="PhoneTypesTable.cpp">
+      <Filter>Source Files\PhoneTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="PhoneTypesView.cpp">
+      <Filter>Source Files\PhoneTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscribersDlg.cpp">
+      <Filter>Source Files\Subscribers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscribersDoc.cpp">
+      <Filter>Source Files\Subscribers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscribersTable.cpp">
+      <Filter>Source Files\Subscribers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscribersView.cpp">
+      <Filter>Source Files\Subscribers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscriberPhoneNumbersDlg.cpp">
+      <Filter>Source Files\SubscriberPhoneNumbers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscriberPhoneNumbersDoc.cpp">
+      <Filter>Source Files\SubscriberPhoneNumbers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscriberPhoneNumbersTable.cpp">
+      <Filter>Source Files\SubscriberPhoneNumbers</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscriberPhoneNumbersView.cpp">
+      <Filter>Source Files\SubscriberPhoneNumbers</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonDlg.cpp">
+      <Filter>Source Files\Person</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonDoc.cpp">
+      <Filter>Source Files\Person</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonView.cpp">
+      <Filter>Source Files\Person</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ChildFrm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewDocDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhoneBook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cities.h">
+      <Filter>Header Files\Cities</Filter>
+    </ClInclude>
+    <ClInclude Include="CitiesDlg.h">
+      <Filter>Header Files\Cities</Filter>
+    </ClInclude>
+    <ClInclude Include="CitiesDoc.h">
+      <Filter>Header Files\Cities</Filter>
+    </ClInclude>
+    <ClInclude Include="CitiesTable.h">
+      <Filter>Header Files\Cities</Filter>
+    </ClInclude>
+    <ClInclude Include="CitiesView.h">
+      <Filter>Header Files\Cities</Filter>
+    </ClInclude>
+    <ClInclude Include="PhoneTypes.h">
+      <Filter>Header Files\PhoneTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="PhoneTypesDlg.h">
+      <Filter>Header Files\PhoneTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="PhoneTypesDoc.h">
+      <Filter>Header Files\PhoneTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="PhoneTypesTable.h">
+      <Filter>Header Files\PhoneTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="PhoneTypesView.h">
+      <Filter>Header Files\PhoneTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Subscribers.h">
+      <Filter>Header Files\Subscribers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscribersDlg.h">
+      <Filter>Header Files\Subscribers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscribersDoc.h">
+      <Filter>Header Files\Subscribers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscribersTable.h">
+      <Filter>Header Files\Subscribers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscribersView.h">
+      <Filter>Header Files\Subscribers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscriberPhoneNumbers.h">
+      <Filter>Header Files\SubscriberPhoneNumbers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscriberPhoneNumbersDlg.h">
+      <Filter>Header Files\SubscriberPhoneNumbers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscriberPhoneNumbersDoc.h">
+      <Filter>Header Files\SubscriberPhoneNumbers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscriberPhoneNumbersTable.h">
+      <Filter>Header Files\SubscriberPhoneNumbers</Filter>
+    </ClInclude>
+    <ClInclude Include="SubscriberPhoneNumbersView.h">
+      <Filter>Header Files\SubscriberPhoneNumbers</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Header Files\Person</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonDlg.h">
+      <Filter>Header Files\Person</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonDoc.h">
+      <Filter>Header Files\Person</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonView.h">
+      <Filter>Header Files\Person</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\bmp00001.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\images_n.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\PhoneBook.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\PhoneBook.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\PhoneBookDoc.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PhoneBook.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

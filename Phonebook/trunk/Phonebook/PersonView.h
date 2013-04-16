@@ -28,13 +28,13 @@ protected:
 // Implementation
 public:
 	virtual ~CPersonView();
-  virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	void RecreateColumnsContent(const BOOL bResetFilter = TRUE);
+	virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+	void RecreateColumnsContent(CPersonDoc::eColumn eColumn = CPersonDoc::eColFirstName, const BOOL bResetFilter = TRUE);
 	void RecreateColumnsContent(CPersonArray &oPersonsArr);
 	void UpdateSingleRow(CPerson &oUpdPerson);
 	void InsertNewRow(CPerson &oPerson);
 	void UpdateRow(int iRowIdx, CSubscribers &oSubscriber, CCities &oCity, CSubscriberPhoneNumbers &oPhoneNumb);
-  void ExecuteCntxMenuCmd(eMenuCmd eCmd);
+	void ExecuteCntxMenuCmd(eMenuCmd eCmd);
 	CPersonDoc* GetDocument() const;
 
 #ifdef _DEBUG
@@ -48,16 +48,16 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 
-  // Текущият избран ред от списъка 
-  int   m_nCurrRowSelected;
+	// Текущият избран ред от списъка 
+	int	 m_nCurrRowSelected;
  // Масив указващ начина на сортиране на всяка една от колоните 
-  BOOL  m_abAscSorting[CPersonDoc::eCOL_NUMB];
-  // Масив от указатели към данни за всеки ред от листът. Необходим е, тъй като ID и rev_numb на всеки 
-  // ред, не се визуализират. Т.е. те трябва да се съхваняват, с цел използване в случай на редакция 
-  CPersonArray m_PersonsArray;
+	BOOL	m_abAscSorting[CPersonDoc::eCOL_NUMB];
+	// Масив от указатели към данни за всеки ред от листът. Необходим е, тъй като ID и rev_numb на всеки 
+	// ред, не се визуализират. Т.е. те трябва да се съхваняват, с цел използване в случай на редакция 
+	CPersonArray m_PersonsArray;
 };
 
-#ifndef _DEBUG  // debug version in PersonView.cpp
+#ifndef _DEBUG	// debug version in PersonView.cpp
 
 #endif
 

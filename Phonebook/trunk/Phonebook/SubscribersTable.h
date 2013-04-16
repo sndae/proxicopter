@@ -8,17 +8,16 @@
 // code generated on 05 март 2013 г., 19:08 ч.
 #include "Subscribers.h"
 #include "CitiesTable.h"
+
 class CSubscribersTable : private CRecordset
 {
 public:
 	CSubscribersTable(CDatabase* pDatabase = NULL);
 	DECLARE_DYNAMIC(CSubscribersTable)
 
-	//Enumerators
-public:
 	// Изброяване имената на полетата и техните номера 
 	enum	eColumn{cColIdx = 0, eColRevNumb, eColCode, eColFirstName, eColSecondName, eColThirdName, eColIDNumb, eColCityCode, eColAddress, eCOL_NUMB};
-
+private:
 
 // Field/Param Data
 
@@ -48,18 +47,18 @@ public:
 	// Wizard generated virtual function overrides
 public:
 	virtual CString GetDefaultConnect();	// Default connection string
-	virtual CString GetDefaultSQL(); 	// default SQL for Recordset
+	virtual CString GetDefaultSQL(); 		// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
-	BOOL SelectAll(CSubscribersArray &oSubscribersArray);
-	BOOL SelectWhereId(const int iId, CSubscribers &oSubscriber);
+	BOOL const SelectAll(CSubscribersArray &oSubscribersArray);
+	BOOL const SelectWhereId(const int iId, CSubscribers &oSubscriber);
 	BOOL UpdateWhereId(const int iId, const CSubscribers &oSubscriber);
 	BOOL Insert(CSubscribers &oSubscriber);
 	BOOL DeleteWhereId(const int iId);
 	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
 	BOOL SelectByContent(const CSubscribers &oSubscriber);
 private:
-	void DoExchangeFromDatabaseData(CSubscribers &oSubscriber);
+	void const DoExchangeFromDatabaseData(CSubscribers &oSubscriber);
 	void DoExchangeТоDatabaseData(const CSubscribers &oSubscriber);
 // Implementation
 #ifdef _DEBUG

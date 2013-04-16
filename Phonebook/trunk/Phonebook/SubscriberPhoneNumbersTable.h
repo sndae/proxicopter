@@ -16,12 +16,10 @@ public:
 	CSubscriberPhoneNumbersTable(CDatabase* pDatabase = NULL);
 	DECLARE_DYNAMIC(CSubscriberPhoneNumbersTable)
 
-	//Enumerators
-public:
 	// Изброяване имената на полетата и техните номера 
 	enum eColumn{cColIdx = 0, eColRevNumb, eColSubscrCode, eColPhoneCode, eColPhoneNumber, eCOL_NUMB};
 
-
+private:
 // Field/Param Data
 
 // The string types below (if present) reflect the actual data type of the
@@ -51,8 +49,8 @@ public:
 	virtual CString GetDefaultSQL();     // default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX); // RFX support
 
-	BOOL SelectAll(CSubscriberPhoneNumbersArray &oSubscriberPhoneNumbersArray);
-	BOOL SelectWhereId(const int iId, CSubscriberPhoneNumbers &oPhoneNumb);
+	BOOL const SelectAll(CSubscriberPhoneNumbersArray &oSubscriberPhoneNumbersArray);
+	BOOL const SelectWhereId(const int iId, CSubscriberPhoneNumbers &oPhoneNumb);
 	BOOL UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oPhoneNumb);
 	BOOL Insert(const CSubscriberPhoneNumbers &oPhoneNumb);
 	BOOL DeleteWhereId(const int iId);
@@ -62,7 +60,7 @@ public:
 	BOOL SelectAllPhoneTypesCodes(CPhoneTypesArray &oPhoneTypesArray);
 
 private:
-	void DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oPhoneNumb);
+	void const DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oPhoneNumb);
 	void DoExchangeТоDatabaseData(const CSubscriberPhoneNumbers &oPhoneNumb);
 // Implementation
 #ifdef _DEBUG

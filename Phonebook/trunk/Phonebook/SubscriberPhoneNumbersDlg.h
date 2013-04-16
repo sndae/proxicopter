@@ -10,7 +10,7 @@ class CSubscriberPhoneNumbersDlg : public CDialog
 
 public:
 	CSubscriberPhoneNumbersDlg(const CSubscriberPhoneNumbers &oSubscriberPhoneNumbers, eMenuCmd eCmd, CSubscribersArray *poSubscrArray = 0,
-								CPhoneTypesArray *poPhoneTypesArray = 0, CWnd* pParent = NULL);	 // standard constructor
+								CPhoneTypesArray *poPhoneTypesArray = 0, CWnd* pParent = NULL);	 
 	virtual ~CSubscriberPhoneNumbersDlg();
 
 	// Dialog Data

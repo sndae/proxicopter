@@ -92,10 +92,10 @@ BOOL CPhoneTypesView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, 
 				// изпълнение на команда, избрана от конктекстното меню 
 				switch(iMenuChoice)
 				{
-					case ID_OPTIONS_EDIT:	 ExecuteCntxMenuCmd(eCmdUpdate); break;
+					case ID_OPTIONS_EDIT:	ExecuteCntxMenuCmd(eCmdUpdate); break;
 					case ID_OPTIONS_DELETE: ExecuteCntxMenuCmd(eCmdDelete); break;
-					case ID_OPTIONS_ADD:		ExecuteCntxMenuCmd(eCmdInsert); break;
-					case ID_OPTIONS_FIND:	 ExecuteCntxMenuCmd(eCmdFind);	 break; 
+					case ID_OPTIONS_ADD:	ExecuteCntxMenuCmd(eCmdInsert); break;
+					case ID_OPTIONS_FIND:	ExecuteCntxMenuCmd(eCmdFind);	 break; 
 					default: break; 
 				}
 				break;
@@ -122,7 +122,7 @@ void CPhoneTypesView::RecreateColumnsContent()
 {
 	m_PhoneTypesArray.RemoveAndFreeAll();
 	// запълване на листът с редове, спрямо последно наложеният филтър 
-	if(GetDocument()->SelectAll(m_PhoneTypesArray) == TRUE)
+	if(GetDocument()->SelectAll(m_PhoneTypesArray))
 	{
 		CListCtrl& oListCtrl = GetListCtrl();
 		oListCtrl.DeleteAllItems();
@@ -158,18 +158,20 @@ void CPhoneTypesView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		{
 		case eCmdUpdate:
 			oPhoneType = oEditDlg.GetCityData();
-			if(GetDocument()->UpdateWhereId(oPhoneType.m_nId, oPhoneType) == FALSE)
-				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+			if(!GetDocument()->UpdateWhereId(oPhoneType.m_nId, oPhoneType))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 			
 			break;
 		case eCmdInsert:
 			oPhoneType = oEditDlg.GetCityData();
-			if(GetDocument()->Insert(oPhoneType) == FALSE)
-				MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+			if(!GetDocument()->Insert(oPhoneType))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 			break;
 		case eCmdFind:
 			oPhoneType = oEditDlg.GetCityData();
-			GetDocument()->SelectByContent(oPhoneType);
+			if(!GetDocument()->SelectByContent(oPhoneType))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWReadFailed);
+
 			RecreateColumnsContent();
 			break;
 		default:

@@ -24,7 +24,7 @@ END_MESSAGE_MAP()
 
 CPersonDoc::CPersonDoc()
 {
-  // TODO: add one-time construction code here
+	// TODO: add one-time construction code here
 	m_bAutoDelete = FALSE;
 }
 
@@ -34,13 +34,13 @@ CPersonDoc::~CPersonDoc()
 
 BOOL CPersonDoc::OnNewDocument()
 {
-  if (!CDocument::OnNewDocument())
-    return FALSE;
+	if (!CDocument::OnNewDocument())
+		return FALSE;
 
-  // TODO: add reinitialization code here
-  // (SDI documents will reuse this document)
+	// TODO: add reinitialization code here
+	// (SDI documents will reuse this document)
 
-  return TRUE;
+	return TRUE;
 }
 
 
@@ -50,14 +50,14 @@ BOOL CPersonDoc::OnNewDocument()
 
 void CPersonDoc::Serialize(CArchive& ar)
 {
-  if (ar.IsStoring())
-  {
-    // TODO: add storing code here
-  }
-  else
-  {
-    // TODO: add loading code here
-  }
+	if (ar.IsStoring())
+	{
+		// TODO: add storing code here
+	}
+	else
+	{
+		// TODO: add loading code here
+	}
 }
 
 BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray, eColumn eCol, BOOL bAsc, const BOOL bResetFilter)
@@ -177,7 +177,7 @@ BOOL CPersonDoc::SelectAll(CPersonArray &oPersonArray)
 
 	for(int i = 0; i < oSubscrArr.GetCount(); i++)
 	{
-		if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,  oSubscrArr[i]->m_nId)))
+		if(!m_oSubscrPhoneNumbsTable.SelectByContent(CSubscriberPhoneNumbers(DNC, 0,	oSubscrArr[i]->m_nId)))
 			continue;
 
 		CSubscriberPhoneNumbersArray oPhoneNumbersArr;
@@ -214,9 +214,9 @@ BOOL CPersonDoc::UpdateWhereId(const CPerson &oPerson, CSubscribers &oUpdSubscri
 	if(!m_oSubscrPhoneNumbsTable.UpdateWhereId(oUpdPhoneNumb.m_nId, oUpdPhoneNumb))
 		return FALSE;
 
-  // индициране за извършени промени по съдържанието на таблицата 
-  
-  UpdateAllViews(0, (LPARAM)&oPerson);
+	// индициране за извършени промени по съдържанието на таблицата 
+	
+	UpdateAllViews(0, (LPARAM)&oPerson);
 
 	return TRUE;
 }
@@ -273,9 +273,9 @@ BOOL CPersonDoc::DeleteWhereId(const int iId)
 	if(!m_oSubscrTable.DeleteWhereId(iId))
 		return FALSE;
 
-  // индициране за извършени промени по съдържанието на таблицата 
-  
-  UpdateAllViews(0);
+	// индициране за извършени промени по съдържанието на таблицата 
+	
+	UpdateAllViews(0);
 
 	return TRUE;
 }
@@ -285,12 +285,12 @@ BOOL CPersonDoc::DeleteWhereId(const int iId)
 #ifdef _DEBUG
 void CPersonDoc::AssertValid() const
 {
-  CDocument::AssertValid();
+	CDocument::AssertValid();
 }
 
 void CPersonDoc::Dump(CDumpContext& dc) const
 {
-  CDocument::Dump(dc);
+	CDocument::Dump(dc);
 }
 #endif //_DEBUG
 

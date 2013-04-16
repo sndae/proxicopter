@@ -10,10 +10,11 @@ class CPersonDlg : public CDialog
 
 public:
 	CPersonDlg(eMenuCmd eCmd, CCitiesArray &oCitiesArr, CPhoneTypesArray &oPhoneTypesArr, 
-						 CSubscribers &oSubscriber, CSubscriberPhoneNumbers &oSubscrPhoneNumb, CWnd* pParent = NULL);   // standard constructor
+				CSubscribers &oSubscriber, CSubscriberPhoneNumbers &oSubscrPhoneNumb, 
+				CPhoneTypes &oPhoneType, CCities &oCity, CWnd* pParent = NULL);   
 	virtual ~CPersonDlg();
-	CPerson									&GetPerson(){return m_oPerson;};
-	CSubscribers						&GetSubscriber(){return m_oSubscriberTab;};
+	CPerson							&GetPerson(){return m_oPerson;};
+	CSubscribers					&GetSubscriber(){return m_oSubscriberTab;};
 	CSubscriberPhoneNumbers	&GetPhoneNumber(){return m_oPhoneNumberTab;};
 	INT_PTR	 DoModal(const CPerson *poPerson);
 // Dialog Data
@@ -24,9 +25,11 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
 	CPerson m_oPerson;
-	CSubscribers						m_oSubscriberTab;
-	CSubscriberPhoneNumbers m_oPhoneNumberTab;
-	CCitiesArray						*m_poCitiesArr;
+	CSubscribers					m_oSubscriberTab;
+	CSubscriberPhoneNumbers			m_oPhoneNumberTab;
+	CCities							m_oCityTab;
+	CPhoneTypes						m_oPhoneTypeTab;
+	CCitiesArray					*m_poCitiesArr;
 	CPhoneTypesArray				*m_poPhoneTypesArr;
 	int  m_nPhoneNumbIdx;
 	int  m_nPhoneTypeIdx;

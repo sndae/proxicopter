@@ -44,7 +44,7 @@ CString CSubscriberPhoneNumbersTable::GetDefaultConnect()
 	if(m_bSQLEn)
 		return _T("DSN=SQLExpress;Trusted_Connection=Yes;APP=Microsoft\x00ae Visual Studio\x00ae 2008;WSID=PROXIMUS-PC;DATABASE=phonebook");
 	else
-		return _T("");
+		return EMPTY_STRING;
 }
 
 CString CSubscriberPhoneNumbersTable::GetDefaultSQL()
@@ -68,7 +68,7 @@ void CSubscriberPhoneNumbersTable::DoFieldExchange(CFieldExchange* pFX)
 	RFX_Text(pFX, _T("[PHONE_NUMB]"), m_PHONE_NUMB);
 }
 
-BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubscrPhoneNmbPhoneNumbersArray)
+BOOL const CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubscrPhoneNmbPhoneNumbersArray)
 {
 	if(IsOpen())
 		Close();
@@ -106,7 +106,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectAll(CSubscriberPhoneNumbersArray &oSubs
 	return TRUE;
 }
 
-BOOL CSubscriberPhoneNumbersTable::SelectWhereId(const int iId, CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers)
+BOOL const CSubscriberPhoneNumbersTable::SelectWhereId(const int iId, CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers)
 {
 	if(IsOpen())
 		Close(); 
@@ -134,7 +134,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectWhereId(const int iId, CSubscriberPhone
 BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscriberPhoneNumbers &oSubscrPhoneNmbPhoneNumbers)
 {
 	CSubscriberPhoneNumbers oCurrSubscriber;
-	if(SelectWhereId(iId, oCurrSubscriber) == FALSE)
+	if(!SelectWhereId(iId, oCurrSubscriber))
 		return FALSE;
 	
 	if(oCurrSubscriber.m_nRevNumb != oSubscrPhoneNmbPhoneNumbers.m_nRevNumb)
@@ -154,13 +154,13 @@ BOOL CSubscriberPhoneNumbersTable::UpdateWhereId(const int iId, const CSubscribe
 	}
 	catch(CDBException *)
 	{
-		m_strFilter = _T("");
-		m_strSort = _T("");
+		m_strFilter = EMPTY_STRING;
+		m_strSort = EMPTY_STRING;
 		return FALSE;
 	}
 
-	m_strFilter = _T("");
-	m_strSort = _T("");
+	m_strFilter = EMPTY_STRING;
+	m_strSort = EMPTY_STRING;
 
 	return TRUE;
 }
@@ -170,8 +170,8 @@ BOOL CSubscriberPhoneNumbersTable::Insert(const CSubscriberPhoneNumbers &oSubscr
 	if(IsOpen())
 		Close(); 
 
-	m_strFilter = _T("");
-	m_strSort = _T("");
+	m_strFilter = EMPTY_STRING;
+	m_strSort = EMPTY_STRING;
 	Open(CRecordset::dynaset);
 
 	if(!CanAppend())
@@ -206,9 +206,9 @@ BOOL CSubscriberPhoneNumbersTable::Insert(const CSubscriberPhoneNumbers &oSubscr
 BOOL CSubscriberPhoneNumbersTable::DeleteWhereId(const int iId)
 {
 	CSubscriberPhoneNumbers oSubscrPhoneNmbPhoneNumbers;
-	if(SelectWhereId(iId, oSubscrPhoneNmbPhoneNumbers) == FALSE)
+	if(!SelectWhereId(iId, oSubscrPhoneNmbPhoneNumbers))
 	{
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 		return FALSE;
 	}
 
@@ -221,11 +221,11 @@ BOOL CSubscriberPhoneNumbersTable::DeleteWhereId(const int iId)
 	}
 	catch(CDBException *)
 	{
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 		return FALSE;
 	}
 
-  m_strFilter = _T("");
+  m_strFilter = EMPTY_STRING;
 	return TRUE;
 }
 
@@ -235,7 +235,7 @@ BOOL CSubscriberPhoneNumbersTable::SortByColumn(const eColumn eCol, const BOOL b
 		Close(); 
 
 	if(bResetFilter)
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 
 	switch(eCol)
 	{
@@ -271,8 +271,8 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 
 	if(bClearFilter)
 	{
-		m_strSort = _T("");
-		m_strFilter = _T("");
+		m_strSort = EMPTY_STRING;
+		m_strFilter = EMPTY_STRING;
 	}
 
 	CString szColFilter;
@@ -325,7 +325,7 @@ BOOL CSubscriberPhoneNumbersTable::SelectByContent(const CSubscriberPhoneNumbers
 
 
 
-void CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscrPhoneNmb)
+void const CSubscriberPhoneNumbersTable::DoExchangeFromDatabaseData(CSubscriberPhoneNumbers &oSubscrPhoneNmb)
 {
 	oSubscrPhoneNmb.m_nId = m_nID;
 	oSubscrPhoneNmb.m_nRevNumb = m_REV_NUMB;

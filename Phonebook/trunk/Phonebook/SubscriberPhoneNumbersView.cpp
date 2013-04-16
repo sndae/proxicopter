@@ -54,14 +54,14 @@ void CSubscriberPhoneNumbersView::OnInitialUpdate()
 	CListCtrl& oListCtrl = GetListCtrl();
 	oListCtrl.SetExtendedStyle( oListCtrl.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT );
 
-	oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColSubscrCode, _T("Код на абонат"), LVCFMT_LEFT);
-	oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColPhoneCode, _T("Код на тип телефон"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColSubscrCode,	_T("Код на абонат"), LVCFMT_LEFT);
+	oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColPhoneCode,	_T("Код на тип телефон"), LVCFMT_LEFT);
 	oListCtrl.InsertColumn(CSubscriberPhoneNumbersDoc::eColPhoneNumber, _T("Телефон"), LVCFMT_LEFT);
 
 	// Оразмеряване на колонита спрямо дължината на имената им 
-	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode, LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneCode, LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneNumber, LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode,	LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneCode,		LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneNumber,	LVSCW_AUTOSIZE_USEHEADER);
 
 	memset(m_abAscSorting, TRUE, sizeof(m_abAscSorting));
 
@@ -124,7 +124,7 @@ void CSubscriberPhoneNumbersView::RecreateColumnsContent()
 {
 	m_SubscriberPhoneNumbersArray.RemoveAndFreeAll();
 	// запълване на листът с редове, спрямо последно наложеният филтър 
-	if(GetDocument()->SelectAll(m_SubscriberPhoneNumbersArray) == TRUE)
+	if(GetDocument()->SelectAll(m_SubscriberPhoneNumbersArray))
 	{
 		CListCtrl& oListCtrl = GetListCtrl();	 
 		oListCtrl.DeleteAllItems();
@@ -167,18 +167,19 @@ void CSubscriberPhoneNumbersView::ExecuteCntxMenuCmd(eMenuCmd eCmd)
 		{
 		case eCmdUpdate:
 			oCity = oEditDlg.GetCityData();
-			if(GetDocument()->UpdateWhereId(oCity.m_nId, oCity) == FALSE)
-				MessageBox(_T("Грешка при запис.\nВалидарайте записа или го опреснете"), 0, MB_OK|MB_ICONWARNING);
+			if(!GetDocument()->UpdateWhereId(oCity.m_nId, oCity))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 			
 			break;
 		case eCmdInsert:
 			oCity = oEditDlg.GetCityData();
-			if(GetDocument()->Insert(oCity) == FALSE)
-				MessageBox(_T("Грешка при запис.\nВалидарайте записа"), 0, MB_OK|MB_ICONWARNING); 
+			if(!GetDocument()->Insert(oCity))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWriteFailed);
 			break;
 		case eCmdFind:
 			oCity = oEditDlg.GetCityData();
-			GetDocument()->SelectByContent(oCity);
+			if(!GetDocument()->SelectByContent(oCity))
+				CPhoneBookErr::IndicateUser(CPhoneBookErr::eDBWReadFailed);
 			RecreateColumnsContent();
 			break;
 		default:
@@ -240,10 +241,10 @@ void CSubscriberPhoneNumbersView::SetRowData(int iRowIdx, CSubscriberPhoneNumber
 
 	oListCtrl.SetItemText(iRowIdx, CSubscriberPhoneNumbersDoc::eColPhoneNumber, oSubscriberPhoneNumb.m_szPhoneNumber);
 	// Оразмеряване на колоната спрямо дължината на името й 
-	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode, LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColSubscrCode,	LVSCW_AUTOSIZE_USEHEADER);
 	// Оразмеряване на колоната спрямо макс. дължина на неин запис 
-	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneCode,	 LVSCW_AUTOSIZE_USEHEADER);
-	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneNumber, LVSCW_AUTOSIZE);
+	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneCode,		LVSCW_AUTOSIZE_USEHEADER);
+	oListCtrl.SetColumnWidth(CSubscriberPhoneNumbersDoc::eColPhoneNumber,	LVSCW_AUTOSIZE);
 }
 
 // CSubscriberPhoneNumbersView diagnostics

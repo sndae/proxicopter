@@ -13,12 +13,10 @@ public:
 	CPhoneTypesTable(CDatabase* pDatabase = NULL);
 	DECLARE_DYNAMIC(CPhoneTypesTable)
 
-	//Enumerators
-public:
 	// Изброяване имената на полетата и техните номера 
 	enum	eColumn{cColIdx = 0, eColRevNumb, eColCode, eColType, eCOL_NUMB};
 
-
+private:
 // Field/Param Data
 
 // The string types below (if present) reflect the actual data type of the
@@ -39,19 +37,19 @@ public:
 // Overrides
 	// Wizard generated virtual function overrides
 public:
-	virtual CString GetDefaultConnect(); // Default connection string
-	virtual CString GetDefaultSQL(); // default SQL for Recordset
+	virtual CString GetDefaultConnect();	// Default connection string
+	virtual CString GetDefaultSQL();		// default SQL for Recordset
 	virtual void DoFieldExchange(CFieldExchange* pFX);	// RFX support
 
-	BOOL SelectAll(CPhoneTypesArray &oPhoneTypesArray);
-	BOOL SelectWhereId(const int iId, CPhoneTypes &oPhoneType);
+	BOOL const SelectAll(CPhoneTypesArray &oPhoneTypesArray);
+	BOOL const SelectWhereId(const int iId, CPhoneTypes &oPhoneType);
 	BOOL UpdateWhereId(const int iId, const CPhoneTypes &oPhoneType);
 	BOOL Insert(const CPhoneTypes &oPhoneType);
 	BOOL DeleteWhereId(const int iId);
 	BOOL SortByColumn(const eColumn eCol, const BOOL bAsc = TRUE, const BOOL bResetFilter = TRUE);
 	BOOL SelectByContent(const CPhoneTypes &oPhoneType);
 private:
-	void DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType);
+	void const DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType);
 	void DoExchangeТоDatabaseData(const CPhoneTypes &oPhoneType);
 // Implementation
 #ifdef _DEBUG

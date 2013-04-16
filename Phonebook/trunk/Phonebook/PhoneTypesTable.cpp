@@ -42,7 +42,7 @@ CString CPhoneTypesTable::GetDefaultConnect()
 	if(m_bSQLEn)
 		return _T("DSN=SQLExpress;Trusted_Connection=Yes;APP=Microsoft\x00ae Visual Studio\x00ae 2008;WSID=PROXIMUS-PC;DATABASE=phonebook");
 	else
-		return _T("");
+		return EMPTY_STRING;
 }
 
 CString CPhoneTypesTable::GetDefaultSQL()
@@ -65,7 +65,7 @@ void CPhoneTypesTable::DoFieldExchange(CFieldExchange* pFX)
 	RFX_Text(pFX, _T("[PHONE_TYPE]"), m_PHONE_TYPE);
 }
 
-BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
+BOOL const CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 {
 	if(IsOpen())
 		Close();
@@ -103,7 +103,7 @@ BOOL CPhoneTypesTable::SelectAll(CPhoneTypesArray &oPhoneTypesArray)
 	return TRUE;
 }
 
-BOOL CPhoneTypesTable::SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes)
+BOOL const CPhoneTypesTable::SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes)
 {
 	if(IsOpen())
 		Close(); 
@@ -131,15 +131,15 @@ BOOL CPhoneTypesTable::SelectWhereId(const int iId, CPhoneTypes &oPhoneTypes)
 BOOL CPhoneTypesTable::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTypes)
 {
 	// Проверка дали има друг запис със такъв код 
-	if(SelectByContent(CPhoneTypes(oPhoneTypes.m_nId, oPhoneTypes.m_nRevNumb, oPhoneTypes.m_nCode)) == TRUE)
+	if(SelectByContent(CPhoneTypes(oPhoneTypes.m_nId, oPhoneTypes.m_nRevNumb, oPhoneTypes.m_nCode)))
 		return FALSE;
 
 	// Проверка дали има друг запис със такъв тип 
-	if(SelectByContent(CPhoneTypes(oPhoneTypes.m_nId, oPhoneTypes.m_nRevNumb, DNC, oPhoneTypes.m_szType)) == TRUE)
+	if(SelectByContent(CPhoneTypes(oPhoneTypes.m_nId, oPhoneTypes.m_nRevNumb, DNC, oPhoneTypes.m_szType)))
 		return FALSE;
 
 	CPhoneTypes oCurrPhoneType;
-	if(SelectWhereId(iId, oCurrPhoneType) == FALSE)
+	if(!SelectWhereId(iId, oCurrPhoneType))
 		return FALSE;
 	
 	if(oCurrPhoneType.m_nRevNumb != oPhoneTypes.m_nRevNumb)
@@ -156,14 +156,14 @@ BOOL CPhoneTypesTable::UpdateWhereId(const int iId, const CPhoneTypes &oPhoneTyp
 	}
 	catch(CDBException *)
 	{
-		m_strFilter = _T("");
-		m_strSort = _T("");
+		m_strFilter = EMPTY_STRING;
+		m_strSort = EMPTY_STRING;
 
 		return FALSE;
 	}
 
-	m_strFilter = _T("");
-	m_strSort = _T("");
+	m_strFilter = EMPTY_STRING;
+	m_strSort = EMPTY_STRING;
 
 	return TRUE;
 }
@@ -174,16 +174,16 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
 		return FALSE;
 
 	// Проверка дали има запис с такъв код на	
-	if(SelectByContent(CPhoneTypes(DNC, 0, oPhoneTypes.m_nCode)) == TRUE)
+	if(SelectByContent(CPhoneTypes(DNC, 0, oPhoneTypes.m_nCode)))
 		return FALSE;
 
 	// Проверка дали има запис със такъв тип телефон
-	if(SelectByContent(CPhoneTypes(DNC, 0, DNC, oPhoneTypes.m_szType)) == TRUE)
+	if(SelectByContent(CPhoneTypes(DNC, 0, DNC, oPhoneTypes.m_szType)))
 		return FALSE;
 
 	Close();
-	m_strFilter = _T("");
-	m_strSort = _T("");
+	m_strFilter = EMPTY_STRING;
+	m_strSort = EMPTY_STRING;
 	try
 	{
 		Open(CRecordset::dynaset);
@@ -209,9 +209,9 @@ BOOL CPhoneTypesTable::Insert(const CPhoneTypes &oPhoneTypes)
 BOOL CPhoneTypesTable::DeleteWhereId(const int iId)
 {
 	CPhoneTypes oPhoneTypes;
-	if(SelectWhereId(iId, oPhoneTypes) == FALSE)
+	if(!SelectWhereId(iId, oPhoneTypes))
 	{
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 		return FALSE;
 	}
 	
@@ -224,11 +224,11 @@ BOOL CPhoneTypesTable::DeleteWhereId(const int iId)
 	}
 	catch(CDBException *)
 	{
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 		return FALSE;
 	}
 
-  m_strFilter = _T("");
+  m_strFilter = EMPTY_STRING;
 	return TRUE;
 }
 
@@ -238,7 +238,7 @@ BOOL CPhoneTypesTable::SortByColumn(const eColumn eCol, const BOOL bAsc, const B
 		Close(); 
 
 	if(bResetFilter)
-		m_strFilter = _T("");
+		m_strFilter = EMPTY_STRING;
 
 	switch(eCol)
 	{
@@ -269,8 +269,8 @@ BOOL CPhoneTypesTable::SelectByContent(const CPhoneTypes &oPhoneTypes)
 	if(IsOpen())
 		Close(); 
 
-	m_strSort = _T("");
-	m_strFilter = _T("");
+	m_strSort = EMPTY_STRING;
+	m_strFilter = EMPTY_STRING;
 	CString szColFilter;
 	if(oPhoneTypes.m_nId != DNC)
 	{
@@ -319,7 +319,7 @@ void CPhoneTypesTable::DoExchangeТоDatabaseData(const CPhoneTypes &oPhoneType)
 	m_PHONE_TYPE = oPhoneType.m_szType;
 }
 
-void CPhoneTypesTable::DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType)
+void const CPhoneTypesTable::DoExchangeFromDatabaseData(CPhoneTypes &oPhoneType)
 {
 	oPhoneType.m_nId = m_nID;
 	oPhoneType.m_nRevNumb = m_REV_NUMB;

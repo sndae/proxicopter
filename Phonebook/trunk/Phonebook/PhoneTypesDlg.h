@@ -9,7 +9,7 @@ class CPhoneTypesDlg : public CDialog
 	DECLARE_DYNAMIC(CPhoneTypesDlg)
 
 public:
-	CPhoneTypesDlg(const CPhoneTypes &oPhoneTypes, eMenuCmd eCmd, CWnd* pParent = NULL); // standard constructor
+	CPhoneTypesDlg(const CPhoneTypes &oPhoneTypes, eMenuCmd eCmd, CWnd* pParent = NULL); 
 	virtual ~CPhoneTypesDlg();
 
 	// Dialog Data

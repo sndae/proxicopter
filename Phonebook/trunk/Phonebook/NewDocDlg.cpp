@@ -13,8 +13,8 @@ IMPLEMENT_DYNAMIC(CNewDocDlg, CDialog)
 CNewDocDlg::CNewDocDlg(CPtrList *poTemplateList, CWnd* pParent /*=NULL*/)
 	: CDialog(CNewDocDlg::IDD, pParent)
 {
-  m_poSelectedTempl = 0;
-  m_poTemplateList = poTemplateList;
+	m_poSelectedTempl = 0;
+	m_poTemplateList = poTemplateList;
 }
 
 CNewDocDlg::~CNewDocDlg()
@@ -23,21 +23,21 @@ CNewDocDlg::~CNewDocDlg()
 
 void CNewDocDlg::DoDataExchange(CDataExchange* pDX)
 {
-  CDialog::DoDataExchange(pDX);
-  DDX_Control(pDX, LSB_NEWDOC_LIST, m_cListCtrl);
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, LSB_NEWDOC_LIST, m_cListCtrl);
 }
 
 BOOL CNewDocDlg::OnInitDialog()
 {
-  CDialog::OnInitDialog();
-  
-  if(m_poTemplateList)
-	{  
+	CDialog::OnInitDialog();
+	
+	if(m_poTemplateList)
+	{	
 		InitIcons();
 		InitItems();
 	}
 
-  return TRUE;
+	return TRUE;
 }
 
 void CNewDocDlg::InitItems()
@@ -48,18 +48,18 @@ void CNewDocDlg::InitItems()
 	LVITEM lvi;
 
 	POSITION oPos = m_poTemplateList->GetTailPosition();
-  CString  strClassName;
+	CString	strClassName;
 	int iCntr = 0;
-  while(oPos)
-  {
-   ((CDocTemplate*)m_poTemplateList->GetAt(oPos))->GetDocString(strClassName, CDocTemplate::fileNewName);
+	while(oPos)
+	{
+	 ((CDocTemplate*)m_poTemplateList->GetAt(oPos))->GetDocString(strClassName, CDocTemplate::fileNewName);
  
 		// Вмъкване на първият обект
-		lvi.mask =  LVIF_IMAGE | LVIF_TEXT;
+		lvi.mask =	LVIF_IMAGE | LVIF_TEXT;
 
 		lvi.iItem = iCntr;
 		lvi.iSubItem = 0;
-    lvi.pszText = (LPTSTR)(LPCTSTR)(strClassName.GetBuffer());
+		lvi.pszText = (LPTSTR)(LPCTSTR)(strClassName.GetBuffer());
 		lvi.iImage = iCntr;		// Налични са 8 изображения в листа с иконите
 		m_cListCtrl.InsertItem(&lvi);
 #if 0
@@ -74,9 +74,9 @@ void CNewDocDlg::InitItems()
 		m_cListCtrl.SetItem(&lvi);
 #endif
 		iCntr++;
-    m_poTemplateList->GetPrev(oPos);
-  }
-  
+		m_poTemplateList->GetPrev(oPos);
+	}
+	
 }
 
 void CNewDocDlg::InitIcons()
@@ -97,45 +97,45 @@ void CNewDocDlg::InitIcons()
 
 void CNewDocDlg::OnOK()
 {
-  LVHITTESTINFO  oHitInfo;
-  m_cListCtrl.SubItemHitTest(&oHitInfo);
+	LVHITTESTINFO	oHitInfo;
+	m_cListCtrl.SubItemHitTest(&oHitInfo);
 
-  CDialog::OnOK();
+	CDialog::OnOK();
 }
 
 CDocTemplate *CNewDocDlg::GetSelectedDoc()
 {
-  return m_poSelectedTempl;
+	return m_poSelectedTempl;
 }
 
 BEGIN_MESSAGE_MAP(CNewDocDlg, CDialog)
-  ON_NOTIFY(NM_CLICK, LSB_NEWDOC_LIST, &CNewDocDlg::OnNMClickNewdoclistCtrl)
-  ON_NOTIFY(NM_DBLCLK, LSB_NEWDOC_LIST, &CNewDocDlg::OnNMDblclkListCtrl)
+	ON_NOTIFY(NM_CLICK, LSB_NEWDOC_LIST, &CNewDocDlg::OnNMClickNewdoclistCtrl)
+	ON_NOTIFY(NM_DBLCLK, LSB_NEWDOC_LIST, &CNewDocDlg::OnNMDblclkListCtrl)
 END_MESSAGE_MAP()
 
 void CNewDocDlg::OnNMClickNewdoclistCtrl(NMHDR *pNMHDR, LRESULT *pResult)
 {
-  NMITEMACTIVATE *pNMItemActivate = (NMITEMACTIVATE*)pNMHDR;
-  // TODO: Add your control notification handler code here
+	NMITEMACTIVATE *pNMItemActivate = (NMITEMACTIVATE*)pNMHDR;
+	// TODO: Add your control notification handler code here
 	POSITION oPos = m_poTemplateList->GetTailPosition();
-  int iItemSelected = pNMItemActivate->iItem;
-  if(iItemSelected >= 0)
-  {
+	int iItemSelected = pNMItemActivate->iItem;
+	if(iItemSelected >= 0)
+	{
 	//	iItemSelected = (m_poTemplateList->GetCount() - 1) - iItemSelected ;
-    while(iItemSelected--)
+		while(iItemSelected--)
 			m_poTemplateList->GetPrev(oPos);
-  }
+	}
 
-  m_poSelectedTempl = (CDocTemplate*)m_poTemplateList->GetAt(oPos);
+	m_poSelectedTempl = (CDocTemplate*)m_poTemplateList->GetAt(oPos);
 
-  *pResult = 0;
+	*pResult = 0;
 }
 
 void CNewDocDlg::OnNMDblclkListCtrl(NMHDR *pNMHDR, LRESULT *pResult)
 {
-  // TODO: Add your control notification handler code here
-  OnNMClickNewdoclistCtrl(pNMHDR, pResult);
-  OnOK();
+	// TODO: Add your control notification handler code here
+	OnNMClickNewdoclistCtrl(pNMHDR, pResult);
+	OnOK();
 
-  *pResult = 0;
+	*pResult = 0;
 }
